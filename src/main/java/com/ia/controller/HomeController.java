@@ -93,6 +93,13 @@ public class HomeController {
 	        if(scrap.getUser_id()==null || scrap.getUser_id().equalsIgnoreCase("0") || scrap.getUser_id().equalsIgnoreCase("")) {
 	        	scrap.setUser_id("1");
 	        }
+	        
+	        String urlId = scrap.getUrl_id()+"";
+	        
+	        if(urlId.equalsIgnoreCase("null") || urlId==null ) {
+	        	scrap.setUrl_id(0);
+	        }
+	        
 	        scrap.setIpaddress(request.getRemoteAddr());
 		return homeDao.insertScrap(scrap)+"";
 	}
@@ -120,12 +127,6 @@ public class HomeController {
         return homeDao.insertListContacts(listContacts)+"";
 	}
 
-	@RequestMapping(value="whatsup")
-	public String whatsup()
-	{
-		return "front/whatsup";
-	}
-	
 	/* Start Admin controller */
 	@RequestMapping(value="login")
 	public String login()
@@ -215,7 +216,7 @@ public class HomeController {
 	public String userUrl(HttpServletRequest reques,Model model,HttpSession session)
 	{
 		int userId = Integer.parseInt(session.getAttribute("userId")+"");
-		model.addAttribute("urlList",homeDao.getUrlList(userId,"active"));
+		model.addAttribute("urlList",homeDao.getUrlList(userId,"display"));
 		
 		model.addAttribute("userLastHour",homeDao.getQueryTime("scrap", "1", userId));
 		model.addAttribute("userTotalHour",homeDao.getQueryTime("scrap", "8", userId));

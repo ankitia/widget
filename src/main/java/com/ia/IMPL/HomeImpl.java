@@ -377,6 +377,10 @@ public class HomeImpl implements HomeDao {
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);
 				ps.setInt(2,userId);	
+			}else if(action.equalsIgnoreCase("display")) {
+				sql = "select * from master_url where status = 'Active' and user_id = ? limit 0,10";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1,userId);				
 			}
 			rs = ps.executeQuery();
 			while (rs.next()) {

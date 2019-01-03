@@ -22,7 +22,7 @@
             <div class="nav-collapse collapse">    
               <ul class="nav"> 
                 <li><a href="<%=request.getContextPath() %>/dashboard">Dashboard</a></li>
-                <li class="dropdown">
+                <%-- <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Manage <b class="caret"></b></a>
                   <ul class="dropdown-menu">
                     <li><a href="<%=request.getContextPath() %>/userUrl">User Verification</a></li>
@@ -39,7 +39,7 @@
                     <li><a href="#">List Building</a></li>
                     <li><a href="#">Company Details</a></li> 
                   </ul>
-                </li>
+                </li> --%>
                 
                 
                 <%-- <li><a href="<%=request.getContextPath() %>/manageUser">Users</a></li>

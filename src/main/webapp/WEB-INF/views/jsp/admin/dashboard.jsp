@@ -39,7 +39,7 @@
          <table class="table table-striped" style="    font-size: 16px;">
          	<tr>
          		<th width="25%">Link</th>
-         		<th style="text-align: center;" width="10%">Active</th>
+         		<th style="text-align: center;" width="10%">Pending</th>
          		<th style="text-align: center;" width="10%">Approved</th>
          		<th style="text-align: center;" width="10%">Missed Link</th>
          		<th style="text-align: center;" width="10%">Total</th>
@@ -57,12 +57,18 @@
 			</tr>
 			<tr>
 				<td>Full Profile Details</td>
-				<td style="text-align: center;"><a href="<%=request.getContextPath() %>/userProfile">${userProfileActive }</a></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<%-- <td style="text-align: center;"><a href="<%=request.getContextPath() %>/userProfile">${userProfileActive }</a></td>
 				<td style="text-align: center;"><a href="<%=request.getContextPath() %>/userProfileLog">${userProfileApproved }</a></td>
 				<td style="text-align: center;"><a href="<%=request.getContextPath() %>/userProfileMissed">${userProfileAll  -(userProfileActive+userProfileApproved) }</a></td> 
 				<td style="text-align: center;">${userProfileAll }</td>
 				<td style="text-align: center;">${userProfileLastHour }</td>
-				<td>${userProfileTotalHour }</td>
+				<td>${userProfileTotalHour }</td> --%>
 			</tr>
 			<tr>
 				<td>List Building</td> 
