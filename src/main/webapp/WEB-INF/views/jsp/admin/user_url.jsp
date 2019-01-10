@@ -56,12 +56,18 @@ function setStatus(status,urlId){
        
 
       <!-- Begin page content --> 
-      <div class="container text-center" style="margin-top: 30px;">
+      <div class="container" style="margin-top: 10px;">
+         
+         <font style="text-align: left;" size="3" ><strong> Pending </strong> ${userVerificationActive }</font> <br />
+        <font style="text-align: left;" size="3" ><strong> Approved </strong> (<a href="<%=request.getContextPath() %>/userVerificationLog">${userVerificationApproved }</a>) </font> <br />
+        <font style="text-align: left;" size="3" ><strong> Missed </strong> (<a href="<%=request.getContextPath() %>/userVerificationMissed">${userVerificationAll -(userVerificationActive +userVerificationApproved)}</a>)</font> <br />
          
          <div style="text-align: right;">  
+         		
          		<font  size="3" > In Last Hour Clicked (<font color="green" size="4"> ${userLastHour } </font>) </font>
          </div>
-         <div style="text-align: right;margin-top: 10px;margin-bottom: 10px;"> 
+         <div style="margin-top: 10px;text-align: right;margin-bottom: 10px;"> 
+        	 
          	 <font  size="3" > In Last Eight Hour Clicked (<font color="green" size="4"> ${userTotalHour } </font>) </font> 
          </div>
          
@@ -70,15 +76,18 @@ function setStatus(status,urlId){
          	<tr>
          		<th width="3%">#</th>
          		<th width="57%">Url</th>         		
-         	</tr>     	 
+         	</tr>   
+         	  	 
              <c:forEach items="${urlList }" var="urlList" varStatus="index">         
 	         	<tr>
 	         		<td>${index.count } </td> 
-	         		<td ><a href="${urlList.url }&id=${urlList.userId}&urlId=${urlList.urlId}"  onclick="setStatus('Done',${urlList.urlId})" target="_blank"> Link ${urlList.urlId }</a> </td>	         		
+	         		<td>
+	         			<a href="${urlList.url }&id=${urlList.userId}&urlId=${urlList.urlId}"  onclick="setStatus('Done',${urlList.urlId})" target="_blank"> Link ${urlList.urlId }</a> 
+	         		</td>
 	         	</tr>	
-	         </c:forEach>
+	         </c:forEach>  
          </table>
-		   
+         
       </div>
 
       <div id="push"></div>

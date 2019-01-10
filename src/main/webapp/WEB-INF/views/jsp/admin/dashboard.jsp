@@ -16,7 +16,40 @@
     <link rel="stylesheet" href="<c:url value="resources/css/bootstrap-responsive.css"></c:url>">
 	<!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
- 	
+
+<script type="text/javascript">
+
+
+function setTotal(total){
+	
+	if(confirm("Are you sure you want to confirm?")){
+		 $.ajax({
+			 url : "updateLinkScore",
+			 type : "POST",
+			 data :{
+				 "total" : total
+			 },
+			 success: function(data){
+				 if(data=="true"){
+					 alert("Score updated successfully");
+					 $("#totalApproved").hide();					 
+				 }else{
+				 	 
+				 }
+				 
+				 
+			 },
+			 error : function(e) {
+				console.log("Error setTotal ::"+e);
+			}
+			 
+			 
+		 })
+		 
+	}
+	
+}
+</script> 	
 	
 	 
 	 
@@ -90,7 +123,19 @@
 			</tr>                
          </table>
 		   
+		   
+		   <% if(session.getAttribute("approvedLink")==null || session.getAttribute("approvedLink")==""){  %>
+				   <h3 id="totalApproved" class="text-left">User Verification till(07-Jan-2019) :  ${userVerificationApprovedLog } <a href="#" onclick="return setTotal(${userVerificationApprovedLog})" class="btn btn-primary">Please confirm </a> </h3>
+			<% }else{
+				%>
+				<h3 id="totalApproved1" class="text-left">User Verification till(07-Jan-2019) :  ${userVerificationApprovedLog } <a href="#" class="btn btn-primary">Approved </a> </h3>
+			<% }%>
+		   
+		   
+		    
+		
       </div>
+      
 
       <div id="push"></div>
     </div>

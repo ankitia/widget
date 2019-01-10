@@ -8,9 +8,15 @@ public class UserDetail {
 	private String userEmail;
 	private String password;
 	private String total;
-	
+	private String mobileNumber;
 	
 	 
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
 	public String getTotal() {
 		return total;
 	}

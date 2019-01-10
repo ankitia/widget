@@ -62,14 +62,17 @@ public class HomeImpl implements HomeDao {
 		User user = new User();
 		try {
 			Connection con = (Connection) dataSource.getConnection();
-			String sql = "select * from user where useremail = '"+ userName +"' and binary password = '"+ password +"'";
+			String sql = "select * from user where useremail = ? and binary password = ?";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setString(1, userName);
+			ps.setString(2, password);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				user.setFname(rs.getString("fname"));
 				user.setLname(rs.getString("lname"));
 				user.setUserId(rs.getInt("user_id"));
 				user.setUserRole(rs.getString("user_role"));
+				user.setApprovedLink(rs.getString("approved_link"));
 			} 
 			con.close();
 		}catch (Exception e) {
@@ -85,8 +88,12 @@ public class HomeImpl implements HomeDao {
 		int status = 0;
 		try {
 			Connection con = (Connection) dataSource.getConnection();
-			String sql = "insert into user(fname,lname,useremail,password) value('"+user.getFname()+"','"+user.getLname()+"','"+user.getUserEmail()+"','"+user.getPassword()+"')";
+			String sql = "insert into user(fname,lname,useremail,password) value(?,?,?,?)";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setString(1, user.getFname());
+			ps.setString(2, user.getLname());
+			ps.setString(3, user.getUserEmail());
+			ps.setString(4, user.getPassword());
 			status = ps.executeUpdate();
 			con.close();	
 		}catch (Exception e) {
@@ -173,6 +180,8 @@ public class HomeImpl implements HomeDao {
 				user.setLname(rs.getString("lname"));
 				user.setUserEmail(rs.getString("useremail"));
 				user.setPassword(rs.getString("password"));
+				user.setMobileNumber(rs.getString("mobile_number"));
+				user.setUserId(rs.getInt("user_id"));
 				users.add(user);
 			} 
 			con.close();
@@ -281,7 +290,10 @@ public class HomeImpl implements HomeDao {
 				sql = "select count(distinct(url_id)) as total from scrap where user_id = ?";	
 			}else if(action.equalsIgnoreCase("listContacts")) {
 				sql = "select count(distinct(url_id)) as total from list_contacts where user_id = ?";
+			}if(action.equals("scrap_log")) {
+				sql = "select count(distinct(url_id)) as total from scrap1 where user_id = ?";	
 			}
+			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setInt(1, userId);
 			ResultSet rs = ps.executeQuery();
@@ -333,7 +345,7 @@ public class HomeImpl implements HomeDao {
 		List<UserDetail> users = new ArrayList<>();
 		try {
 			Connection con = (Connection) dataSource.getConnection();
-			String sql = "select u.fname,u.lname,u.useremail,u.password,count(s.user_id) as total from scrap s,user u where u.user_id=s.user_id  group by  s.user_id";
+			String sql = "select u.fname,u.lname,u.useremail,u.mobile_number,u.password,count(s.user_id) as total from scrap s,user u where u.user_id=s.user_id  group by  s.user_id";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -342,6 +354,7 @@ public class HomeImpl implements HomeDao {
 				user.setLname(rs.getString("lname"));
 				user.setUserEmail(rs.getString("useremail"));
 				user.setPassword(rs.getString("password"));
+				user.setMobileNumber(rs.getString("mobile_number"));
 				user.setTotal(rs.getString("total"));
 				users.add(user);
 			} 
@@ -387,7 +400,7 @@ public class HomeImpl implements HomeDao {
 				MasterURL masterURL = new MasterURL();
 				masterURL.setUrlId(Long.parseLong(rs.getString("master_url_id")));
 				masterURL.setUrl((rs.getString("url")));
-				masterURL.setUserId(Integer.parseInt(rs.getString("user_id")));
+				masterURL.setUserId(rs.getString("user_id").trim()!=""?Integer.parseInt(rs.getString("user_id")): 0);
 				data.add(masterURL);
 			}
 			con.close();			
@@ -519,6 +532,83 @@ public class HomeImpl implements HomeDao {
 			// TODO: handle exception
 		}
 		return liContacts;
+	}
+
+	@Override
+	public String getActiveUsers() {
+		String userIds="";
+		try {
+			Connection con = (Connection) dataSource.getConnection();
+			String sql = "select group_concat(user_id) as user_id from user where status = 'Active'";
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				userIds = rs.getString("user_id");				
+			} 
+			con.close();
+		}catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Error ::::");
+			
+			e.printStackTrace();
+		}
+		return userIds;
+	}
+
+	@Override
+	public boolean updateLinkScore(int userId, String total) {
+		System.out.println(userId +"  --"+total);
+		int queryStatus = 0;
+		try(Connection con = (Connection) dataSource.getConnection()) {
+			String sql = "update  user set approved_link = ? where user_id = ?";
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setString(1, total);
+			ps.setLong(2, userId);
+			queryStatus = ps.executeUpdate();
+			ps.close();
+			con.commit();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		System.out.println("updateLinkScore Status :::"+queryStatus);
+		if(queryStatus > 0)
+			return true;
+		else		
+			return false;
+	}
+
+	@Override
+	public boolean setPendingLink(String action, int userId,int limit) {
+		int queryStatus = 0;
+		try(Connection con = (Connection) dataSource.getConnection()) {
+			PreparedStatement ps = null;
+			String sql = "";
+			if(action.equalsIgnoreCase("reset")) {
+				sql = "update master_url set user_id = 0 where user_id = ? and status = 'Active'";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+			}else if(action.equalsIgnoreCase("assign")){
+				sql = "UPDATE master_url SET user_id=? 	WHERE master_url_id IN (SELECT master_url_id FROM (SELECT master_url_id FROM master_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
+			}
+			
+						
+			queryStatus = ps.executeUpdate();
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		System.out.println("Status :::"+queryStatus);
+		if(queryStatus > 0)
+			return true;
+		else		
+			return false;
 	}
 	
 	

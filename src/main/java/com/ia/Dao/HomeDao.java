@@ -50,5 +50,11 @@ public interface HomeDao {
 	
 	String getQueryTime(String action,String totalHour,int userId);
 	
+	String getActiveUsers();
+	
+	boolean updateLinkScore(int userId,String total);
+
+	boolean setPendingLink(String action,int userId,int limit);
+	
 	
 }

@@ -31,7 +31,16 @@ public class HomeController {
 	@RequestMapping(value="/")
 	public String home(Model model,HttpSession session) {
 		
-
+		/*String userIds = homeDao.getActiveUsers();
+		
+		String[] userList =  userIds.split(",");
+		
+		System.out.println("Total active users ::"+ userList.length+" --- "+homeDao.getUrlList(0,"active").size());
+		
+		for (int i = 0; i < userList.length; i++) {
+			
+		}*/
+		
 		
 		if(session.getAttribute("userRole")!=null) {
 			if(session.getAttribute("userRole").toString().equalsIgnoreCase("1")) {
@@ -59,7 +68,7 @@ public class HomeController {
 		
 	}
 	
-	@RequestMapping(value="signup")
+	@RequestMapping(value="i")
 	public String signup(HttpServletRequest request,HttpSession session)
 	{
 		
@@ -68,10 +77,6 @@ public class HomeController {
 		user.setLname(request.getParameter("lname"));
 		user.setPassword(request.getParameter("pass"));
 		user.setUserEmail(request.getParameter("email"));
-		
-		if(homeDao.insert(user)) {
-			session.setAttribute("username", user.getFname() +" "+ user.getLname());
-		}
 		
 		return "redirect:/";
 	}
@@ -160,7 +165,7 @@ public class HomeController {
 			 session.setAttribute("userName", request.getParameter("Email"));
 			 session.setAttribute("userId", user.getUserId());
 			 session.setAttribute("userRole", user.getUserRole());
-			 
+			 session.setAttribute("approvedLink", user.getApprovedLink());
 			 System.out.println("Login user Id::"+ user.getUserId());
 			 
 			 Cookie ck=new Cookie("userId",user.getUserId()+"");//creating cookie object  
@@ -212,6 +217,24 @@ public class HomeController {
 		return "admin/admindashboard";
 	}
 	
+	@RequestMapping(value="userAssigned")
+	public String userAssigned(HttpServletRequest requestm,Model model)
+	{
+		model.addAttribute("userList", homeDao.getUserList());		
+		model.addAttribute("pendingLink",homeDao.getUrlList(0,"all").size()+"");
+		
+		return "admin/user_assigned";
+	}
+	
+	@RequestMapping(value="setPendingLink")
+	@ResponseBody public String getUserActiveLink(HttpServletRequest request) {
+		
+		
+		
+		return homeDao.setPendingLink(request.getParameter("action"), Integer.parseInt(request.getParameter("userId")),Integer.parseInt(request.getParameter("limit")))+"";
+	}
+	
+	
 	@RequestMapping(value="userUrl")
 	public String userUrl(HttpServletRequest reques,Model model,HttpSession session)
 	{
@@ -220,6 +243,10 @@ public class HomeController {
 		
 		model.addAttribute("userLastHour",homeDao.getQueryTime("scrap", "1", userId));
 		model.addAttribute("userTotalHour",homeDao.getQueryTime("scrap", "8", userId));
+		
+		model.addAttribute("userVerificationActive",homeDao.getUrlList(userId,"active").size());
+		model.addAttribute("userVerificationApproved",homeDao.getTotalCount(userId,"scrap"));
+		model.addAttribute("userVerificationAll",homeDao.getUrlList(userId,"all").size());
 		
 		return "admin/user_url";
 	}
@@ -240,35 +267,55 @@ public class HomeController {
 	@RequestMapping(value="dashboard")
 	public String dashboard(HttpServletRequest requestm,Model model,HttpSession session)
 	{
-		int userId = Integer.parseInt(session.getAttribute("userId")+"");
+		if(session.getAttribute("userId")!=null) {
 		
+			int userId = Integer.parseInt(session.getAttribute("userId")+"");
+			
+			
+			model.addAttribute("userVerificationActive",homeDao.getUrlList(userId,"active").size());
+			model.addAttribute("userVerificationApproved",homeDao.getTotalCount(userId,"scrap"));
+			model.addAttribute("userVerificationAll",homeDao.getUrlList(userId,"all").size());
+			model.addAttribute("getScrap", homeDao.getScrapData(userId));		
+			model.addAttribute("userLastHour",homeDao.getQueryTime("scrap", "1", userId));
+			model.addAttribute("userTotalHour",homeDao.getQueryTime("scrap", "8", userId));
+			
+			
+			
+			model.addAttribute("userProfileActive",homeDao.getProfileUrlList(userId,"active").size());
+			model.addAttribute("userProfileApproved",homeDao.getTotalCount(userId,"listContacts"));
+			model.addAttribute("userProfileAll",homeDao.getProfileUrlList(userId,"all").size());
+			
+			
+			model.addAttribute("userProfileLastHour",homeDao.getQueryTime("listContacts", "1", userId));
+			model.addAttribute("userProfileTotalHour",homeDao.getQueryTime("listContacts", "8", userId));
+			
+			
+			model.addAttribute("userVerificationApprovedLog",homeDao.getTotalCount(userId,"scrap_log"));
+
+			System.out.println("This is dashboard  "+userId);
+			return "admin/dashboard";	
+		}else {
+			return "redirect:login";	
+		}
 		
-		model.addAttribute("userVerificationActive",homeDao.getUrlList(userId,"active").size());
-		model.addAttribute("userVerificationApproved",homeDao.getTotalCount(userId,"scrap"));
-		model.addAttribute("userVerificationAll",homeDao.getUrlList(userId,"all").size());
-		model.addAttribute("getScrap", homeDao.getScrapData(userId));		
-		model.addAttribute("userLastHour",homeDao.getQueryTime("scrap", "1", userId));
-		model.addAttribute("userTotalHour",homeDao.getQueryTime("scrap", "8", userId));
-		
-		
-		
-		model.addAttribute("userProfileActive",homeDao.getProfileUrlList(userId,"active").size());
-		model.addAttribute("userProfileApproved",homeDao.getTotalCount(userId,"listContacts"));
-		model.addAttribute("userProfileAll",homeDao.getProfileUrlList(userId,"all").size());
-		
-		
-		model.addAttribute("userProfileLastHour",homeDao.getQueryTime("listContacts", "1", userId));
-		model.addAttribute("userProfileTotalHour",homeDao.getQueryTime("listContacts", "8", userId));
-		
-		
-		System.out.println("This is dashboard  "+userId);
-		return "admin/dashboard";
+	}
+	
+	
+	@RequestMapping(value="updateLinkScore" , method = RequestMethod.POST)
+	@ResponseBody public String updateLinkScore(HttpSession session,HttpServletRequest request) {
+		if(session.getAttribute("userId")!=null) {
+			int userId = Integer.parseInt(session.getAttribute("userId")+"");
+			return homeDao.updateLinkScore(userId, request.getParameter("total"))+"";
+		}
+		return "false";
 	}
 	
 	@RequestMapping(value="userVerificationLog")
 	public String userVerificationLog(HttpServletRequest requestm,Model model,HttpSession session)
 	{
 		int userId = Integer.parseInt(session.getAttribute("userId")+"");
+		
+		
 		model.addAttribute("total",homeDao.getTotalCount(userId,"scrap"));		
 		model.addAttribute("getScrap", homeDao.getScrapData(userId));		
 		

@@ -8,8 +8,23 @@ public class User {
 	private String userEmail;
 	private String password;
 	private String userRole;
+	private String mobileNumber;
+	private String approvedLink;
 	
 	
+	
+	public String getApprovedLink() {
+		return approvedLink;
+	}
+	public void setApprovedLink(String approvedLink) {
+		this.approvedLink = approvedLink;
+	}
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
 	public String getUserRole() {
 		return userRole;
 	}

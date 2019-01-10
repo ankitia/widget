@@ -37,19 +37,35 @@
      	<div class="col-sm-3"></div>
 	    <div class="col-sm-6">
 	    	<h3>User List</h3>
+	    	<div class="text-right"><c:out value="${count }"></c:out></div>
 		    <table class="table table-striped" style="    font-size: 13px;">
 	         	<tr>
 	         		<td width="3%" >#</td>
-	         		<td width="87%">Name</td>
+	         		<td width="17%">Name</td>
+	         		<td width="20%">User Name</td>
+	         		<td width="50%">Mobile number</td>
 	         		<td width="10%">Total</td>
 	         	</tr>     	 
+	         	<c:set var="count" value="0"></c:set>
 	             <c:forEach items="${userList }" var="userList" varStatus="index">         
 		         	<tr>
 		         		<td>${index.count } </td>
 		         		<td>${userList.fname } ${userList.lname } </td>
-		         		<td>${userList.total } </td>
+		         		<td>${userList.userEmail }</td>
+		         		<td>${userList.mobileNumber }</td>
+		         		<td>
+		         			${userList.total }
+		         			<c:set var="count" value="${userList.total + count }"></c:set> 
+		         		
+		         		</td>
 		         	</tr>	
 		         </c:forEach>
+		         <tr>
+	         		<td colspan="4" >#</td>
+	         		<td width="10%"><strong><c:out value="${count }"></c:out></strong></td>
+	         	</tr>     	 
+		         
+		         	
 	         </table>
 	    </div>
    	</div>

@@ -11,4 +11,9 @@ public class ServletInitializer extends SpringBootServletInitializer {
 		return application.sources(Application.class);
 	}
 
+	public ServletInitializer() {
+	    super();
+	    setRegisterErrorPageFilter(false); // <- this one
+	}
+	
 }
