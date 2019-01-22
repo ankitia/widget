@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ia.Dao.CompanyDao;
 import com.ia.Dao.HomeDao;
 import com.ia.modal.Category;
+import com.ia.modal.CompanyAffiliate;
+import com.ia.modal.CompanyDetails;
+import com.ia.modal.CompanyLocation;
 import com.ia.modal.ListContacts;
 import com.ia.modal.Scrap;
 import com.ia.modal.User;
@@ -28,19 +34,11 @@ public class HomeController {
 	@Autowired	 
 	HomeDao homeDao;
 	
+	@Autowired
+	CompanyDao companyDao;
+	
 	@RequestMapping(value="/")
 	public String home(Model model,HttpSession session) {
-		
-		/*String userIds = homeDao.getActiveUsers();
-		
-		String[] userList =  userIds.split(",");
-		
-		System.out.println("Total active users ::"+ userList.length+" --- "+homeDao.getUrlList(0,"active").size());
-		
-		for (int i = 0; i < userList.length; i++) {
-			
-		}*/
-		
 		
 		if(session.getAttribute("userRole")!=null) {
 			if(session.getAttribute("userRole").toString().equalsIgnoreCase("1")) {
@@ -91,8 +89,11 @@ public class HomeController {
 				
 	}
 	
+	
+	
+	
 	@CrossOrigin
-	@RequestMapping(value="getData")
+	@RequestMapping(value="getData" , method = RequestMethod.POST)
  	@ResponseBody public String getData(Scrap scrap,HttpServletRequest request,HttpSession session) throws UnknownHostException, SocketException
 	{
 	        if(scrap.getUser_id()==null || scrap.getUser_id().equalsIgnoreCase("0") || scrap.getUser_id().equalsIgnoreCase("")) {
@@ -106,6 +107,9 @@ public class HomeController {
 	        }
 	        
 	        scrap.setIpaddress(request.getRemoteAddr());
+	        
+	        
+	        
 		return homeDao.insertScrap(scrap)+"";
 	}
 	
@@ -148,6 +152,8 @@ public class HomeController {
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"scrap")+"";	
 		}else if(action.equalsIgnoreCase("listContacts")){
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"listContacts")+"";
+		}else if(action.equalsIgnoreCase("companyData")){
+			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"companyData")+"";
 		}
 		
 		return "false";
@@ -166,6 +172,7 @@ public class HomeController {
 			 session.setAttribute("userId", user.getUserId());
 			 session.setAttribute("userRole", user.getUserRole());
 			 session.setAttribute("approvedLink", user.getApprovedLink());
+			 session.setAttribute("approvedLink2", user.getApprovedLink2());
 			 System.out.println("Login user Id::"+ user.getUserId());
 			 
 			 Cookie ck=new Cookie("userId",user.getUserId()+"");//creating cookie object  
@@ -221,17 +228,50 @@ public class HomeController {
 	public String userAssigned(HttpServletRequest requestm,Model model)
 	{
 		model.addAttribute("userList", homeDao.getUserList());		
-		model.addAttribute("pendingLink",homeDao.getUrlList(0,"all").size()+"");
+		
 		
 		return "admin/user_assigned";
 	}
 	
+	@RequestMapping(value="getTotalCount")
+	@ResponseBody public String getTotalCount(String action) {
+		
+		
+		if(action.equalsIgnoreCase("userProfile")) {
+			return homeDao.getUrlList(0,"all").size()+"";	
+		}else if(action.equalsIgnoreCase("companyData")) {
+			return companyDao.getCompanyUrlList(0,"all").size()+"";
+		}
+		return "";
+	}
+	
+	
+	
 	@RequestMapping(value="setPendingLink")
 	@ResponseBody public String getUserActiveLink(HttpServletRequest request) {
 		
+		String dataProcess = request.getParameter("dataProcess");
+		String action = request.getParameter("action");
+		if(dataProcess.equalsIgnoreCase("userProfile")) {
+			
+			if(action.equalsIgnoreCase("reset")) {
+				action = "resetScrap";
+			}else {
+				action = "assignScrap";
+			}			
+			
+		}else if(dataProcess.equalsIgnoreCase("companyData")) {
+			
+			if(action.equalsIgnoreCase("reset")) {
+				action = "resetCompany";
+			}else {
+				action = "assignCompany";
+			}
+		}
 		
+		System.out.println("action------------"+action);
 		
-		return homeDao.setPendingLink(request.getParameter("action"), Integer.parseInt(request.getParameter("userId")),Integer.parseInt(request.getParameter("limit")))+"";
+		return homeDao.setPendingLink(action, Integer.parseInt(request.getParameter("userId")),Integer.parseInt(request.getParameter("limit")))+"";
 	}
 	
 	
@@ -291,6 +331,16 @@ public class HomeController {
 			
 			
 			model.addAttribute("userVerificationApprovedLog",homeDao.getTotalCount(userId,"scrap_log"));
+			model.addAttribute("userVerificationApprovedLog2",homeDao.getTotalCount(userId,"scrap_log2"));
+			
+			
+			
+			model.addAttribute("companyVerificationActive",companyDao.getCompanyUrlList(userId,"active").size());
+			model.addAttribute("companyVerificationApproved",homeDao.getTotalCount(userId,"companyData"));
+			model.addAttribute("companyVerificationAll",companyDao.getCompanyUrlList(userId,"all").size());
+			model.addAttribute("companyLastHour",homeDao.getQueryTime("companyData", "1", userId));
+			model.addAttribute("companyTotalHour",homeDao.getQueryTime("companyData", "8", userId));
+						
 
 			System.out.println("This is dashboard  "+userId);
 			return "admin/dashboard";	
@@ -305,7 +355,7 @@ public class HomeController {
 	@ResponseBody public String updateLinkScore(HttpSession session,HttpServletRequest request) {
 		if(session.getAttribute("userId")!=null) {
 			int userId = Integer.parseInt(session.getAttribute("userId")+"");
-			return homeDao.updateLinkScore(userId, request.getParameter("total"))+"";
+			return homeDao.updateLinkScore(userId, request.getParameter("total"),request.getParameter("action"))+"";
 		}
 		return "false";
 	}

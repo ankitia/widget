@@ -5,6 +5,7 @@ package com.ia.IMPL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +17,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ia.Dao.HomeDao;
 import com.ia.modal.Category;
+import com.ia.modal.CompanyAffiliate;
+import com.ia.modal.CompanyDetails;
+import com.ia.modal.CompanyLocation;
 import com.ia.modal.ListContacts;
 import com.ia.modal.MasterURL;
 import com.ia.modal.MasterURLProfile;
 import com.ia.modal.Scrap;
 import com.ia.modal.User;
 import com.ia.modal.UserDetail;
+import com.mysql.jdbc.Statement;
 
 @Component("homeDao")
 public class HomeImpl implements HomeDao {
@@ -73,6 +78,7 @@ public class HomeImpl implements HomeDao {
 				user.setUserId(rs.getInt("user_id"));
 				user.setUserRole(rs.getString("user_role"));
 				user.setApprovedLink(rs.getString("approved_link"));
+				user.setApprovedLink2(rs.getString("approved_link_scrap2"));
 			} 
 			con.close();
 		}catch (Exception e) {
@@ -290,8 +296,12 @@ public class HomeImpl implements HomeDao {
 				sql = "select count(distinct(url_id)) as total from scrap where user_id = ?";	
 			}else if(action.equalsIgnoreCase("listContacts")) {
 				sql = "select count(distinct(url_id)) as total from list_contacts where user_id = ?";
-			}if(action.equals("scrap_log")) {
+			}else if(action.equals("scrap_log")) {
 				sql = "select count(distinct(url_id)) as total from scrap1 where user_id = ?";	
+			}else if(action.equals("scrap_log2")) {
+				sql = "select count(distinct(url_id)) as total from scrap2 where user_id = ?";	
+			}else if(action.equals("companyData")) {
+				sql = "select count(distinct(url_id)) as total from company_detail where user_id = ?";	
 			}
 			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
@@ -423,19 +433,23 @@ public class HomeImpl implements HomeDao {
 				sql = "update  master_url set status = ? where master_url_id = ?";
 			}else if(action.equalsIgnoreCase("listContacts")){
 				sql = "update  master_url_profile set status = ? where master_url_id = ?";
+			}else if(action.equalsIgnoreCase("companyData")){
+				sql = "update  master_company_url set status = ? where company_url_id = ?";
 			}
+			
+			
 			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setString(1, status);
 			ps.setLong(2, urlId);
 			queryStatus = ps.executeUpdate();
-			
+			con.commit();
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
 		
-		System.out.println("Status :::"+queryStatus);
+		System.out.println(urlId+"--Status :::"+queryStatus+"---"+action+"---"+status);
 		if(queryStatus > 0)
 			return true;
 		else		
@@ -491,6 +505,8 @@ public class HomeImpl implements HomeDao {
 				sql = "select count(*) as cnt from  scrap where created_date >= DATE_SUB(NOW(),INTERVAL ? HOUR) and user_id = ?";				
 			}else if(action.equalsIgnoreCase("listContacts")) {
 				sql = "select count(*) as cnt from  list_contacts where created_date >= DATE_SUB(NOW(),INTERVAL ? HOUR) and user_id = ?";
+			}else if(action.equalsIgnoreCase("companyData")) {
+				sql = "select count(*) as cnt from  company_detail where created_date >= DATE_SUB(NOW(),INTERVAL ? HOUR) and user_id = ?";
 			}
 			ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setString(1, totalHour);
@@ -556,11 +572,19 @@ public class HomeImpl implements HomeDao {
 	}
 
 	@Override
-	public boolean updateLinkScore(int userId, String total) {
+	public boolean updateLinkScore(int userId, String total,String action) {
 		System.out.println(userId +"  --"+total);
 		int queryStatus = 0;
 		try(Connection con = (Connection) dataSource.getConnection()) {
 			String sql = "update  user set approved_link = ? where user_id = ?";
+			if(action.equalsIgnoreCase("scrap1")) {
+				sql = "update  user set approved_link = ? where user_id = ?";
+			}else if(action.equalsIgnoreCase("scrap2")) {
+				sql = "update  user set approved_link_scrap2 = ? where user_id = ?";
+			}
+			
+			
+			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setString(1, total);
 			ps.setLong(2, userId);
@@ -585,18 +609,25 @@ public class HomeImpl implements HomeDao {
 		try(Connection con = (Connection) dataSource.getConnection()) {
 			PreparedStatement ps = null;
 			String sql = "";
-			if(action.equalsIgnoreCase("reset")) {
+			if(action.equalsIgnoreCase("resetScrap")) {
 				sql = "update master_url set user_id = 0 where user_id = ? and status = 'Active'";
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1, userId);
-			}else if(action.equalsIgnoreCase("assign")){
+			}else if(action.equalsIgnoreCase("assignScrap")){
 				sql = "UPDATE master_url SET user_id=? 	WHERE master_url_id IN (SELECT master_url_id FROM (SELECT master_url_id FROM master_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1, userId);
 				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("resetCompany")) {
+				sql = "update master_company_url set user_id = 0 where user_id = ? and status = 'Active'";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+			}else if(action.equalsIgnoreCase("assignCompany")){
+				sql = "UPDATE master_company_url SET user_id=? 	WHERE company_url_id IN (SELECT company_url_id FROM (SELECT company_url_id FROM master_company_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
 			}
-			
-						
 			queryStatus = ps.executeUpdate();
 			
 		}catch (Exception e) {
@@ -610,6 +641,135 @@ public class HomeImpl implements HomeDao {
 		else		
 			return false;
 	}
+
+	@Override
+	public int insertCompany(CompanyDetails companyDetails) {
+		// TODO Auto-generated method stub
+			int status = 0;
+			try (Connection con = (Connection) dataSource.getConnection()){
+				
+				String sql = "insert into company_detail(company_name,company_location,employee_count,company_url,company_headquater,year_founded,company_size,"
+						+ "company_speciality,company_confirmed_location,affiliate_company,showcase_page,url,url_id,user_id,ipaddress,li_co_id) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+				ps.setString(1, companyDetails.getCompany_name());
+				ps.setString(2, companyDetails.getCompany_location());
+				ps.setString(3, companyDetails.getEmployee_count());
+				ps.setString(4, companyDetails.getCompany_url());
+				ps.setString(5, companyDetails.getCompany_headquater());
+				ps.setString(6, companyDetails.getYear_founded());
+				ps.setString(7, companyDetails.getCompany_size());
+				ps.setString(8, companyDetails.getCompany_speciality());
+				ps.setString(9, "");
+				ps.setString(10, "");
+				ps.setString(11, companyDetails.getShowcase_page());
+				ps.setString(12, companyDetails.getUrl());
+				ps.setString(13, companyDetails.getUrl_id());
+				ps.setString(14, companyDetails.getUser_id());
+				ps.setString(15, companyDetails.getIpaddress());
+				ps.setString(16, companyDetails.getCompany_li_id());
+				status = ps.executeUpdate();
+				con.commit();		
+				
+				
+				 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+			            if (generatedKeys.next()) {
+			            	status = generatedKeys.getInt(1);
+			            }
+			            else {
+			                throw new SQLException("Creating user failed, no ID obtained.");
+			            }
+			        }
+				
+				
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			
+			System.out.println("Status :::"+status);
+			return status;
+	}
+
+	@Override
+	public boolean insertCompanyLocation(CompanyLocation companyLocation) {
+		int status = 0;
+		try (Connection con = (Connection) dataSource.getConnection()){
+			
+			String sql = "insert into company_location(company_id,country,geographic_area,city,postal_code,description,headquarter,line1,line2) value(?,?,?,?,?,?,?,?,?)";
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setInt(1, companyLocation.getCompany_id());
+			ps.setString(2, companyLocation.getCountry());
+			ps.setString(3, companyLocation.getGeographic_area());
+			ps.setString(4, companyLocation.getCity());
+			ps.setString(5, companyLocation.getPostal_code());
+			ps.setString(6, companyLocation.getDescription());
+			ps.setString(7, companyLocation.getHeadquarter());
+			ps.setString(8, companyLocation.getLine1());
+			ps.setString(9, companyLocation.getLine2());
+			status = ps.executeUpdate();
+			con.commit();		
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		System.out.println("Status :::"+status);
+		if(status > 0)
+			return true;
+		else		
+			return false;
+	}
+
+	@Override
+	public boolean insertCompanyAffiliate(CompanyAffiliate companyAffiliate) {
+		int status = 0;
+		try (Connection con = (Connection) dataSource.getConnection()){			
+			String sql = "insert into company_affiliate(company_id,company_name,company_link,company_description) value(?,?,?,?)";
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setInt(1, companyAffiliate.getCompany_id());
+			ps.setString(2, companyAffiliate.getCompany_name());
+			ps.setString(3, companyAffiliate.getCompany_link());
+			ps.setString(4, companyAffiliate.getCompany_description());
+			status = ps.executeUpdate();
+			con.commit();		
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		System.out.println("Status :::"+status);
+		if(status > 0)
+			return true;
+		else		
+			return false;
+	}
+	
+	@Override
+	public List<CompanyDetails> getCompanyDetails() {
+		List<CompanyDetails> companyDetails = new ArrayList<>();
+		try (Connection con = (Connection) dataSource.getConnection()){
+			
+			String sql = "select * from company_detail limit 0,1";
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				CompanyDetails details = new CompanyDetails();
+				details.setCompany_confirmed_location(rs.getString("company_confirmed_location"));;
+				companyDetails.add(details);
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return companyDetails;
+	}
+
+
 	
 	
 	

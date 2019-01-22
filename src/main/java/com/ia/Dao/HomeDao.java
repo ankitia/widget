@@ -3,6 +3,9 @@ package com.ia.Dao;
 import java.util.List;
 
 import com.ia.modal.Category;
+import com.ia.modal.CompanyAffiliate;
+import com.ia.modal.CompanyDetails;
+import com.ia.modal.CompanyLocation;
 import com.ia.modal.ListContacts;
 import com.ia.modal.MasterURL;
 import com.ia.modal.MasterURLProfile;
@@ -29,6 +32,15 @@ public interface HomeDao {
 	
 	boolean insertScrap(Scrap scrap);
 	
+	int insertCompany(CompanyDetails companyDetails);
+	
+	boolean insertCompanyLocation(CompanyLocation companyLocation);
+	
+	boolean insertCompanyAffiliate(CompanyAffiliate companyAffiliate);
+	
+	List<CompanyDetails> getCompanyDetails();
+	
+	
 	boolean insertListContacts(ListContacts listContacts);
 	
 	boolean insertlist();
@@ -52,7 +64,7 @@ public interface HomeDao {
 	
 	String getActiveUsers();
 	
-	boolean updateLinkScore(int userId,String total);
+	boolean updateLinkScore(int userId,String total,String action);
 
 	boolean setPendingLink(String action,int userId,int limit);
 	

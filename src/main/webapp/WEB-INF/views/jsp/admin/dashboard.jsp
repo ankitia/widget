@@ -20,19 +20,27 @@
 <script type="text/javascript">
 
 
-function setTotal(total){
+function setTotal(total,action){
 	
 	if(confirm("Are you sure you want to confirm?")){
 		 $.ajax({
 			 url : "updateLinkScore",
 			 type : "POST",
 			 data :{
-				 "total" : total
+				 "total" : total,
+				 "action" :action
 			 },
 			 success: function(data){
 				 if(data=="true"){
 					 alert("Score updated successfully");
-					 $("#totalApproved").hide();					 
+					 
+					 if(action=="scrap1"){
+						 $("#totalApproved").hide();
+					 }else{
+						 $("#totalApproved2").hide();	 
+					 }
+					 
+					 					 
 				 }else{
 				 	 
 				 }
@@ -114,21 +122,27 @@ function setTotal(total){
 			</tr>              
 			<tr>
 				<td>Company Details</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td style="text-align: center;" ><a href="<%=request.getContextPath() %>/companyUrl"> ${companyVerificationActive }</a></td>
+				<td style="text-align: center;"><a href="<%=request.getContextPath() %>/companyVerificationLog"> ${companyVerificationApproved }</a></td>
+				<td style="text-align: center;"> <a href="<%=request.getContextPath() %>/companyVerificationMissed">${companyVerificationAll -(companyVerificationActive +companyVerificationApproved)}</a></td>
+				<td style="text-align: center;">${companyVerificationAll }</td>
+				<td style="text-align: center;">${companyLastHour }</td>
+				<td  > ${companyTotalHour}</td>
 			</tr>                
          </table>
 		   
-		   
-		   <% if(session.getAttribute("approvedLink")==null || session.getAttribute("approvedLink")==""){  %>
-				   <h3 id="totalApproved" class="text-left">User Verification till(07-Jan-2019) :  ${userVerificationApprovedLog } <a href="#" onclick="return setTotal(${userVerificationApprovedLog})" class="btn btn-primary">Please confirm </a> </h3>
+		   <% if(session.getAttribute("approvedLink")==null || session.getAttribute("approvedLink").toString().trim()=="" || session.getAttribute("approvedLink").toString().length() == 0){  %>
+				   <h3 id="totalApproved" class="text-left">User Verification till(06-Jan-2019) :  ${userVerificationApprovedLog } <a href="#" onclick="return setTotal(${userVerificationApprovedLog},'scrap1')" class="btn btn-primary">Please confirm </a> </h3>
 			<% }else{
 				%>
-				<h3 id="totalApproved1" class="text-left">User Verification till(07-Jan-2019) :  ${userVerificationApprovedLog } <a href="#" class="btn btn-primary">Approved </a> </h3>
+				<h3  class="text-left">User Verification till(06-Jan-2019) :  ${userVerificationApprovedLog } <a href="#" class="btn btn-primary">Approved </a> </h3>
+			<% }%>
+			
+			<% if(session.getAttribute("approvedLink2")==null || session.getAttribute("approvedLink2")==""){  %>
+				   <h3 id="totalApproved2" class="text-left">User Verification from (07-Jan-2019) to (18-Jan-2019) :  ${userVerificationApprovedLog2 } <a href="#" onclick="return setTotal(${userVerificationApprovedLog2},'scrap2')" class="btn btn-primary">Please confirm </a> </h3>
+			<% }else{
+				%>
+				<h3  class="text-left">User Verification from (07-Jan-2019) to (18-Jan-2019) :  ${userVerificationApprovedLog2 } <a href="#" class="btn btn-primary">Approved </a> </h3>
 			<% }%>
 		   
 		   

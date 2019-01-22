@@ -42,7 +42,36 @@ function getUserActiveLink(){
 	
 }  
 
+
+function getTotalCount(){
+	
+
+	$.ajax({
+		type : "POST",
+		url : "getTotalCount",
+		data : {
+			 action :$("#dataProcess").val(),
+			 userId : $("#userId").val(),			 
+		},
+		success : function(data){
+			$("#pendingCount").html(data); 
+			$("#pendingLink").val(data);
+		},
+		error : function(e){
+			console.log("Error getTotalCount:::"+e);
+			
+		}
+	});
+	
+}
+
+
 function setLinks(){
+	
+	if($("#dataProcess").val()==""){
+		alert("Please select process");
+		return false;
+	}
 	
 	if($("#operation").val()=="Assign"){
 		if($("#allocateLink").val()==0 || $("#allocateLink").val()==""){
@@ -71,6 +100,7 @@ function setLinks(){
 				 action :$("#operation").val(),
 				 userId : $("#userId").val(),
 				 limit : $("#allocateLink").val(),
+				 dataProcess : $("#dataProcess").val(),
 			},
 			success : function(data){
 				 
@@ -130,8 +160,15 @@ function setOperation(){
      	<div class="col-sm-3"></div>
 	    <div class="col-sm-6">
 	    	<h3>User List</h3>
-	    	Pending link : <strong>${pendingLink}</strong> <br />  
+	    	Pending link : <strong id="pendingCount"></strong> <br />  
 	    	 <div class="form-group">
+	    	 
+	    	 <select class="form-control" id="dataProcess"  onchange="getTotalCount()">
+	    	 	<option value="">Select Soucre</option>
+	    	 	<option value="userProfile">User Profile Data</option>
+	    	 	<option value="companyData">Company Data</option>
+	    	 </select>
+	    	 
 		      <select class="form-control" id="userId">
 		        <option value="">Select User</option>
 		        <c:forEach items="${userList }" var="userList" varStatus="index">
@@ -156,7 +193,7 @@ function setOperation(){
       		</div>
       		
       		
-	    	<input type="hidden" name="pendingLink" id="pendingLink" value="${pendingLink }">
+	    	<input type="hidden" name="pendingLink" id="pendingLink" ">
 	    	<div class="text-right"><c:out value="${count }"></c:out></div>
 		     
 	    </div>

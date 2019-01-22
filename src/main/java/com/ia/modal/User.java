@@ -10,9 +10,16 @@ public class User {
 	private String userRole;
 	private String mobileNumber;
 	private String approvedLink;
+	private String approvedLink2;
 	
 	
 	
+	public String getApprovedLink2() {
+		return approvedLink2;
+	}
+	public void setApprovedLink2(String approvedLink2) {
+		this.approvedLink2 = approvedLink2;
+	}
 	public String getApprovedLink() {
 		return approvedLink;
 	}
