@@ -43,6 +43,7 @@
          		<td>#</td>
          		<td>Company Name</td>
          		<td>Location</td>
+         		<td>Company Id</td>
          		<td>Locations Total</td>
          		<td>Url Id</td>
          	</tr>     	 
@@ -51,6 +52,7 @@
 	         		<td>${index.count } </td>
 	         		<td>${getCompany.company_name } </td>
 	         		<td>${getCompany.company_location } </td>
+	         		<td>${getCompany.company_li_id } </td>
 	         		<td>${getCompany.locationCount }  </td>	         		
 	         		<td><a href="#" title="${getCompany.url }"> Link ${getCompany.company_id }</a> </td>
 	         	</tr>	

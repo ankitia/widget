@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ia.Dao.CompanyDao;
@@ -37,9 +39,10 @@ public class CompanyController {
 		model.addAttribute("userVerificationActive",companyDao.getCompanyUrlList(userId,"active").size());
 		model.addAttribute("userVerificationApproved",homeDao.getTotalCount(userId,"companyData"));
 		
-		System.out.println("User ud ::"+userId);
-		
 		model.addAttribute("urlList",companyDao.getCompanyUrlList(userId,"display"));
+		
+		
+		model.addAttribute("getTotalActiveLink",companyDao.getCompanyUrlList(0, "active").size());
 		
 		model.addAttribute("userLastHour",homeDao.getQueryTime("companyData", "1", userId));
 		model.addAttribute("userTotalHour",homeDao.getQueryTime("companyData", "8", userId));
@@ -75,7 +78,7 @@ public class CompanyController {
 	}
 	
 	@CrossOrigin
-	@RequestMapping(value="insertCompany" )
+	@RequestMapping(value="insertCompany" , method = RequestMethod.POST)
  	@ResponseBody public String insertCompany(CompanyDetails companyDetails,HttpServletRequest request,HttpSession session) throws UnknownHostException, SocketException
 	{
 		System.out.println("This is call compnay");
@@ -138,6 +141,27 @@ public class CompanyController {
 				}
 	        
 		return "true";
+	}
+	
+	
+	@RequestMapping(value="getMoreLinks")
+	@ResponseBody public String getMoreLinks(HttpSession session,@RequestParam("tableName") String action) {
+		int userId = Integer.parseInt(session.getAttribute("userId")+"");
+		/*int missedLink = companyDao.getCompanyUrlList(userId,"missed").size();
+		if(missedLink > 2) {
+		}*/
+		if(action.equalsIgnoreCase("scrap")) {
+				
+			return homeDao.setPendingLink("assignScrap", userId, 50)+"";
+				
+		}else if(action.equalsIgnoreCase("companyData")) {
+			if(companyDao.getCurrentDateCount(userId) > 4000){
+				return "Your daily 4000 limit exceeded (Per day limit 4000)";
+			}else	
+				return homeDao.setPendingLink("assignCompany", userId, 50)+"";	
+		}
+		return "";
+				
 	}
 
 }

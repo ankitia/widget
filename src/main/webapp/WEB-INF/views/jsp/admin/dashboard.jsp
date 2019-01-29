@@ -22,7 +22,7 @@
 
 function setTotal(total,action){
 	
-	if(confirm("Are you sure you want to confirm?")){
+	//if(confirm("Are you sure you want to confirm?")){
 		 $.ajax({
 			 url : "updateLinkScore",
 			 type : "POST",
@@ -32,13 +32,12 @@ function setTotal(total,action){
 			 },
 			 success: function(data){
 				 if(data=="true"){
-					 alert("Score updated successfully");
-					 
+					 //alert("Score updated successfully");					 
 					 if(action=="scrap1"){
 						 $("#totalApproved").hide();
 					 }else{
 						 $("#totalApproved2").hide();	 
-					 }
+					 } 
 					 
 					 					 
 				 }else{
@@ -54,7 +53,7 @@ function setTotal(total,action){
 			 
 		 })
 		 
-	}
+	//}
 	
 }
 </script> 	
@@ -91,8 +90,8 @@ function setTotal(total,action){
 				<td>User Verification</td>
 				<td style="text-align: center;" ><a href="<%=request.getContextPath() %>/userUrl"> ${userVerificationActive }</a></td>
 				<td style="text-align: center;"><a href="<%=request.getContextPath() %>/userVerificationLog"> ${userVerificationApproved }</a></td>
-				<td style="text-align: center;"> <a href="<%=request.getContextPath() %>/userVerificationMissed">${userVerificationAll -(userVerificationActive +userVerificationApproved)}</a></td>
-				<td style="text-align: center;">${userVerificationAll }</td>
+				<td style="text-align: center;"> <a href="<%=request.getContextPath() %>/userVerificationMissed"><!--${userVerificationMissed }-->  ${userVerificationAll -(userVerificationActive +userVerificationApproved)}</a></td>
+				<td style="text-align: center;">${userVerificationAll } </td> 
 				<td style="text-align: center;">${userLastHour }</td>
 				<td  > ${userTotalHour}</td>
 			</tr>
@@ -130,12 +129,14 @@ function setTotal(total,action){
 				<td  > ${companyTotalHour}</td>
 			</tr>                
          </table>
-		   
+         
+		 	<c:set var="total" value="0"></c:set>  
 		   <% if(session.getAttribute("approvedLink")==null || session.getAttribute("approvedLink").toString().trim()=="" || session.getAttribute("approvedLink").toString().length() == 0){  %>
 				   <h3 id="totalApproved" class="text-left">User Verification till(06-Jan-2019) :  ${userVerificationApprovedLog } <a href="#" onclick="return setTotal(${userVerificationApprovedLog},'scrap1')" class="btn btn-primary">Please confirm </a> </h3>
 			<% }else{
 				%>
 				<h3  class="text-left">User Verification till(06-Jan-2019) :  ${userVerificationApprovedLog } <a href="#" class="btn btn-primary">Approved </a> </h3>
+				<c:set var="total" value="${userVerificationApprovedLog }"></c:set>
 			<% }%>
 			
 			<% if(session.getAttribute("approvedLink2")==null || session.getAttribute("approvedLink2")==""){  %>
@@ -143,9 +144,26 @@ function setTotal(total,action){
 			<% }else{
 				%>
 				<h3  class="text-left">User Verification from (07-Jan-2019) to (18-Jan-2019) :  ${userVerificationApprovedLog2 } <a href="#" class="btn btn-primary">Approved </a> </h3>
+				<c:set var="total" value="${ total + userVerificationApprovedLog2 }"></c:set>
 			<% }%>
 		   
+		   	<% if(session.getAttribute("approvedLink3")==null || session.getAttribute("approvedLink3")==""){  %>
+				   <h3 id="totalApproved2" class="text-left">User Verification from (19-Jan-2019) to (27-Jan-2019) :  ${userVerificationApprovedLog3 } <a href="#" onclick="return setTotal(${userVerificationApprovedLog3},'scrap3')" class="btn btn-primary">Please confirm </a> </h3>
+			<% }else{
+				%>
+				<h3  class="text-left">User Verification from (19-Jan-2019) to (27-Jan-2019) :  ${userVerificationApprovedLog3 } <a href="#" class="btn btn-primary">Approved </a> </h3>
+				<c:set var="total" value="${ total + userVerificationApprovedLog3 }"></c:set>
+			<% }%>
+			
+			  	<% if(session.getAttribute("companyLink")==null || session.getAttribute("companyLink")==""){  %>
+				   <h3 id="totalApproved2" class="text-left">Company Details from (9-Jan-2019) to (27-Jan-2019) :  ${companyVerification } <a href="#" onclick="return setTotal(${companyVerification},'company_log')" class="btn btn-primary">Please confirm </a> </h3>
+			<% }else{
+				%>
+				<h3  class="text-left">Company Details from (9-Jan-2019) to (27-Jan-2019) :  ${companyVerification } <a href="#" class="btn btn-primary">Approved </a> </h3>
+				<c:set var="total" value="${ total + companyVerification }"></c:set>
+			<% }%>
 		   
+		   <h3  class="text-left"> Final total : ${total }</h3> 
 		    
 		
       </div>

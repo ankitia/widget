@@ -1,8 +1,12 @@
 package com.ia.controller;
 
+import java.lang.management.ManagementFactory;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import javax.management.MBeanServer;
+import javax.management.MalformedObjectNameException;
+import javax.management.ObjectName;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,6 +43,19 @@ public class HomeController {
 	
 	@RequestMapping(value="/")
 	public String home(Model model,HttpSession session) {
+		
+		/*MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+		ObjectName objectName;
+		try {
+			objectName = new ObjectName("Catalina:type=Manager,context=/,host=localhost");
+			int activeSessions = (Integer) mBeanServer.getAttribute(objectName, "activeSessions");
+			
+			System.out.println("activeSessions--->>>>>"+activeSessions);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 		
 		if(session.getAttribute("userRole")!=null) {
 			if(session.getAttribute("userRole").toString().equalsIgnoreCase("1")) {
@@ -140,6 +157,10 @@ public class HomeController {
 	@RequestMapping(value="login")
 	public String login()
 	{
+		
+		
+
+		
 		System.out.println("This is callllllllllllllllllllllllllllllll");
 		return "admin/login";
 	}
@@ -173,6 +194,8 @@ public class HomeController {
 			 session.setAttribute("userRole", user.getUserRole());
 			 session.setAttribute("approvedLink", user.getApprovedLink());
 			 session.setAttribute("approvedLink2", user.getApprovedLink2());
+			 session.setAttribute("approvedLink3", user.getApprovedLink3());
+			 session.setAttribute("companyLink", user.getCompanyLink());
 			 System.out.println("Login user Id::"+ user.getUserId());
 			 
 			 Cookie ck=new Cookie("userId",user.getUserId()+"");//creating cookie object  
@@ -224,12 +247,10 @@ public class HomeController {
 		return "admin/admindashboard";
 	}
 	
-	@RequestMapping(value="userAssigned")
+	@RequestMapping(value="userAssigned-ia")
 	public String userAssigned(HttpServletRequest requestm,Model model)
 	{
 		model.addAttribute("userList", homeDao.getUserList());		
-		
-		
 		return "admin/user_assigned";
 	}
 	
@@ -288,6 +309,8 @@ public class HomeController {
 		model.addAttribute("userVerificationApproved",homeDao.getTotalCount(userId,"scrap"));
 		model.addAttribute("userVerificationAll",homeDao.getUrlList(userId,"all").size());
 		
+		model.addAttribute("getTotalActiveLink",homeDao.getUrlList(0, "active").size());
+		
 		return "admin/user_url";
 	}
 	
@@ -314,6 +337,8 @@ public class HomeController {
 			
 			model.addAttribute("userVerificationActive",homeDao.getUrlList(userId,"active").size());
 			model.addAttribute("userVerificationApproved",homeDao.getTotalCount(userId,"scrap"));
+			model.addAttribute("userVerificationMissed",homeDao.getUrlList(userId,"missed").size());
+			
 			model.addAttribute("userVerificationAll",homeDao.getUrlList(userId,"all").size());
 			model.addAttribute("getScrap", homeDao.getScrapData(userId));		
 			model.addAttribute("userLastHour",homeDao.getQueryTime("scrap", "1", userId));
@@ -332,7 +357,8 @@ public class HomeController {
 			
 			model.addAttribute("userVerificationApprovedLog",homeDao.getTotalCount(userId,"scrap_log"));
 			model.addAttribute("userVerificationApprovedLog2",homeDao.getTotalCount(userId,"scrap_log2"));
-			
+			model.addAttribute("userVerificationApprovedLog3",homeDao.getTotalCount(userId,"scrap_log3"));
+			model.addAttribute("companyVerification",homeDao.getTotalCount(userId,"company_log"));
 			
 			
 			model.addAttribute("companyVerificationActive",companyDao.getCompanyUrlList(userId,"active").size());

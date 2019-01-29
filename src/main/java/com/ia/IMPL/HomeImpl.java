@@ -79,6 +79,8 @@ public class HomeImpl implements HomeDao {
 				user.setUserRole(rs.getString("user_role"));
 				user.setApprovedLink(rs.getString("approved_link"));
 				user.setApprovedLink2(rs.getString("approved_link_scrap2"));
+				user.setApprovedLink3(rs.getString("approved_link_scrap3"));
+				user.setCompanyLink(rs.getString("company_link"));
 			} 
 			con.close();
 		}catch (Exception e) {
@@ -300,8 +302,12 @@ public class HomeImpl implements HomeDao {
 				sql = "select count(distinct(url_id)) as total from scrap1 where user_id = ?";	
 			}else if(action.equals("scrap_log2")) {
 				sql = "select count(distinct(url_id)) as total from scrap2 where user_id = ?";	
+			}else if(action.equals("scrap_log3")) {
+				sql = "select count(distinct(url_id)) as total from scrap3 where user_id = ?";	
 			}else if(action.equals("companyData")) {
 				sql = "select count(distinct(url_id)) as total from company_detail where user_id = ?";	
+			}else if(action.equals("company_log")) {
+				sql = "select count(distinct(url_id)) as total from company_detail_log where user_id = ?";	
 			}
 			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
@@ -581,9 +587,13 @@ public class HomeImpl implements HomeDao {
 				sql = "update  user set approved_link = ? where user_id = ?";
 			}else if(action.equalsIgnoreCase("scrap2")) {
 				sql = "update  user set approved_link_scrap2 = ? where user_id = ?";
+			}else if(action.equalsIgnoreCase("scrap3")) {
+				sql = "update  user set approved_link_scrap3 = ? where user_id = ?";
+			}else if(action.equalsIgnoreCase("company_log")) {
+				sql = "update  user set company_link = ? where user_id = ?";
 			}
 			
-			
+			 
 			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setString(1, total);
@@ -649,7 +659,7 @@ public class HomeImpl implements HomeDao {
 			try (Connection con = (Connection) dataSource.getConnection()){
 				
 				String sql = "insert into company_detail(company_name,company_location,employee_count,company_url,company_headquater,year_founded,company_size,"
-						+ "company_speciality,company_confirmed_location,affiliate_company,showcase_page,url,url_id,user_id,ipaddress,li_co_id) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+						+ "company_speciality,company_confirmed_location,affiliate_company,showcase_page,url,url_id,user_id,ipaddress,li_co_id,company_type,company_stock_name,company_industry,phone_number) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 				PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, companyDetails.getCompany_name());
 				ps.setString(2, companyDetails.getCompany_location());
@@ -667,10 +677,12 @@ public class HomeImpl implements HomeDao {
 				ps.setString(14, companyDetails.getUser_id());
 				ps.setString(15, companyDetails.getIpaddress());
 				ps.setString(16, companyDetails.getCompany_li_id());
+				ps.setString(17, companyDetails.getCompany_type());
+				ps.setString(18, companyDetails.getCompany_stock_name());
+				ps.setString(19, companyDetails.getCompany_industry());
+				ps.setString(20, companyDetails.getPhone_number());
 				status = ps.executeUpdate();
 				con.commit();		
-				
-				
 				 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
 			            if (generatedKeys.next()) {
 			            	status = generatedKeys.getInt(1);
@@ -679,8 +691,6 @@ public class HomeImpl implements HomeDao {
 			                throw new SQLException("Creating user failed, no ID obtained.");
 			            }
 			        }
-				
-				
 			}catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();

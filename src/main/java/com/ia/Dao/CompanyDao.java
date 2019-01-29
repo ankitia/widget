@@ -11,5 +11,7 @@ public interface CompanyDao {
 	List<MasterCompanyURL> getCompanyUrlList(int userId,String action);
 	
 	List<CompanyDetails> getCompanyData(int userId);
+	
+	int getCurrentDateCount(int userId);
 
 }

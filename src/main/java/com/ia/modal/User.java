@@ -11,9 +11,23 @@ public class User {
 	private String mobileNumber;
 	private String approvedLink;
 	private String approvedLink2;
+	private String approvedLink3;
+	private String companyLink;
 	
 	
 	
+	public String getCompanyLink() {
+		return companyLink;
+	}
+	public void setCompanyLink(String companyLink) {
+		this.companyLink = companyLink;
+	}
+	public String getApprovedLink3() {
+		return approvedLink3;
+	}
+	public void setApprovedLink3(String approvedLink3) {
+		this.approvedLink3 = approvedLink3;
+	}
 	public String getApprovedLink2() {
 		return approvedLink2;
 	}

@@ -20,11 +20,36 @@ public class CompanyDetails
 	private String ipaddress;
 	private String company_li_id;
 	private String locationCount;
+	private String company_type;
+	private String company_stock_name;
+	private String company_industry;
+	private String phone_number;
 	
-	
-	
-	
- 
+		
+	public String getPhone_number() {
+		return phone_number;
+	}
+	public void setPhone_number(String phone_number) {
+		this.phone_number = phone_number;
+	}
+	public String getCompany_type() {
+		return company_type;
+	}
+	public void setCompany_type(String company_type) {
+		this.company_type = company_type;
+	}
+	public String getCompany_stock_name() {
+		return company_stock_name;
+	}
+	public void setCompany_stock_name(String company_stock_name) {
+		this.company_stock_name = company_stock_name;
+	}
+	public String getCompany_industry() {
+		return company_industry;
+	}
+	public void setCompany_industry(String company_industry) {
+		this.company_industry = company_industry;
+	}
 	public String getLocationCount() {
 		return locationCount;
 	}

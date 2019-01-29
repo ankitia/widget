@@ -39,12 +39,20 @@
          		<td width="3%">#</td>
          		<td width="97%">Url</td>
          	</tr>     	 
-             <c:forEach items="${urlList }" var="urlList" varStatus="index">         
+         	<c:forEach items="${urlList }" var="urlList" varStatus="index">         
+	         	<tr>
+	         		<td>${index.count } </td> 
+	         		<td>
+	         			<a href="${urlList.url }?id=${urlList.userId}&urlId=${urlList.companyUrlId}"  onclick="setStatus('Done',${urlList.companyUrlId})" target="_blank"> Link ${urlList.companyUrlId }</a> 
+	         		</td>
+	         	</tr>	
+	         </c:forEach> 
+             <%-- <c:forEach items="${urlList }" var="urlList" varStatus="index">         
 	         	<tr>
 	         		<td>${index.count } </td> 
 	         		<td><a href="${urlList.url }&id=${urlList.userId}&urlId=${urlList.urlId}"  onclick="setStatus('Done',${urlList.urlId})" target="_blank"> Link ${urlList.urlId }</a> </td>	         		
 	         	</tr>	
-	         </c:forEach>
+	         </c:forEach> --%>
          </table>
 		   
       </div>

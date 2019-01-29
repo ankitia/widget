@@ -42,12 +42,12 @@ public class CompanyImpl implements CompanyDao {
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);
 			}else if(action.equalsIgnoreCase("missed")) {
-				sql = "select m.* from master_company_url m where  m.status='Done' and  m.user_id = ? and m.company_url_id not in (select url_id from company_detail where user_id=?);";
+				sql = "select m.* from master_company_url m where  m.status='Done' and  m.user_id = ? and m.company_url_id not in (select url_id from company_detail where user_id=?)  limit 0,6";
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);
 				ps.setInt(2,userId);	
 			}else if(action.equalsIgnoreCase("display")) {
-				sql = "select * from master_company_url where status = 'Active' and user_id = ? limit 0,3";
+				sql = "select * from master_company_url where status = 'Active' and user_id = ? limit 0,6";
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);				
 			}
@@ -73,8 +73,10 @@ public class CompanyImpl implements CompanyDao {
 		List<CompanyDetails> companyDetails = new ArrayList<>();
 		try (Connection con = (Connection) dataSource.getConnection()){
 			
-			String sql = "select *,count(cl.company_id) as locations from company_detail cd LEFT JOIN company_location cl ON cl.company_id=cd.company_id where \n" + 
-					"user_id = ?  group by cd.company_id limit 0,10";
+			//String sql = "select *,count(cl.company_id) as locations from company_detail cd LEFT JOIN company_location cl ON cl.company_id=cd.company_id where \n" + 
+			//		"user_id = ?  group by cd.company_id limit 0,10";
+			String sql = "select *,count(cl.company_id) as locations from master_company_url mu,company_detail cd LEFT JOIN company_location cl ON \n" + 
+					"cl.company_id=cd.company_id where mu.company_url_id = cd.url_id and   cd.user_id = ?  group by cd.company_id limit 0,10";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setInt(1,userId);
 			ResultSet rs = ps.executeQuery();
@@ -82,9 +84,10 @@ public class CompanyImpl implements CompanyDao {
 				CompanyDetails details = new CompanyDetails();
 				details.setCompany_name(rs.getString("company_name"));;
 				details.setCompany_location(rs.getString("company_location"));;
-				details.setCompany_url(rs.getString("url"));;
+				details.setUrl(rs.getString("url"));;
 				details.setCompany_id(rs.getInt("company_id"));
-				details.setLocationCount(rs.getString("locations")); 
+				details.setLocationCount(rs.getString("locations"));
+				details.setCompany_li_id(rs.getString("li_co_id"));
 				companyDetails.add(details);
 			}
 		}catch (Exception e) {
@@ -92,6 +95,23 @@ public class CompanyImpl implements CompanyDao {
 			// TODO: handle exception
 		}
 		return companyDetails;
+	}
+
+	@Override
+	public int getCurrentDateCount(int userId) {
+		try (Connection con = (Connection) dataSource.getConnection()){
+			String  sql = "select count(user_id) as count from company_detail where user_id = ? and CURDATE()=date_format(created_date,'%Y-%m-%d')";	
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setInt(1,userId);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				return rs.getInt("count");				
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}		
+		return 0;
 	}
 	
 	
