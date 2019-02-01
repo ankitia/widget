@@ -1,19 +1,13 @@
 package com.ia.controller;
 
-import java.lang.management.ManagementFactory;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import javax.management.MBeanServer;
-import javax.management.MalformedObjectNameException;
-import javax.management.ObjectName;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,9 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ia.Dao.CompanyDao;
 import com.ia.Dao.HomeDao;
 import com.ia.modal.Category;
-import com.ia.modal.CompanyAffiliate;
-import com.ia.modal.CompanyDetails;
-import com.ia.modal.CompanyLocation;
 import com.ia.modal.ListContacts;
 import com.ia.modal.Scrap;
 import com.ia.modal.User;
@@ -116,17 +107,12 @@ public class HomeController {
 	        if(scrap.getUser_id()==null || scrap.getUser_id().equalsIgnoreCase("0") || scrap.getUser_id().equalsIgnoreCase("")) {
 	        	scrap.setUser_id("1");
 	        }
-	        
 	        String urlId = scrap.getUrl_id()+"";
-	        
 	        if(urlId.equalsIgnoreCase("null") || urlId==null ) {
 	        	scrap.setUrl_id(0);
 	        }
 	        
 	        scrap.setIpaddress(request.getRemoteAddr());
-	        
-	        
-	        
 		return homeDao.insertScrap(scrap)+"";
 	}
 	
@@ -192,10 +178,10 @@ public class HomeController {
 			 session.setAttribute("userName", request.getParameter("Email"));
 			 session.setAttribute("userId", user.getUserId());
 			 session.setAttribute("userRole", user.getUserRole());
-			 session.setAttribute("approvedLink", user.getApprovedLink());
+			 /*session.setAttribute("approvedLink", user.getApprovedLink());
 			 session.setAttribute("approvedLink2", user.getApprovedLink2());
 			 session.setAttribute("approvedLink3", user.getApprovedLink3());
-			 session.setAttribute("companyLink", user.getCompanyLink());
+			 session.setAttribute("companyLink", user.getCompanyLink());*/
 			 System.out.println("Login user Id::"+ user.getUserId());
 			 
 			 Cookie ck=new Cookie("userId",user.getUserId()+"");//creating cookie object  
@@ -325,7 +311,7 @@ public class HomeController {
 		model.addAttribute("userProfileTotalHour",homeDao.getQueryTime("listContacts", "8", userId));
 		
 		return "admin/user_profile";
-	}
+	}	
 	
 	@RequestMapping(value="dashboard")
 	public String dashboard(HttpServletRequest requestm,Model model,HttpSession session)
@@ -338,35 +324,44 @@ public class HomeController {
 			model.addAttribute("userVerificationActive",homeDao.getUrlList(userId,"active").size());
 			model.addAttribute("userVerificationApproved",homeDao.getTotalCount(userId,"scrap"));
 			model.addAttribute("userVerificationMissed",homeDao.getUrlList(userId,"missed").size());
-			
+				
 			model.addAttribute("userVerificationAll",homeDao.getUrlList(userId,"all").size());
-			model.addAttribute("getScrap", homeDao.getScrapData(userId));		
+			/*model.addAttribute("getScrap", homeDao.getScrapData(userId));*/ 		
 			model.addAttribute("userLastHour",homeDao.getQueryTime("scrap", "1", userId));
 			model.addAttribute("userTotalHour",homeDao.getQueryTime("scrap", "8", userId));
 			
 			
 			
-			model.addAttribute("userProfileActive",homeDao.getProfileUrlList(userId,"active").size());
+			/*model.addAttribute("userProfileActive",homeDao.getProfileUrlList(userId,"active").size());
 			model.addAttribute("userProfileApproved",homeDao.getTotalCount(userId,"listContacts"));
 			model.addAttribute("userProfileAll",homeDao.getProfileUrlList(userId,"all").size());
 			
 			
 			model.addAttribute("userProfileLastHour",homeDao.getQueryTime("listContacts", "1", userId));
-			model.addAttribute("userProfileTotalHour",homeDao.getQueryTime("listContacts", "8", userId));
+			model.addAttribute("userProfileTotalHour",homeDao.getQueryTime("listContacts", "8", userId));*/
 			
 			
-			model.addAttribute("userVerificationApprovedLog",homeDao.getTotalCount(userId,"scrap_log"));
+			/*model.addAttribute("userVerificationApprovedLog",homeDao.getTotalCount(userId,"scrap_log"));
 			model.addAttribute("userVerificationApprovedLog2",homeDao.getTotalCount(userId,"scrap_log2"));
-			model.addAttribute("userVerificationApprovedLog3",homeDao.getTotalCount(userId,"scrap_log3"));
+			model.addAttribute("userVerificationApprovedLog3",homeDao.getTotalCount(userId,"scrap_log3"));*/
 			model.addAttribute("companyVerification",homeDao.getTotalCount(userId,"company_log"));
 			
 			
-			model.addAttribute("companyVerificationActive",companyDao.getCompanyUrlList(userId,"active").size());
+			/*model.addAttribute("companyVerificationActive",companyDao.getCompanyUrlList(userId,"active").size());
 			model.addAttribute("companyVerificationApproved",homeDao.getTotalCount(userId,"companyData"));
 			model.addAttribute("companyVerificationAll",companyDao.getCompanyUrlList(userId,"all").size());
 			model.addAttribute("companyLastHour",homeDao.getQueryTime("companyData", "1", userId));
-			model.addAttribute("companyTotalHour",homeDao.getQueryTime("companyData", "8", userId));
+			model.addAttribute("companyTotalHour",homeDao.getQueryTime("companyData", "8", userId));*/
 						
+			
+			/*User user = homeDao.checkValidUser("", "","user",userId);
+			model.addAttribute("userDetail",user);*/
+			
+			/*session.setAttribute("approvedLink", user.getApprovedLink());
+			 session.setAttribute("approvedLink2", user.getApprovedLink2());
+			 session.setAttribute("approvedLink3", user.getApprovedLink3());
+			 session.setAttribute("companyLink", user.getCompanyLink());*/
+			
 
 			System.out.println("This is dashboard  "+userId);
 			return "admin/dashboard";	
@@ -454,10 +449,23 @@ public class HomeController {
 		System.out.println("Categoty :::"+category.getCatName());
 		
 		homeDao.categoryInsert(category);
-		
+		 
 		return "redirect:category";
 	}
 	
 	/* End Admin controller */
 	
+	@RequestMapping(value="testSample")
+	@ResponseBody public String test() {
+		
+		 String host = "pop.gmail.com";// change accordingly
+	      String mailStoreType = "pop3";
+	      String username = "shivpatel9878@gmail.com";// change accordingly
+	      String password = "Hello135!";// change accordingly
+
+	      //Test.check(host, mailStoreType, username, password);
+
+	      
+		return "true";
+	}
 }

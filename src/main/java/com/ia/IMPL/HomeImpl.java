@@ -68,7 +68,7 @@ public class HomeImpl implements HomeDao {
 		try {
 			Connection con = (Connection) dataSource.getConnection();
 			String sql = "select * from user where useremail = ? and binary password = ?";
-			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			PreparedStatement  ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setString(1, userName);
 			ps.setString(2, password);
 			ResultSet rs = ps.executeQuery();
@@ -222,13 +222,13 @@ public class HomeImpl implements HomeDao {
 			ps.setLong(9, scrap.getUrl_id());
 			status = ps.executeUpdate();
 			con.commit();		
-			
+			con.close();
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
 		
-		System.out.println("Status :::"+status);
+		System.out.println("Status insertScrap:::"+status);
 		if(status > 0)
 			return true;
 		else		
@@ -450,6 +450,7 @@ public class HomeImpl implements HomeDao {
 			ps.setLong(2, urlId);
 			queryStatus = ps.executeUpdate();
 			con.commit();
+			con.close();
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -522,6 +523,7 @@ public class HomeImpl implements HomeDao {
 			while (rs.next()) {
 				time = rs.getString("cnt");
 			}
+			con.close();
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
