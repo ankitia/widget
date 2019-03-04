@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="<c:url value="resources/css/bootstrap-responsive.css"></c:url>">
 	<!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
- 	
+ 	<script src="<c:url value="resources/js/common.js"></c:url>"></script>
 <script type="text/javascript">
 
 function setStatus(status,urlId){
@@ -41,6 +41,26 @@ function setStatus(status,urlId){
 	
 }
 
+function setStatus(status,urlId){	
+	$.ajax({
+		type : "POST",
+		url : "updateUrlStatus",
+		data :{
+			status : status,
+			urlId : urlId,
+			action : "listContacts"
+		},
+		success : function(data){
+			
+		},
+		error : function(e){
+			consloe.log("Error ::: "+e);
+		}
+	});	
+}
+
+
+
 </script>	
 	 
 	 
@@ -56,7 +76,16 @@ function setStatus(status,urlId){
        
 
       <!-- Begin page content --> 
-      <div class="container text-center" style="margin-top: 30px;">
+      <div class="container" style="margin-top: 10px;">
+      
+      	<font style="text-align: left;" size="3" ><strong> Pending </strong> ${userProfileActive }</font> <br />
+        <span style="float: right;"><font style="text-align: left;" size="3" >Total Pending Link in System : </font><font size="5" color="black"> ${getTotalActiveLink }</font></span>
+        <font style="text-align: left;" size="3" ><strong> Approved </strong> (<a href="<%=request.getContextPath() %>/userProfileLog">${userProfileApproved }</a>) </font> <br />
+        <font style="text-align: left;" size="3" ><strong> Missed </strong> (<a href="<%=request.getContextPath() %>/userProfileMissed">${userProfileAll -(userProfileActive +userProfileApproved)}</a>)</font> <br />
+              
+        <c:if test="${userProfileActive == 0}">
+        	<input type="button" name="getMoreLinks" id="getMoreLinks" class="btn btn-primary" onclick="getMoreLinks('userProfile')" value="Get More 50 Links">
+        </c:if>
       
       	 <div style="text-align: right;">  
          		<font  size="3" > In Last Hour Clicked (<font color="green" size="4"> ${userProfileLastHour } </font>) </font>

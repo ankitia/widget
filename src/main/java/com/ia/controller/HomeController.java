@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ia.Dao.CompanyDao;
 import com.ia.Dao.HomeDao;
+import com.ia.Dao.ListBuildingDao;
 import com.ia.modal.Category;
 import com.ia.modal.ListContacts;
 import com.ia.modal.Scrap;
@@ -31,6 +32,9 @@ public class HomeController {
 	
 	@Autowired
 	CompanyDao companyDao;
+	
+	@Autowired
+	ListBuildingDao  listBuildingDao; 
 	
 	@RequestMapping(value="/")
 	public String home(Model model,HttpSession session) {
@@ -161,6 +165,8 @@ public class HomeController {
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"listContacts")+"";
 		}else if(action.equalsIgnoreCase("companyData")){
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"companyData")+"";
+		}else if(action.equalsIgnoreCase("listBuild")){
+			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"listBuild")+"";
 		}
 		
 		return "false";
@@ -178,10 +184,10 @@ public class HomeController {
 			 session.setAttribute("userName", request.getParameter("Email"));
 			 session.setAttribute("userId", user.getUserId());
 			 session.setAttribute("userRole", user.getUserRole());
-			 /*session.setAttribute("approvedLink", user.getApprovedLink());
+			 session.setAttribute("approvedLink", user.getApprovedLink());
 			 session.setAttribute("approvedLink2", user.getApprovedLink2());
-			 session.setAttribute("approvedLink3", user.getApprovedLink3());
-			 session.setAttribute("companyLink", user.getCompanyLink());*/
+			 /*session.setAttribute("approvedLink3", user.getApprovedLink3());*/
+			 session.setAttribute("companyLink", user.getCompanyLink()); 
 			 System.out.println("Login user Id::"+ user.getUserId());
 			 
 			 Cookie ck=new Cookie("userId",user.getUserId()+"");//creating cookie object  
@@ -310,6 +316,12 @@ public class HomeController {
 		model.addAttribute("userProfileLastHour",homeDao.getQueryTime("listContacts", "1", userId));
 		model.addAttribute("userProfileTotalHour",homeDao.getQueryTime("listContacts", "8", userId));
 		
+		model.addAttribute("userProfileActive",homeDao.getProfileUrlList(userId,"active").size());
+		model.addAttribute("userProfileApproved",homeDao.getTotalCount(userId,"listContacts"));
+		model.addAttribute("userProfileAll",homeDao.getProfileUrlList(userId,"all").size());
+		
+		model.addAttribute("getTotalActiveLink",homeDao.getProfileUrlList(0, "active").size());
+		
 		return "admin/user_profile";
 	}	
 	
@@ -332,33 +344,44 @@ public class HomeController {
 			
 			
 			
-			/*model.addAttribute("userProfileActive",homeDao.getProfileUrlList(userId,"active").size());
+			model.addAttribute("userProfileActive",homeDao.getProfileUrlList(userId,"active").size());
 			model.addAttribute("userProfileApproved",homeDao.getTotalCount(userId,"listContacts"));
 			model.addAttribute("userProfileAll",homeDao.getProfileUrlList(userId,"all").size());
 			
 			
 			model.addAttribute("userProfileLastHour",homeDao.getQueryTime("listContacts", "1", userId));
-			model.addAttribute("userProfileTotalHour",homeDao.getQueryTime("listContacts", "8", userId));*/
+			model.addAttribute("userProfileTotalHour",homeDao.getQueryTime("listContacts", "8", userId));
 			
 			
-			/*model.addAttribute("userVerificationApprovedLog",homeDao.getTotalCount(userId,"scrap_log"));
+			model.addAttribute("userVerificationApprovedLog",homeDao.getTotalCount(userId,"scrap_log"));
 			model.addAttribute("userVerificationApprovedLog2",homeDao.getTotalCount(userId,"scrap_log2"));
-			model.addAttribute("userVerificationApprovedLog3",homeDao.getTotalCount(userId,"scrap_log3"));*/
+			/*model.addAttribute("userVerificationApprovedLog3",homeDao.getTotalCount(userId,"scrap_log3"));*/
 			model.addAttribute("companyVerification",homeDao.getTotalCount(userId,"company_log"));
 			
 			
-			/*model.addAttribute("companyVerificationActive",companyDao.getCompanyUrlList(userId,"active").size());
+			model.addAttribute("companyVerificationActive",companyDao.getCompanyUrlList(userId,"active").size());
 			model.addAttribute("companyVerificationApproved",homeDao.getTotalCount(userId,"companyData"));
 			model.addAttribute("companyVerificationAll",companyDao.getCompanyUrlList(userId,"all").size());
 			model.addAttribute("companyLastHour",homeDao.getQueryTime("companyData", "1", userId));
-			model.addAttribute("companyTotalHour",homeDao.getQueryTime("companyData", "8", userId));*/
+			model.addAttribute("companyTotalHour",homeDao.getQueryTime("companyData", "8", userId));
 						
 			
-			/*User user = homeDao.checkValidUser("", "","user",userId);
-			model.addAttribute("userDetail",user);*/
+			/* Start List Building  */
 			
-			/*session.setAttribute("approvedLink", user.getApprovedLink());
-			 session.setAttribute("approvedLink2", user.getApprovedLink2());
+			model.addAttribute("listBuildVerificationActive",listBuildingDao.getListBuildingUrlList(userId,"active").size());
+			model.addAttribute("listBuildVerificationApproved",homeDao.getTotalCount(userId,"listBuild"));
+			model.addAttribute("listBuildVerificationAll",listBuildingDao.getListBuildingUrlList(userId,"all").size());
+			model.addAttribute("listBuildLastHour",homeDao.getQueryTime("listBuild", "1", userId));
+			model.addAttribute("listBuildTotalHour",homeDao.getQueryTime("listBuild", "8", userId));
+			
+			/* End List Building */ 
+			
+			
+			/*User user = homeDao.checkValidUser("", "","user",userId);
+			model.addAttribute("userDetail",user);
+			
+			session.setAttribute("approvedLink", user.getApprovedLink());
+			/* session.setAttribute("approvedLink2", user.getApprovedLink2());
 			 session.setAttribute("approvedLink3", user.getApprovedLink3());
 			 session.setAttribute("companyLink", user.getCompanyLink());*/
 			

@@ -308,6 +308,8 @@ public class HomeImpl implements HomeDao {
 				sql = "select count(distinct(url_id)) as total from company_detail where user_id = ?";	
 			}else if(action.equals("company_log")) {
 				sql = "select count(distinct(url_id)) as total from company_detail_log where user_id = ?";	
+			}else if(action.equalsIgnoreCase("listBuild")) {
+				sql = "select count(distinct(url_id)) as total from list_building_details where user_id = ?";
 			}
 			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
@@ -441,9 +443,11 @@ public class HomeImpl implements HomeDao {
 				sql = "update  master_url_profile set status = ? where master_url_id = ?";
 			}else if(action.equalsIgnoreCase("companyData")){
 				sql = "update  master_company_url set status = ? where company_url_id = ?";
+			}else if(action.equalsIgnoreCase("listBuild")){
+				sql = "update  master_list_building_url set status = ? where master_list_url_id = ?";
 			}
 			
-			
+			 
 			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setString(1, status);
@@ -514,7 +518,10 @@ public class HomeImpl implements HomeDao {
 				sql = "select count(*) as cnt from  list_contacts where created_date >= DATE_SUB(NOW(),INTERVAL ? HOUR) and user_id = ?";
 			}else if(action.equalsIgnoreCase("companyData")) {
 				sql = "select count(*) as cnt from  company_detail where created_date >= DATE_SUB(NOW(),INTERVAL ? HOUR) and user_id = ?";
+			}else if(action.equalsIgnoreCase("listBuild")) {
+				sql = "select count(*) as cnt from  list_building_details where created_date >= DATE_SUB(NOW(),INTERVAL ? HOUR) and user_id = ?";
 			}
+			
 			ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setString(1, totalHour);
 			ps.setInt(2, userId);
@@ -636,6 +643,16 @@ public class HomeImpl implements HomeDao {
 				ps.setInt(1, userId);
 			}else if(action.equalsIgnoreCase("assignCompany")){
 				sql = "UPDATE master_company_url SET user_id=? 	WHERE company_url_id IN (SELECT company_url_id FROM (SELECT company_url_id FROM master_company_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignListBuild")){
+				sql = "UPDATE master_list_building_url SET user_id=? 	WHERE master_list_url_id IN (SELECT master_list_url_id FROM (SELECT master_list_url_id FROM master_list_building_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignUserProfile")){
+				sql = "UPDATE master_url_profile SET user_id=? 	WHERE master_url_id IN (SELECT master_url_id FROM (SELECT master_url_id FROM master_url_profile where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1, userId);
 				ps.setInt(2, limit);

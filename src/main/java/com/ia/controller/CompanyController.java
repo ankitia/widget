@@ -159,6 +159,10 @@ public class CompanyController {
 				return "Your daily 4000 limit exceeded (Per day limit 4000)";
 			}else	
 				return homeDao.setPendingLink("assignCompany", userId, 50)+"";	
+		}else if(action.equalsIgnoreCase("listBuild")) {
+			return homeDao.setPendingLink("assignListBuild", userId, 50)+"";
+		}else if(action.equalsIgnoreCase("userProfile")) {
+			return homeDao.setPendingLink("assignUserProfile", userId, 50)+"";
 		}
 		return "";
 				

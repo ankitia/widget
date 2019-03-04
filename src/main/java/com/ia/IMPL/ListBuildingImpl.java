@@ -1,0 +1,156 @@
+package com.ia.IMPL;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.ia.Dao.ListBuildingDao;
+import com.ia.modal.ListBuilding;
+import com.ia.modal.MasterListBuildingURL;
+import com.mysql.jdbc.Statement;
+
+
+@Component("listBuildingDao")
+public class ListBuildingImpl implements ListBuildingDao {
+	
+	@Autowired
+	DataSource dataSource;
+		
+	Connection con;
+
+	@Override
+	public List<MasterListBuildingURL> getListBuildingUrlList(int userId, String action) {
+		List<MasterListBuildingURL> data = new ArrayList<>();
+		try(Connection con = (Connection) dataSource.getConnection();) {
+			ResultSet rs = null;
+			PreparedStatement ps = null;
+			String sql = "";
+			if(action.equalsIgnoreCase("active")) {
+				sql = "select * from master_list_building_url where status = 'Active' and user_id = ?";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1,userId);
+					
+			}else if(action.equalsIgnoreCase("all")){
+				sql = "select * from master_list_building_url where user_id = ?";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1,userId);
+			}else if(action.equalsIgnoreCase("missed")) {
+				sql = "select m.* from master_list_building_url m where  m.status='Done' and  m.user_id = ? and m.master_list_url_id not in (select url_id from list_building_details where user_id=?)  limit 0,10";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1,userId);
+				ps.setInt(2,userId);	
+			}else if(action.equalsIgnoreCase("display")) {
+				sql = "select * from master_list_building_url where status = 'Active' and user_id = ? limit 0,10";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1,userId);				
+			}
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				MasterListBuildingURL masterListBuildingURL = new MasterListBuildingURL();
+				masterListBuildingURL.setListBuildUrlId(Long.parseLong(rs.getString("master_list_url_id")));
+				masterListBuildingURL.setUrl((rs.getString("url")));
+				masterListBuildingURL.setUserId(rs.getString("user_id").trim()!=""?Integer.parseInt(rs.getString("user_id")): 0);
+				data.add(masterListBuildingURL);
+			}
+			con.close();			
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return data;
+	}
+
+	@Override
+	public List<ListBuilding> getListBuildingData(int userId) {
+		List<ListBuilding> listBuildings = new ArrayList<>();
+		try (Connection con = (Connection) dataSource.getConnection()){
+			
+			String sql = "select * from list_building_details  group by list_id limit 0,10";
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setInt(1,userId);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				ListBuilding details = new ListBuilding();
+				details.setName(rs.getString("name"));
+				details.setCompany_name(rs.getString("company_name"));;
+				details.setUrl(rs.getString("url"));;
+				details.setListId(rs.getInt("list_id"));
+				listBuildings.add(details);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return listBuildings;
+	}
+
+	@Override
+	public int getCurrentDateCount(int userId) {
+		// TODO Auto-generated method stub
+		try (Connection con = (Connection) dataSource.getConnection()){
+			String  sql = "select count(user_id) as count from list_building_details where user_id = ? and CURDATE()=date_format(created_date,'%Y-%m-%d')";	
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setInt(1,userId);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				return rs.getInt("count");				
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}		
+		return 0;
+	}
+
+	@Override
+	public int insertListBuild(ListBuilding listBuilding) {
+		// TODO Auto-generated method stub
+		int status = 0; 
+		try (Connection con = (Connection) dataSource.getConnection()){
+			
+			String sql = "insert into list_building_details(name,new_link,company_link,company_name,company_tenure,contact_location,contact_designation,url,url_id,user_id,ipaddress) value(?,?,?,?,?,?,?,?,?,?,?)";
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, listBuilding.getName());
+			ps.setString(2, listBuilding.getNew_link());
+			ps.setString(3, listBuilding.getCompany_link());
+			ps.setString(4, listBuilding.getCompany_name());
+			ps.setString(5, listBuilding.getCompany_tenure());
+			ps.setString(6, listBuilding.getContact_location());
+			ps.setString(7, listBuilding.getContact_designation());
+			ps.setString(8, listBuilding.getUrl());
+			ps.setString(9, listBuilding.getUrl_id());
+			ps.setString(10, listBuilding.getUser_id());
+			ps.setString(11, listBuilding.getIpaddress());
+			 
+			status = ps.executeUpdate();
+			con.commit();		
+			 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+		            if (generatedKeys.next()) {
+		            	status = generatedKeys.getInt(1);
+		            }
+		            else {
+		                throw new SQLException("Creating user failed, no ID obtained.");
+		            }
+		        }
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		System.out.println("Status :::"+status);
+		return status;
+	}
+
+ 
+	
+	
+
+}
