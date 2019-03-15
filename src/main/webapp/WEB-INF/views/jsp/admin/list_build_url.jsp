@@ -61,7 +61,7 @@
         <font style="text-align: left;" size="3" ><strong> Missed </strong> (<a href="<%=request.getContextPath() %>/listBuildVerificationMissed">${listVerificationAll -(listVerificationActive +listVerificationApproved)}</a>)</font> <br />
          
         <c:if test="${listVerificationActive == 0}"> 
-        	<input type="button" name="getMoreLinks" id="getMoreLinks" class="btn btn-primary" onclick="getMoreLinks('listBuild')" value="Get More 50 Links">
+        	<input type="button" name="getMoreLinks" id="getMoreLinks" class="btn btn-primary" onclick="getMoreLinks('listBuild')" value="Get More 3 Links">
         </c:if>        
          
          <div style="text-align: right;"> 
@@ -83,7 +83,7 @@
 	         	<tr>
 	         		<td>${index.count } </td> 
 	         		<td>
-	         			<a href="${urlList.url }?id=${urlList.userId}&urlId=${urlList.listBuildUrlId}"  onclick="setStatus('Done',${urlList.listBuildUrlId})" target="_blank"> Link ${urlList.listBuildUrlId }</a> 
+	         			<a href="${urlList.url }&id=${urlList.userId}&urlId=${urlList.listBuildUrlId}"  onclick="setStatus('Done',${urlList.listBuildUrlId})" target="_blank"> Link ${urlList.listBuildUrlId }</a> 
 	         		</td>
 	         	</tr>	
 	         </c:forEach>  

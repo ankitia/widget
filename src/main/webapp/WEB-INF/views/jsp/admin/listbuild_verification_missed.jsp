@@ -63,7 +63,7 @@
 	         	<tr>
 	         		<td>${index.count } </td> 
 	         		<td>
-	         			<a href="${urlList.url }?id=${urlList.userId}&urlId=${urlList.listBuildUrlId}"  onclick="setStatus('Done',${urlList.listBuildUrlId})" target="_blank"> Link ${urlList.listBuildUrlId }</a> 
+	         			<a href="${urlList.url }&id=${urlList.userId}&urlId=${urlList.listBuildUrlId}"  onclick="setStatus('Done',${urlList.listBuildUrlId})" target="_blank"> Link ${urlList.listBuildUrlId }</a> 
 	         		</td>
 	         	</tr>	
 	         </c:forEach> 

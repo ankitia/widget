@@ -85,6 +85,7 @@ public class ListBuildingImpl implements ListBuildingDao {
 				details.setListId(rs.getInt("list_id"));
 				listBuildings.add(details);
 			}
+			con.close();
 		}catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception
@@ -103,6 +104,7 @@ public class ListBuildingImpl implements ListBuildingDao {
 			while (rs.next()) {
 				return rs.getInt("count");				
 			}
+			con.close();
 		}catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception
@@ -116,7 +118,7 @@ public class ListBuildingImpl implements ListBuildingDao {
 		int status = 0; 
 		try (Connection con = (Connection) dataSource.getConnection()){
 			
-			String sql = "insert into list_building_details(name,new_link,company_link,company_name,company_tenure,contact_location,contact_designation,url,url_id,user_id,ipaddress) value(?,?,?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into list_building_details(name,new_link,company_link,company_name,company_tenure,contact_location,contact_designation,url,url_id,user_id,ipaddress,total_result_no,total_changed_job_no,page_number,record_no) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, listBuilding.getName());
 			ps.setString(2, listBuilding.getNew_link());
@@ -129,6 +131,10 @@ public class ListBuildingImpl implements ListBuildingDao {
 			ps.setString(9, listBuilding.getUrl_id());
 			ps.setString(10, listBuilding.getUser_id());
 			ps.setString(11, listBuilding.getIpaddress());
+			ps.setString(12, listBuilding.getTotal_result_no());
+			ps.setString(13, listBuilding.getTotal_changed_job_no());
+			ps.setString(14, listBuilding.getPage_number());
+			ps.setString(15, listBuilding.getRecord_no());
 			 
 			status = ps.executeUpdate();
 			con.commit();		
@@ -140,6 +146,7 @@ public class ListBuildingImpl implements ListBuildingDao {
 		                throw new SQLException("Creating user failed, no ID obtained.");
 		            }
 		        }
+			 con.close();
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

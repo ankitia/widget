@@ -404,7 +404,7 @@ public class HomeImpl implements HomeDao {
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);
 			}else if(action.equalsIgnoreCase("missed")) {
-				sql = "select m.* from master_url m where  m.status='Done' and  m.user_id = ? and m.master_url_id not in (select url_id from scrap where user_id=?);";
+				sql = "select m.* from master_url m where  m.status='Done' and  m.user_id = ? and m.master_url_id not in (select group_concat(url_id) from scrap where user_id=?)  limit 0,20;";
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);
 				ps.setInt(2,userId);	

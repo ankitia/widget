@@ -291,6 +291,8 @@ public class HomeController {
 	@RequestMapping(value="userUrl")
 	public String userUrl(HttpServletRequest reques,Model model,HttpSession session)
 	{
+		System.out.println("User url");
+		
 		int userId = Integer.parseInt(session.getAttribute("userId")+"");
 		model.addAttribute("urlList",homeDao.getUrlList(userId,"display"));
 		
@@ -305,6 +307,8 @@ public class HomeController {
 		
 		return "admin/user_url";
 	}
+	
+	
 	
 	
 	@RequestMapping(value="userProfile")
@@ -335,13 +339,13 @@ public class HomeController {
 			
 			model.addAttribute("userVerificationActive",homeDao.getUrlList(userId,"active").size());
 			model.addAttribute("userVerificationApproved",homeDao.getTotalCount(userId,"scrap"));
-			model.addAttribute("userVerificationMissed",homeDao.getUrlList(userId,"missed").size());
+			/*model.addAttribute("userVerificationMissed",homeDao.getUrlList(userId,"missed").size());*/
 				
 			model.addAttribute("userVerificationAll",homeDao.getUrlList(userId,"all").size());
 			/*model.addAttribute("getScrap", homeDao.getScrapData(userId));*/ 		
-			model.addAttribute("userLastHour",homeDao.getQueryTime("scrap", "1", userId));
+			/*model.addAttribute("userLastHour",homeDao.getQueryTime("scrap", "1", userId));
 			model.addAttribute("userTotalHour",homeDao.getQueryTime("scrap", "8", userId));
-			
+			*/
 			
 			
 			model.addAttribute("userProfileActive",homeDao.getProfileUrlList(userId,"active").size());
@@ -349,9 +353,9 @@ public class HomeController {
 			model.addAttribute("userProfileAll",homeDao.getProfileUrlList(userId,"all").size());
 			
 			
-			model.addAttribute("userProfileLastHour",homeDao.getQueryTime("listContacts", "1", userId));
+			/*model.addAttribute("userProfileLastHour",homeDao.getQueryTime("listContacts", "1", userId));
 			model.addAttribute("userProfileTotalHour",homeDao.getQueryTime("listContacts", "8", userId));
-			
+			*/
 			
 			model.addAttribute("userVerificationApprovedLog",homeDao.getTotalCount(userId,"scrap_log"));
 			model.addAttribute("userVerificationApprovedLog2",homeDao.getTotalCount(userId,"scrap_log2"));
@@ -362,17 +366,21 @@ public class HomeController {
 			model.addAttribute("companyVerificationActive",companyDao.getCompanyUrlList(userId,"active").size());
 			model.addAttribute("companyVerificationApproved",homeDao.getTotalCount(userId,"companyData"));
 			model.addAttribute("companyVerificationAll",companyDao.getCompanyUrlList(userId,"all").size());
-			model.addAttribute("companyLastHour",homeDao.getQueryTime("companyData", "1", userId));
+			/*model.addAttribute("companyLastHour",homeDao.getQueryTime("companyData", "1", userId));
 			model.addAttribute("companyTotalHour",homeDao.getQueryTime("companyData", "8", userId));
-						
+			*/			
 			
 			/* Start List Building  */
+		
+			/*if(session.getAttribute("userName").toString().equalsIgnoreCase("E00101") || session.getAttribute("userName").toString().equalsIgnoreCase("E00471")) {
+				model.addAttribute("listBuildVerificationActive",listBuildingDao.getListBuildingUrlList(userId,"active").size());
+				model.addAttribute("listBuildVerificationApproved",homeDao.getTotalCount(userId,"listBuild"));
+				model.addAttribute("listBuildVerificationAll",listBuildingDao.getListBuildingUrlList(userId,"all").size());
+				model.addAttribute("listBuildLastHour",homeDao.getQueryTime("listBuild", "1", userId));
+				model.addAttribute("listBuildTotalHour",homeDao.getQueryTime("listBuild", "8", userId));	
+			}*/
 			
-			model.addAttribute("listBuildVerificationActive",listBuildingDao.getListBuildingUrlList(userId,"active").size());
-			model.addAttribute("listBuildVerificationApproved",homeDao.getTotalCount(userId,"listBuild"));
-			model.addAttribute("listBuildVerificationAll",listBuildingDao.getListBuildingUrlList(userId,"all").size());
-			model.addAttribute("listBuildLastHour",homeDao.getQueryTime("listBuild", "1", userId));
-			model.addAttribute("listBuildTotalHour",homeDao.getQueryTime("listBuild", "8", userId));
+			
 			
 			/* End List Building */ 
 			
@@ -429,8 +437,8 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="userVerificationMissed")
-	public String userVerificationMissed(HttpServletRequest requestm,Model model,HttpSession session)
-	{
+	public String userVerificationMissed(Model model,HttpSession session)
+	{ 
 		int userId = Integer.parseInt(session.getAttribute("userId")+"");
 		model.addAttribute("urlList",homeDao.getUrlList(userId,"missed"));	
 		System.out.println("This is user_verification_missed  "+userId);

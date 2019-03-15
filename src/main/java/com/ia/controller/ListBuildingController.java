@@ -3,6 +3,8 @@ package com.ia.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +28,8 @@ public class ListBuildingController {
 	
 	@Autowired
 	HomeDao homeDao;
-	 
+
+	
 	@RequestMapping(value="/listBuildingUrl")
 	public String listBuildingUrl(HttpSession session,Model model) {
 		
@@ -72,15 +75,15 @@ public class ListBuildingController {
 	}
 	 
 	@CrossOrigin
-	@RequestMapping(value="listBuildData")
- 	@ResponseBody public String listBuildData(ListBuilding listBuilding,HttpServletRequest request,HttpSession session) 
+	@RequestMapping(value="salesBuildDatas")
+ 	@ResponseBody public String listBuildData(ListBuilding listBuilding,HttpServletRequest request) 
 	{
 		String ipAddress = request.getHeader("X-Real-IP");
         if (ipAddress == null) {
             ipAddress = request.getRemoteAddr();
         }
         
-        System.out.println(listBuilding.getUser_id());
+        //System.out.println(listBuilding.getTotal_result_no()+"---"+ listBuilding.getUser_id()+ "-----------"+listBuilding.getSales_data());
         
         if(listBuilding.getUser_id()==null || listBuilding.getUser_id().equalsIgnoreCase("null") || listBuilding.getUser_id().equalsIgnoreCase("")) {
         	listBuilding.setUser_id("1");
@@ -88,10 +91,39 @@ public class ListBuildingController {
         
          if(listBuilding.getUrl_id()==null || listBuilding.getUrl_id().equalsIgnoreCase("") || listBuilding.getUrl_id().equalsIgnoreCase("null")) {
         	 listBuilding.setUrl_id("0");
-         }  
+         }
         
-        listBuilding.setIpaddress(request.getRemoteAddr());
-        return listBuildingDao.insertListBuild(listBuilding)+"";
+         listBuilding.setIpaddress(request.getRemoteAddr());
+         try {
+      	   JSONArray jsonArr = new JSONArray(listBuilding.getSales_data());
+		       for (int i = 0; i < jsonArr.length(); i++) {			            
+		    	   	JSONObject jsonObj = jsonArr.getJSONObject(i);
+		    	   	
+		    	   	if(!jsonObj.isNull("name"))
+		    	   		listBuilding.setName(jsonObj.get("name")+"");
+	    	   		if(!jsonObj.isNull("name_link"))
+	    	   			listBuilding.setNew_link(jsonObj.get("name_link")+"");
+    	   			if(!jsonObj.isNull("company_name"))
+    	   				listBuilding.setCompany_name(jsonObj.get("company_name")+"");
+	   				if(!jsonObj.isNull("company_link"))
+	   					listBuilding.setCompany_link(jsonObj.get("company_link")+"");
+   					if(!jsonObj.isNull("company_tenure"))
+   						listBuilding.setCompany_tenure(jsonObj.get("company_tenure")+"");
+					if(!jsonObj.isNull("contact_designation"))
+						listBuilding.setContact_designation(jsonObj.get("contact_designation")+"");
+					if(!jsonObj.isNull("contact_location"))
+						listBuilding.setContact_location(jsonObj.get("contact_location")+"");
+					if(!jsonObj.isNull("record_no"))
+						listBuilding.setRecord_no(jsonObj.get("record_no")+"");
+							
+		    	   	
+		    	   	listBuildingDao.insertListBuild(listBuilding);
+		       }
+         } catch (Exception e) {
+				e.printStackTrace();
+			}
+        
+        return "true";
 	}
 
 }

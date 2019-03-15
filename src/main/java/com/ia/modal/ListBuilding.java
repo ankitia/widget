@@ -14,6 +14,44 @@ public class ListBuilding {
 	private String user_id;
 	private String url_id;
 	private String ipaddress;
+	private String sales_data;
+	private String total_result_no;
+	private String total_changed_job_no;
+	private String page_number;
+	private String record_no;
+	
+	
+	
+	public String getTotal_result_no() {
+		return total_result_no;
+	}
+	public void setTotal_result_no(String total_result_no) {
+		this.total_result_no = total_result_no;
+	}
+	public String getTotal_changed_job_no() {
+		return total_changed_job_no;
+	}
+	public void setTotal_changed_job_no(String total_changed_job_no) {
+		this.total_changed_job_no = total_changed_job_no;
+	}
+	public String getPage_number() {
+		return page_number;
+	}
+	public void setPage_number(String page_number) {
+		this.page_number = page_number;
+	}
+	public String getRecord_no() {
+		return record_no;
+	}
+	public void setRecord_no(String record_no) {
+		this.record_no = record_no;
+	}
+	public String getSales_data() {
+		return sales_data;
+	}
+	public void setSales_data(String sales_data) {
+		this.sales_data = sales_data;
+	}
 	public int getListId() {
 		return listId;
 	}
