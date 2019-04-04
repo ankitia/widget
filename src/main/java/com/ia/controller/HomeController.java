@@ -7,6 +7,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.MessageHandler.Whole;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -372,13 +373,20 @@ public class HomeController {
 			
 			/* Start List Building  */
 		
-			/*if(session.getAttribute("userName").toString().equalsIgnoreCase("E00101") || session.getAttribute("userName").toString().equalsIgnoreCase("E00471")) {
+			String[] empId = {"E00588", "E00101", "E00471", "E00014", "E00017","E00069","E00127","E00205","E00207","E00198","E00044","E00246","E00001"}; 
+			boolean showList = false; 
+			for (int i = 0; i < empId.length; i++) {
+				if(session.getAttribute("userName").toString().equalsIgnoreCase(empId[i])) {
+					showList = true;
+				}
+			}
+			if(showList) {
 				model.addAttribute("listBuildVerificationActive",listBuildingDao.getListBuildingUrlList(userId,"active").size());
 				model.addAttribute("listBuildVerificationApproved",homeDao.getTotalCount(userId,"listBuild"));
 				model.addAttribute("listBuildVerificationAll",listBuildingDao.getListBuildingUrlList(userId,"all").size());
 				model.addAttribute("listBuildLastHour",homeDao.getQueryTime("listBuild", "1", userId));
 				model.addAttribute("listBuildTotalHour",homeDao.getQueryTime("listBuild", "8", userId));	
-			}*/
+			}
 			
 			
 			

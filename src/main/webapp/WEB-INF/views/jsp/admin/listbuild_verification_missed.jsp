@@ -37,6 +37,23 @@
 		});	
 	}
 
+	function getTotalMissed(urlId){
+		$.ajax({
+			type : "POST",
+			url : "getListBuildMissedCount",
+			data :{
+				urlId : urlId,
+				
+			},
+			success : function(data){
+				alert(data);
+			},
+			error : function(e){
+				consloe.log("Error ::: "+e);
+			}
+		});	
+	}
+	
 	</script>
 	 
 	 
@@ -57,7 +74,8 @@
          <table class="table table-striped" style="font-size: 13px;">
          	<tr>
          		<td width="3%">#</td>
-         		<td width="97%">Url</td>
+         		<td width="87%">Url</td>
+         		<td width="10%">Status</td>
          	</tr>     	 
          	<c:forEach items="${urlList }" var="urlList" varStatus="index">         
 	         	<tr>
@@ -65,6 +83,7 @@
 	         		<td>
 	         			<a href="${urlList.url }&id=${urlList.userId}&urlId=${urlList.listBuildUrlId}"  onclick="setStatus('Done',${urlList.listBuildUrlId})" target="_blank"> Link ${urlList.listBuildUrlId }</a> 
 	         		</td>
+	         		<td> <a href="#" onclick="getTotalMissed(${urlList.listBuildUrlId})">Status</a> </td>
 	         	</tr>	
 	         </c:forEach> 
              <%-- <c:forEach items="${urlList }" var="urlList" varStatus="index">         

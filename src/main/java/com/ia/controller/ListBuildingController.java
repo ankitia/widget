@@ -73,6 +73,12 @@ public class ListBuildingController {
 		System.out.println("This is listBuildVerificationMissed  "+userId);
 		return "admin/listbuild_verification_missed";
 	}
+	
+	@RequestMapping(value="getListBuildMissedCount")
+	@ResponseBody public String getListBuildMissedCount(String urlId) {
+		return listBuildingDao.getListBuildMissedCount(Integer.parseInt(urlId))+"";
+	}
+	
 	 
 	@CrossOrigin
 	@RequestMapping(value="salesBuildDatas")

@@ -15,5 +15,7 @@ public interface ListBuildingDao {
 	int getCurrentDateCount(int userId);
 	
 	public int insertListBuild(ListBuilding listBuilding);
+	
+	public String getListBuildMissedCount(int urlId);
 
 }

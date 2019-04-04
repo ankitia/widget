@@ -58,9 +58,6 @@ function setTotal(total,action){
 }
 </script> 	
 	
-	 
-	 
-    
   </head>
 
   <body>
@@ -133,27 +130,24 @@ function setTotal(total,action){
          
          
 		 	<%--  
-		 	
-		 	
-		 	
 		 	<c:if test="${userDetail.approvedLink eq ''}">
 		 		test
 		 	</c:if>
-		 	--%>
+		 	--%> 
 		 	 <c:set var="total" value="0"></c:set> 
 		   <% if(session.getAttribute("approvedLink")==null || session.getAttribute("approvedLink").toString().trim()=="" || session.getAttribute("approvedLink").toString().length() == 0){  %>
-				   <h3 id="totalApproved" class="text-left">User Verification till(06-Jan-2019) :  ${userVerificationApprovedLog } <a href="#" onclick="return setTotal(${userVerificationApprovedLog},'scrap1')" class="btn btn-primary">Please confirm </a> </h3>
+				   <h3 id="totalApproved" class="text-left">User Verification till(18-Mar-2019) :  ${userVerificationApprovedLog } <a href="#" onclick="return setTotal(${userVerificationApprovedLog},'scrap1')" class="btn btn-primary">Please confirm </a> </h3>
 			<% }else{
 				%>
-				<h3  class="text-left">User Verification till(06-Jan-2019) :  ${userVerificationApprovedLog } <a href="#" class="btn btn-primary">Approved </a> </h3>
+				<h3  class="text-left">User Verification till(18-Mar-2019) :  ${userVerificationApprovedLog } <a href="#" class="btn btn-primary">Approved </a> </h3>
 				<c:set var="total" value="${userVerificationApprovedLog }"></c:set>
 			<% }%>
 			
 				<% if(session.getAttribute("approvedLink2")==null || session.getAttribute("approvedLink2") == "" || session.getAttribute("approvedLink2").toString().length() == 0){  %>
-				   <h3 id="totalApproved2" class="text-left">User Verification from (07-Jan-2019) to (18-Jan-2019) :  ${userVerificationApprovedLog2 } <a href="#" onclick="return setTotal(${userVerificationApprovedLog2},'scrap2')" class="btn btn-primary">Please confirm </a> </h3>
+				   <h3 id="totalApproved2" class="text-left">User Verification from (18-Mar-2019) to (25-Mar-2019) :  ${userVerificationApprovedLog2 } <a href="#" onclick="return setTotal(${userVerificationApprovedLog2},'scrap2')" class="btn btn-primary">Please confirm </a> </h3>
 			<% }else{
-				%>
-				<h3  class="text-left">User Verification from (07-Jan-2019) to (18-Jan-2019) :  ${userVerificationApprovedLog2 } <a href="#" class="btn btn-primary">Approved </a> </h3>
+				%> 
+				<h3  class="text-left">User Verification from (18-Mar-2019) to (25-Mar-2019) :  ${userVerificationApprovedLog2 } <a href="#" class="btn btn-primary">Approved </a> </h3>
 				<c:set var="total" value="${ total + userVerificationApprovedLog2 }"></c:set>
 			<% }%>
 		   
@@ -166,10 +160,10 @@ function setTotal(total,action){
 			<% }%>--%>
 			
 			  	<% if(session.getAttribute("companyLink")==null || session.getAttribute("companyLink")=="" || session.getAttribute("companyLink").toString().length() == 0){  %>
-				   <h3 id="totalApproved2" class="text-left">Company Details from (9-Jan-2019) to (27-Jan-2019) :  ${companyVerification } <a href="#" onclick="return setTotal(${companyVerification},'company_log')" class="btn btn-primary">Please confirm </a> </h3>
+				   <h3 id="totalApproved2" class="text-left">Company Details from (9-Mar-2019) to (27-Mar-2019) :  ${companyVerification } <a href="#" onclick="return setTotal(${companyVerification},'company_log')" class="btn btn-primary">Please confirm </a> </h3>
 			<% }else{
 				%>
-				<h3  class="text-left">Company Details from (9-Jan-2019) to (27-Jan-2019) :  ${companyVerification } <a href="#" class="btn btn-primary">Approved </a> </h3>
+				<h3  class="text-left">Company Details from (9-Mar-2019) to (27-Mar-2019) :  ${companyVerification } <a href="#" class="btn btn-primary">Approved </a> </h3>
 				<c:set var="total" value="${ total + companyVerification }"></c:set>
 			<% }%>
 		   
@@ -177,15 +171,9 @@ function setTotal(total,action){
 		    
 		
       </div>
-      
-
       <div id="push"></div>
     </div>
 
-     
-     
     <script src="<c:url value="resources/js/bootstrap-dropdown.js"></c:url>"></script>
-    
-
   </body>
 </html>

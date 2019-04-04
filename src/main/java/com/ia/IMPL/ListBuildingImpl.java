@@ -156,6 +156,30 @@ public class ListBuildingImpl implements ListBuildingDao {
 		return status;
 	}
 
+	@Override
+	public String getListBuildMissedCount(int urlId) {
+		int totalCount = 0;
+		String total = "";
+		try (Connection con = (Connection) dataSource.getConnection()){
+			String  sql = "select count(list_id) count,total_result_no from list_building_details where  url_id =? group by page_number,record_no ";	
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setInt(1,urlId);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				totalCount++;
+				total = rs.getString("total_result_no");
+			}
+			
+			 
+			con.close();
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}		
+		return ""+totalCount+" scraped out of "+total;
+	}
+
  
 	
 	

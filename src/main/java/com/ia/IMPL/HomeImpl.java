@@ -307,7 +307,8 @@ public class HomeImpl implements HomeDao {
 			}else if(action.equals("companyData")) {
 				sql = "select count(distinct(url_id)) as total from company_detail where user_id = ?";	
 			}else if(action.equals("company_log")) {
-				sql = "select count(distinct(url_id)) as total from company_detail_log where user_id = ?";	
+				//sql = "select count(distinct(url_id)) as total from company_detail_log where user_id = ?";	
+				sql = "select count(distinct(cdl.url_id)) as total_fi, (count(distinct(cdl.url_id)) - company_link_temp)  as total from company_detail_log cdl,user u   where cdl.user_id=u.user_id  and cdl.user_id = ?";
 			}else if(action.equalsIgnoreCase("listBuild")) {
 				sql = "select count(distinct(url_id)) as total from list_building_details where user_id = ?";
 			}
@@ -404,7 +405,8 @@ public class HomeImpl implements HomeDao {
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);
 			}else if(action.equalsIgnoreCase("missed")) {
-				sql = "select m.* from master_url m where  m.status='Done' and  m.user_id = ? and m.master_url_id not in (select group_concat(url_id) from scrap where user_id=?)  limit 0,20;";
+				//sql = "select m.* from master_url m where  m.status='Done' and  m.user_id = ? and m.master_url_id not in (select group_concat(url_id) from scrap where user_id=?)  limit 0,20;";
+				sql = "select m.* from master_url m where  m.status='Done' and  m.user_id = ? and m.master_url_id not in (select url_id from scrap where user_id=?);";
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);
 				ps.setInt(2,userId);	
