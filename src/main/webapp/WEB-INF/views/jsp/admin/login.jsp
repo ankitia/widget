@@ -19,6 +19,13 @@
 <script src="<c:url value="resources/bootstrap/js/ValidationFormScript.js"></c:url>"></script>
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
+<style type="text/css">
+.wrapper{
+overflow-y:hidden; 
+}
+
+</style>
+
 </head>
 <body class="wrapper">
  <!-- id="form1" -->

@@ -61,7 +61,7 @@
         <font style="text-align: left;" size="3" ><strong> Missed </strong> (<a href="<%=request.getContextPath() %>/listBuildVerificationMissed">${listVerificationAll -(listVerificationActive +listVerificationApproved)}</a>)</font> <br />
          
         <c:if test="${listVerificationActive == 0}"> 
-        	<input type="button" name="getMoreLinks" id="getMoreLinks" class="btn btn-primary" onclick="getMoreLinks('listBuild')" value="Get More 3 Links">
+        	<input type="button" name="getMoreLinks" id="getMoreLinks" class="btn btn-primary" onclick="getMoreLinks('listBuild')" value="Get More 2 Links">
         </c:if>        
          
          <div style="text-align: right;"> 

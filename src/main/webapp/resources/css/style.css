@@ -1,12 +1,18 @@
 
 /*@import "bourbon";
 */  
+
+html{ 
+	overflow-y:auto;   
+}
+
 body {
 	/*background: #d9dde1 !important;*/  
 }
 
 .wrapper {	
 	margin-top: 10%;
+	overflow-y:hidden;  
   margin-bottom: 80px;
 }
 

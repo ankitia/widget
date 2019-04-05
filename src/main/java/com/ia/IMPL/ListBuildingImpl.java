@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.ia.Dao.ListBuildingDao;
 import com.ia.modal.ListBuilding;
+import com.ia.modal.ListBuildingView;
 import com.ia.modal.MasterListBuildingURL;
 import com.mysql.jdbc.Statement;
 
@@ -43,7 +44,7 @@ public class ListBuildingImpl implements ListBuildingDao {
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);
 			}else if(action.equalsIgnoreCase("missed")) {
-				sql = "select m.* from master_list_building_url m where  m.status='Done' and  m.user_id = ? and m.master_list_url_id not in (select url_id from list_building_details where user_id=?)  limit 0,10";
+				sql = "select m.* from master_list_building_url m where  m.status='Done' and  m.user_id = ? and m.master_list_url_id not in (select url_id from list_building_details where user_id=?) ";
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);
 				ps.setInt(2,userId);	
@@ -51,6 +52,10 @@ public class ListBuildingImpl implements ListBuildingDao {
 				sql = "select * from master_list_building_url where status = 'Active' and user_id = ? limit 0,10";
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);				
+			}else if(action.equalsIgnoreCase("missedCheck")) {
+				sql = "select master_list_url_id,lb.url,lb.user_id, IF(TRIM(REPLACE(REPLACE(lb.total_result_no,'Total results',''),'\\n', ''))=count(url_id), \"YES\", IF(TRIM(REPLACE(REPLACE(lb.total_result_no,'Total results',''),'\\n', ''))<=count(url_id),\"YES\",\"NO\")) as result,count(url_id),TRIM(REPLACE(REPLACE(lb.total_result_no,'Total results',''),'\\n', '')) as total,url_id from list_building_details lb, master_list_building_url mlbu where lb.user_id=? and mlbu.master_list_url_id = lb.url_id group by url_id HAVING  result='NO'";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1,userId);
 			}
 			rs = ps.executeQuery();
 			while (rs.next()) {
@@ -69,20 +74,23 @@ public class ListBuildingImpl implements ListBuildingDao {
 	}
 
 	@Override
-	public List<ListBuilding> getListBuildingData(int userId) {
-		List<ListBuilding> listBuildings = new ArrayList<>();
+	public List<ListBuildingView> getListBuildingData(int userId,String action) {
+		List<ListBuildingView> listBuildings = new ArrayList<>();
 		try (Connection con = (Connection) dataSource.getConnection()){
 			
-			String sql = "select * from list_building_details  group by list_id limit 0,10";
+			//String sql = "select * from list_building_details  group by list_id limit 0,10";
+			String sql = "select company_name,name,master_list_url_id,lb.url,lb.user_id, IF(TRIM(REPLACE(REPLACE(lb.total_result_no,'Total results',''),'\\n', ''))=count(url_id), \"YES\", IF(TRIM(REPLACE(REPLACE(lb.total_result_no,'Total results',''),'\\n', ''))<=count(url_id),\"YES\",\"NO\")) as result,count(url_id) scrap_count,TRIM(REPLACE(REPLACE(lb.total_result_no,'Total results',''),'\\n', '')) as total,url_id from list_building_details lb, master_list_building_url mlbu where lb.user_id=? and mlbu.master_list_url_id = lb.url_id group by url_id HAVING  result='"+action+"'";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setInt(1,userId);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				ListBuilding details = new ListBuilding();
+				ListBuildingView details = new ListBuildingView();
 				details.setName(rs.getString("name"));
 				details.setCompany_name(rs.getString("company_name"));;
 				details.setUrl(rs.getString("url"));;
-				details.setListId(rs.getInt("list_id"));
+				details.setTotalRecord(rs.getString("total"));
+				details.setScrapCount(rs.getString("scrap_count"));
+				details.setListId(rs.getInt("master_list_url_id"));
 				listBuildings.add(details);
 			}
 			con.close();
@@ -145,7 +153,10 @@ public class ListBuildingImpl implements ListBuildingDao {
 		            else {
 		                throw new SQLException("Creating user failed, no ID obtained.");
 		            }
-		        }
+		        }catch (Exception e) {
+					// TODO: handle exception
+		        	e.printStackTrace();
+				}
 			 con.close();
 		}catch (Exception e) {
 			// TODO: handle exception

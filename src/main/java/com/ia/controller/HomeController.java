@@ -7,7 +7,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.MessageHandler.Whole;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -373,7 +372,7 @@ public class HomeController {
 			
 			/* Start List Building  */
 		
-			String[] empId = {"E00588", "E00101", "E00471", "E00014", "E00017","E00069","E00127","E00205","E00207","E00198","E00044","E00246","E00001"}; 
+			String[] empId = {"E00468","E00588", "E00101", "E00471", "E00014", "E00017","E00069","E00127","E00205","E00207","E00198","E00044","E00246","E00001","E00063"}; 
 			boolean showList = false; 
 			for (int i = 0; i < empId.length; i++) {
 				if(session.getAttribute("userName").toString().equalsIgnoreCase(empId[i])) {
@@ -494,7 +493,7 @@ public class HomeController {
 	
 	/* End Admin controller */
 	
-	@RequestMapping(value="testSample")
+	/*@RequestMapping(value="testSample")
 	@ResponseBody public String test() {
 		
 		 String host = "pop.gmail.com";// change accordingly
@@ -506,5 +505,5 @@ public class HomeController {
 
 	      
 		return "true";
-	}
+	}*/
 }

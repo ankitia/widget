@@ -71,6 +71,28 @@
       <!-- Begin page content --> 
       <div class="container text-center" style="margin-top: 50px;">
          
+         <table class="table table-striped" style="    font-size: 13px;">
+         	<tr>
+         		<td>#</td>
+         		<td>Name</td>
+         		<td>Company Name</td>
+         		<td>Scrap Count</td>
+         		<td>Total</td>
+         		<td>Url Id</td>
+         	</tr>     	 
+             <c:forEach items="${getCompany }" var="getCompany" varStatus="index">         
+	         	<tr>
+	         		<td>${index.count } </td>
+	         		<td>${getCompany.name } </td>
+	         		<td>${getCompany.company_name } </td>
+	         		<td>${getCompany.scrapCount } </td>
+	         		<td>${getCompany.totalRecord }  </td>	         		
+	         		<td><a href="#" title="${getCompany.url }"> Link ${getCompany.listId }</a> </td>
+	         	</tr>	
+	         </c:forEach>
+         </table>
+         
+         
          <table class="table table-striped" style="font-size: 13px;">
          	<tr>
          		<td width="3%">#</td>

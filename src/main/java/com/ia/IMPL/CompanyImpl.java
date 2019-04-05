@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import com.ia.Dao.CompanyDao;
 import com.ia.modal.CompanyDetails;
 import com.ia.modal.MasterCompanyURL;
-import com.ia.modal.Scrap;
 
 
 @Component("companyDao")
@@ -42,7 +41,7 @@ public class CompanyImpl implements CompanyDao {
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);
 			}else if(action.equalsIgnoreCase("missed")) {
-				sql = "select m.* from master_company_url m where  m.status='Done' and  m.user_id = ? and m.company_url_id not in (select url_id from company_detail where user_id=?)  limit 0,6";
+				sql = "select m.* from master_company_url m where  m.status='Done' and  m.user_id = ? and m.company_url_id not in (select url_id from company_detail where user_id=?)  limit 0,10";
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);
 				ps.setInt(2,userId);	

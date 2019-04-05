@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ia.Dao.CompanyDao;
@@ -56,12 +57,10 @@ public class ListBuildingController {
 	public String listBuildVerificationLog(Model model,HttpSession session)
 	{
 		int userId = Integer.parseInt(session.getAttribute("userId")+"");
-		
-		
-		model.addAttribute("total",homeDao.getTotalCount(userId,"listBuild"));		
-		model.addAttribute("getCompany", listBuildingDao.getListBuildingData(userId));		
-		
-		System.out.println("This is user_verification_log  "+userId);
+		model.addAttribute("total",listBuildingDao.getListBuildingData(userId,"YES").size());		
+		model.addAttribute("getCompany", listBuildingDao.getListBuildingData(userId,"YES"));		
+		/*System.out.println(listBuildingDao.getListBuildingUrlList(userId, "missedCheck").size());*/
+		/*System.out.println("This is user_verification_log  "+userId);*/
 		return "admin/listbuild_verification_log";
 	}
 	
@@ -70,6 +69,7 @@ public class ListBuildingController {
 	{
 		int userId = Integer.parseInt(session.getAttribute("userId")+"");
 		model.addAttribute("urlList",listBuildingDao.getListBuildingUrlList(userId,"missed"));	
+		model.addAttribute("getCompany", listBuildingDao.getListBuildingData(userId,"NO"));
 		System.out.println("This is listBuildVerificationMissed  "+userId);
 		return "admin/listbuild_verification_missed";
 	}
@@ -81,7 +81,7 @@ public class ListBuildingController {
 	
 	 
 	@CrossOrigin
-	@RequestMapping(value="salesBuildDatas")
+	@RequestMapping(value="salesBuildDatas", method=RequestMethod.POST)
  	@ResponseBody public String listBuildData(ListBuilding listBuilding,HttpServletRequest request) 
 	{
 		String ipAddress = request.getHeader("X-Real-IP");
@@ -102,6 +102,7 @@ public class ListBuildingController {
          listBuilding.setIpaddress(request.getRemoteAddr());
          try {
       	   JSONArray jsonArr = new JSONArray(listBuilding.getSales_data());
+      	   
 		       for (int i = 0; i < jsonArr.length(); i++) {			            
 		    	   	JSONObject jsonObj = jsonArr.getJSONObject(i);
 		    	   	
@@ -122,9 +123,14 @@ public class ListBuildingController {
 					if(!jsonObj.isNull("record_no"))
 						listBuilding.setRecord_no(jsonObj.get("record_no")+"");
 							
-		    	   	
 		    	   	listBuildingDao.insertListBuild(listBuilding);
 		       }
+		       
+		       if(jsonArr.length()==0) {
+		    		listBuildingDao.insertListBuild(listBuilding);
+	      	   }
+		       
+		       
          } catch (Exception e) {
 				e.printStackTrace();
 			}
