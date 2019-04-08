@@ -87,7 +87,7 @@
 	         		<td>${getCompany.company_name } </td>
 	         		<td>${getCompany.scrapCount } </td>
 	         		<td>${getCompany.totalRecord }  </td>	         		
-	         		<td><a href="#" title="${getCompany.url }"> Link ${getCompany.listId }</a> </td>
+	         		<td><a href="${getCompany.url }&id=${getCompany.userId}&urlId=${getCompany.listId}" onclick="setStatus('Done',${getCompany.listId})" target="_blank" title="${getCompany.url }"> Link ${getCompany.listId }</a> </td>
 	         	</tr>	
 	         </c:forEach>
          </table>

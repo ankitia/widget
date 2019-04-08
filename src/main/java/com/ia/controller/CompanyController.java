@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ia.Dao.CompanyDao;
 import com.ia.Dao.HomeDao;
+import com.ia.Dao.ListBuildingDao;
 import com.ia.modal.CompanyAffiliate;
 import com.ia.modal.CompanyDetails;
 import com.ia.modal.CompanyLocation;
@@ -31,6 +32,9 @@ public class CompanyController {
 	
 	@Autowired
 	HomeDao homeDao;
+	
+	@Autowired
+	ListBuildingDao listBuildingDao;
 	
 	@RequestMapping(value="/companyUrl")
 	public String companyUrl(HttpSession session,Model model) {
@@ -160,7 +164,9 @@ public class CompanyController {
 			}else	
 				return homeDao.setPendingLink("assignCompany", userId, 50)+"";	
 		}else if(action.equalsIgnoreCase("listBuild")) {
-			return homeDao.setPendingLink("assignListBuild", userId, 2)+"";
+			if(listBuildingDao.getListBuildingUrlList(userId, "active").size() < 2) {
+				return homeDao.setPendingLink("assignListBuild", userId, 2)+"";	
+			}
 		}else if(action.equalsIgnoreCase("userProfile")) {
 			return homeDao.setPendingLink("assignUserProfile", userId, 50)+"";
 		}

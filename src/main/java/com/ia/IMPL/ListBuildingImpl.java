@@ -79,7 +79,7 @@ public class ListBuildingImpl implements ListBuildingDao {
 		try (Connection con = (Connection) dataSource.getConnection()){
 			
 			//String sql = "select * from list_building_details  group by list_id limit 0,10";
-			String sql = "select company_name,name,master_list_url_id,lb.url,lb.user_id, IF(TRIM(REPLACE(REPLACE(lb.total_result_no,'Total results',''),'\\n', ''))=count(url_id), \"YES\", IF(TRIM(REPLACE(REPLACE(lb.total_result_no,'Total results',''),'\\n', ''))<=count(url_id),\"YES\",\"NO\")) as result,count(url_id) scrap_count,TRIM(REPLACE(REPLACE(lb.total_result_no,'Total results',''),'\\n', '')) as total,url_id from list_building_details lb, master_list_building_url mlbu where lb.user_id=? and mlbu.master_list_url_id = lb.url_id group by url_id HAVING  result='"+action+"'";
+			String sql = "select company_name,name,master_list_url_id,mlbu.url,lb.user_id, IF(TRIM(REPLACE(REPLACE(lb.total_result_no,'Total results',''),'\\n', ''))=count(url_id), \"YES\", IF(TRIM(REPLACE(REPLACE(lb.total_result_no,'Total results',''),'\\n', ''))<=count(url_id),\"YES\",\"NO\")) as result,count(url_id) scrap_count,TRIM(REPLACE(REPLACE(lb.total_result_no,'Total results',''),'\\n', '')) as total,url_id from list_building_details lb, master_list_building_url mlbu where lb.user_id=? and mlbu.master_list_url_id = lb.url_id group by url_id HAVING  result='"+action+"'";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setInt(1,userId);
 			ResultSet rs = ps.executeQuery();
@@ -91,6 +91,7 @@ public class ListBuildingImpl implements ListBuildingDao {
 				details.setTotalRecord(rs.getString("total"));
 				details.setScrapCount(rs.getString("scrap_count"));
 				details.setListId(rs.getInt("master_list_url_id"));
+				details.setUserId(userId+"");
 				listBuildings.add(details);
 			}
 			con.close();

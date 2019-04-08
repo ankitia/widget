@@ -41,7 +41,7 @@ public class CompanyImpl implements CompanyDao {
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);
 			}else if(action.equalsIgnoreCase("missed")) {
-				sql = "select m.* from master_company_url m where  m.status='Done' and  m.user_id = ? and m.company_url_id not in (select url_id from company_detail where user_id=?)  limit 0,10";
+				sql = "select m.* from master_company_url m where  m.status='Done' and  m.user_id = ? and m.company_url_id not in (select url_id from company_detail where user_id=?)";
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);
 				ps.setInt(2,userId);	
