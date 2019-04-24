@@ -114,5 +114,69 @@ public class CompanyImpl implements CompanyDao {
 	}
 	
 	
+	@Override
+	public List<CompanyDetails> exportCompanyData(String startDate,String endDate) {
+		List<CompanyDetails> companyDetails = new ArrayList<>();
+		try (Connection con = (Connection) dataSource.getConnection()){
+			
+			//String sql = "select *,count(cl.company_id) as locations from company_detail cd LEFT JOIN company_location cl ON cl.company_id=cd.company_id where \n" + 
+			//		"user_id = ?  group by cd.company_id limit 0,10";
+			String sql = "select * from company_detail where DATE_FORMAT(created_date,'%m/%d/%Y') BETWEEN ? AND ?";
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setString(1,startDate);
+			ps.setString(2,endDate);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				CompanyDetails details = new CompanyDetails();
+				details.setCompany_id(rs.getInt("company_id"));
+				details.setCompany_name(rs.getString("company_name"));;
+				details.setCompany_location(rs.getString("company_location"));;
+				details.setEmployee_count(rs.getString("employee_count"));
+				details.setCompany_url(rs.getString("company_url"));
+				details.setCompany_headquater(rs.getString("company_headquater"));
+				details.setYear_founded(rs.getString("year_founded"));
+				details.setCompany_size(rs.getString("company_size"));
+				details.setCompany_speciality(rs.getString("company_speciality"));
+				details.setCompany_type(rs.getString("company_type"));
+				details.setCompany_industry(rs.getString("company_industry"));
+				details.setUrl(rs.getString("url"));
+				details.setUser_id(rs.getString("user_id"));
+				details.setUrl_id(rs.getString("url_id"));
+				details.setCompany_li_id(rs.getString("li_co_id"));
+				details.setCreated_date(rs.getString("created_date"));
+				companyDetails.add(details);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return companyDetails;
+	}
+
+	@Override
+	public List<MasterCompanyURL> exportMasterCompanyData() {
+		List<MasterCompanyURL> data = new ArrayList<>();
+		try(Connection con = (Connection) dataSource.getConnection();) {
+			ResultSet rs = null;
+			PreparedStatement ps = null;
+			String sql = "select * from master_company_url";
+			ps = (PreparedStatement) con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				MasterCompanyURL masterCompanyURL = new MasterCompanyURL();
+				masterCompanyURL.setCompanyUrlId(Long.parseLong(rs.getString("company_url_id")));
+				masterCompanyURL.setUrl((rs.getString("url")));
+				masterCompanyURL.setStatus(rs.getString("status"));
+				masterCompanyURL.setUserId(rs.getString("user_id").trim()!=""?Integer.parseInt(rs.getString("user_id")): 0);
+				data.add(masterCompanyURL);
+			}
+			con.close();			
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return data;
+	}
+	
 
 }

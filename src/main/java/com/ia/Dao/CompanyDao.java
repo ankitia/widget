@@ -13,5 +13,9 @@ public interface CompanyDao {
 	List<CompanyDetails> getCompanyData(int userId);
 	
 	int getCurrentDateCount(int userId);
+	
+	List<CompanyDetails> exportCompanyData(String startDate,String endDate);
+	
+	List<MasterCompanyURL> exportMasterCompanyData();
 
 }

@@ -68,5 +68,11 @@ public interface HomeDao {
 
 	boolean setPendingLink(String action,int userId,int limit);
 	
+	/* Export query */
+	List<Scrap> exportScrapData(String startDate,String endDate);
 	
+	
+	List<MasterURL> exportMasterURL();
+	
+ 	
 }

@@ -65,6 +65,9 @@
         </c:if>        
          
          <div style="text-align: right;"> 
+         		<font  size="3" > Total Count : (<font color="green" size="4"> ${totalCount } </font>) </font>
+         </div>
+         <div style="text-align: right;"> 
          		
          		<font  size="3" > In Last Hour Clicked (<font color="green" size="4"> ${userLastHour } </font>) </font>
          </div>

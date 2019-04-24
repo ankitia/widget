@@ -24,8 +24,15 @@ public class CompanyDetails
 	private String company_stock_name;
 	private String company_industry;
 	private String phone_number;
+	private String created_date;
 	
 		
+	public String getCreated_date() {
+		return created_date;
+	}
+	public void setCreated_date(String created_date) {
+		this.created_date = created_date;
+	}
 	public String getPhone_number() {
 		return phone_number;
 	}

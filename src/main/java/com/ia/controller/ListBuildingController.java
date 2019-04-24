@@ -46,7 +46,7 @@ public class ListBuildingController {
 		model.addAttribute("userLastHour",homeDao.getQueryTime("listBuild", "1", userId));
 		model.addAttribute("userTotalHour",homeDao.getQueryTime("listBuild", "8", userId));
 		
-		
+		model.addAttribute("totalCount", listBuildingDao.getTotalListBuildCount(userId));
 		
 		model.addAttribute("listVerificationAll",listBuildingDao.getListBuildingUrlList(userId,"all").size());	
 		

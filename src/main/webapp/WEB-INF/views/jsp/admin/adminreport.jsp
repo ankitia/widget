@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Dashboard</title> 
+    <title>Report</title> 
     <link rel="icon" href="<c:url value="resources/image/favicone.jpg"></c:url>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
@@ -14,10 +14,27 @@
     <link rel="stylesheet" href="<c:url value="resources/css/style.css"></c:url>"> 
     <link rel="stylesheet" href="<c:url value="resources/css/bootstrap.css"></c:url>">     
     <link rel="stylesheet" href="<c:url value="resources/css/bootstrap-responsive.css"></c:url>">
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
 	<!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
- 	
-	  <%-- <link rel="stylesheet" href="<c:url value="resources/bootstrap.min.css"></c:url>"> --%>
+	  
+      <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+      <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script> 	
+
+<script type="text/javascript">
+
+function downloadReport(action){
+	
+	$("#exportStartDate").val($("#startDate").val());
+	$("#exportEndDate").val($("#endDate").val()); 
+	$("#action").val($("#reportList").val()); 
+	document.getElementById("downloadFinalList").submit();
+}
+</script>
+
+
+
+ 
   </head>
 
   <body>
@@ -27,12 +44,42 @@
       <%@include file="include/header.jsp" %>
       <!-- Fixed navbar End -->
        
+       
+      <form action="<%=request.getContextPath()%>/downloadReport" name="downloadFinalList" id="downloadFinalList">
+      	<input type="hidden" name="exportStartDate" id="exportStartDate">
+      	<input type="hidden" name="exportEndDate" id="exportEndDate">
+      	<input type="hidden" name="action" id="action">
+	</form>
       
   <div class="container">
-     <div class="row">
+  		<div class="row">
+  			<h3>Report</h3>
+	     	<div class="col-sm-3"> 
+	     		<select name="reportList" id="reportList" >
+	     			<option value="">Select Option</option>
+	     			<option value="masterScrap">Master User Verification</option>
+	     			<option value="scrap">User Verification</option>
+	     			<option value="masterCompany">Master Company</option>
+	     			<option value="companyDetails">Company Details</option>
+	     			<option value="masterListBuild">Master List Building</option>
+	     			<option value="listBuilding">List Building</option>
+	     		</select> 
+	     		<input type = "text" id = "startDate"  placeholder = "Start Date">
+	     		<input type = "text" id = "endDate" placeholder = "End Date"> 
+	     		<button class="btn btn-primary" style="margin: -10px 0px 0px 10px;"  onclick="downloadReport()">Download</button>
+	     	</div>
+		    <div class="col-sm-6">
+		    
+		    
+		    
+		    
+		    </div>
+		 </div> 
+		    
+     <%-- <div class="row">
      	<div class="col-sm-3"></div>
 	    <div class="col-sm-6">
-	    	<h3>User List</h3>
+	    	
 	    	<div class="text-right"><c:out value="${count }"></c:out></div>
 		    <table class="table table-striped" style="    font-size: 13px;">
 	         	<tr>
@@ -64,7 +111,7 @@
 		         	
 	         </table>
 	    </div>
-   	</div>
+   	</div> --%> 
  </div>
 
       <div id="push"></div>
@@ -76,4 +123,24 @@
     
 
   </body>
+    <script>
+         $(function() {
+            $( "#startDate" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: '1930:2030'
+        });
+
+         });
+      </script>
+      <script>
+         $(function() {
+            $( "#endDate" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: '1930:2030'
+        });
+
+         });
+      </script>
 </html>

@@ -1,7 +1,9 @@
 package com.ia.controller;
 
+import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -15,12 +17,20 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 
 import com.ia.Dao.CompanyDao;
 import com.ia.Dao.HomeDao;
 import com.ia.Dao.ListBuildingDao;
 import com.ia.modal.Category;
+import com.ia.modal.CompanyDetails;
+import com.ia.modal.ListBuilding;
 import com.ia.modal.ListContacts;
+import com.ia.modal.MasterCompanyURL;
+import com.ia.modal.MasterListBuildingURL;
+import com.ia.modal.MasterURL;
 import com.ia.modal.Scrap;
 import com.ia.modal.User;
 
@@ -491,19 +501,143 @@ public class HomeController {
 		return "redirect:category";
 	}
 	
+	
+	@RequestMapping(value="report")
+	public String createreport(HttpServletRequest request,HttpServletResponse response) {
+		
+		
+		
+		return "admin/adminreport";
+	}
+	
+	@RequestMapping(value="downloadReport")
+	@ResponseBody public void downloadReport(HttpServletRequest request,HttpServletResponse response) {
+		
+		System.out.println(request.getParameter("action") +"--"+request.getParameter("exportStartDate")+" --- "+request.getParameter("exportEndDate"));
+		
+	   String csvFileName = "Export_Data.csv";
+	   String headerKey = "Content-Disposition";
+       String headerValue = String.format("attachment; filename=\"%s\"",csvFileName);
+       response.setHeader(headerKey, headerValue);
+	  
+       // uses the Super CSV API to generate CSV data from the model data
+       ICsvBeanWriter csvWriter;
+       
+       String action = request.getParameter("action");
+       
+       if(action.equalsIgnoreCase("scrap")) {
+    	   csvFileName = "User_Verification.csv";
+    	   try {
+   			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+   			String[] header = { "scrapId","name","current_org","current_position","location","url","ipaddress","user_id","contact_url","url_id","created_date"};
+   	        csvWriter.writeHeader(header);
+   	        List<Scrap> tempUrls = homeDao.exportScrapData(request.getParameter("exportStartDate"),request.getParameter("exportEndDate"));
+   	        for (Scrap aBook : tempUrls) {
+   	            csvWriter.write(aBook, header);
+   	        }
+   	     csvWriter.close();
+			
+   		} catch (IOException e) {
+   			// TODO Auto-generated catch block
+   			e.printStackTrace();
+   		}
+    	   
+       }else if(action.equalsIgnoreCase("companyDetails")) {
+    	   	csvFileName = "Company_Data.csv";
+    	   
+    	   try {
+      			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+      			String[] header = { "company_id","company_name","company_location","employee_count","company_url","company_headquater","year_founded","company_size","company_speciality","url","url_id","user_id","company_li_id","locationCount","company_type","company_stock_name","company_industry","ipaddress","created_date"};
+      	        csvWriter.writeHeader(header);
+      	        List<CompanyDetails> tempUrls = companyDao.exportCompanyData(request.getParameter("exportStartDate"),request.getParameter("exportEndDate"));
+      	        for (CompanyDetails aBook : tempUrls) {
+      	            csvWriter.write(aBook, header);
+      	        }
+      	     csvWriter.close();
+   			
+      		} catch (IOException e) {
+      			// TODO Auto-generated catch block
+      			e.printStackTrace();
+      		}
+    	   
+    	   
+       }else if(action.equalsIgnoreCase("listBuilding")) {
+    	   csvFileName = "List_Build_Data.csv";
+      	   try {
+     			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+     			String[] header = { "listId","name","new_link","company_link","company_name","company_tenure","contact_location","contact_designation","url","url_id","user_id","sales_data","total_result_no","total_changed_job_no","created_date"};
+     	        csvWriter.writeHeader(header);
+     	        List<ListBuilding> tempUrls = listBuildingDao.exportListBuilding(request.getParameter("exportStartDate"),request.getParameter("exportEndDate"));
+     	        for (ListBuilding aBook : tempUrls) {
+     	            csvWriter.write(aBook, header);
+     	        }
+     	     csvWriter.close();
+  			
+     		} catch (IOException e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}
+    	   
+       }else if(action.equalsIgnoreCase("masterScrap")) {
+    	   
+    	   csvFileName = "Master_User_Verification.csv";
+      	   try {
+     			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+     			String[] header = { "urlId","url","userId","status"};
+     	        csvWriter.writeHeader(header);
+     	        List<MasterURL> tempUrls = homeDao.exportMasterURL();
+     	        for (MasterURL aBook : tempUrls) {
+     	            csvWriter.write(aBook, header);
+     	        }
+     	     csvWriter.close();
+  			
+     		} catch (IOException e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}
+    	   
+       }else if(action.equalsIgnoreCase("masterCompany")) {
+    	   csvFileName = "Master_Company_Details.csv";
+      	   try {
+     			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+     			String[] header = { "companyUrlId","url","userId","status"};
+     	        csvWriter.writeHeader(header);
+     	        List<MasterCompanyURL> tempUrls = companyDao.exportMasterCompanyData();
+     	        for (MasterCompanyURL aBook : tempUrls) {
+     	            csvWriter.write(aBook, header);
+     	        }
+     	     csvWriter.close();
+     		} catch (IOException e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}
+       }else if(action.equalsIgnoreCase("masterListBuild")) {
+    	   csvFileName = "Master_List_Build.csv";
+      	   try {
+     			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+     			String[] header = { "listBuildUrlId","url","userId","status"};
+     	        csvWriter.writeHeader(header);
+     	        List<MasterListBuildingURL> tempUrls = listBuildingDao.exportMasterListBuilding();
+     	        for (MasterListBuildingURL aBook : tempUrls) {
+     	            csvWriter.write(aBook, header);
+     	        }
+     	     csvWriter.close();
+     		} catch (IOException e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}
+       }
+    	   
+       
+       
+       
+      
+		
+	        
+		
+	}
+	
 	/* End Admin controller */
 	
-	/*@RequestMapping(value="testSample")
-	@ResponseBody public String test() {
-		
-		 String host = "pop.gmail.com";// change accordingly
-	      String mailStoreType = "pop3";
-	      String username = "shivpatel9878@gmail.com";// change accordingly
-	      String password = "Hello135!";// change accordingly
-
-	      //Test.check(host, mailStoreType, username, password);
-
-	      
-		return "true";
-	}*/
+	 
 }

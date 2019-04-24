@@ -19,9 +19,15 @@ public class ListBuilding {
 	private String total_changed_job_no;
 	private String page_number;
 	private String record_no;
+	private String created_date;
 	
 	
-	
+	public String getCreated_date() {
+		return created_date;
+	}
+	public void setCreated_date(String created_date) {
+		this.created_date = created_date;
+	}
 	public String getTotal_result_no() {
 		return total_result_no;
 	}

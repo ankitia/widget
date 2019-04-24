@@ -12,10 +12,16 @@ public class Scrap {
 	private String user_id;
 	private String contact_url;
 	private long url_id;
-	
+	private String created_date;
 	
 	
 	 
+	public String getCreated_date() {
+		return created_date;
+	}
+	public void setCreated_date(String created_date) {
+		this.created_date = created_date;
+	}
 	public String getUser_id() {
 		return user_id;
 	}

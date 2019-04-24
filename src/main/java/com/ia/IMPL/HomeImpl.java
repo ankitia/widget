@@ -343,6 +343,7 @@ public class HomeImpl implements HomeDao {
 			
 			while (rs.next()) {
 				Scrap scrap = new Scrap();
+				scrap.setScrapId(rs.getInt("scrap_id"));
 				scrap.setName(rs.getString("name"));;
 				scrap.setCurrent_org(rs.getString("current_org"));;
 				scrap.setCurrent_position(rs.getString("current_position"));;
@@ -803,7 +804,69 @@ public class HomeImpl implements HomeDao {
 
 	
 	
+	@Override
+	public List<Scrap> exportScrapData(String startDate,String endDate) {
+		// TODO Auto-generated method stub
+			List<Scrap> scraps = new ArrayList<>();
+		try {
+			Connection con = (Connection) dataSource.getConnection();
+			String sql = "select * from scrap where DATE_FORMAT(created_date,'%m/%d/%Y') BETWEEN ? AND ?";
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setString(1,startDate);
+			ps.setString(2,endDate);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				Scrap scrap = new Scrap();
+				scrap.setScrapId(rs.getInt("scrap_id"));
+				scrap.setName(rs.getString("name"));;
+				scrap.setCurrent_org(rs.getString("current_org"));;
+				scrap.setLocation(rs.getString("location"));
+				scrap.setUser_id(rs.getString("user_id"));
+				scrap.setCurrent_position(rs.getString("current_position"));;
+				scrap.setIpaddress(rs.getString("ipaddress"));
+				scrap.setContact_url(rs.getString("contact_url"));
+				scrap.setUrl(rs.getString("url"));
+				scrap.setUrl_id(rs.getInt("url_id")); 
+				scrap.setCreated_date(rs.getString("created_date"));
+				scraps.add(scrap);
+			}
+			con.close();
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		
+		System.out.println("Size ::"+scraps.size());
+		
+		return scraps;
+	}
+
 	
+	@Override
+	public List<MasterURL> exportMasterURL() {
+		List<MasterURL> data = new ArrayList<>();
+		try(Connection con = (Connection) dataSource.getConnection();) {
+			ResultSet rs = null;
+			PreparedStatement ps = null;
+			String sql = "select * from master_url";
+			ps = (PreparedStatement) con.prepareStatement(sql);
+			rs = ps.executeQuery();
+		while (rs.next()) {
+			MasterURL masterURL = new MasterURL();
+			masterURL.setUrlId(Long.parseLong(rs.getString("master_url_id")));
+			masterURL.setUrl((rs.getString("url")));
+			masterURL.setStatus(rs.getString("status"));
+			masterURL.setUserId(rs.getString("user_id").trim()!=""?Integer.parseInt(rs.getString("user_id")): 0);
+			data.add(masterURL);
+		}
+		con.close();			
+	}catch (Exception e) {
+		e.printStackTrace();
+		// TODO: handle exception
+	}
+		return data;	
+	}	
 
 
 	
