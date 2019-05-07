@@ -34,6 +34,7 @@
                 <c:if test="${userRole == 1}">
                 	<li><a href="<%=request.getContextPath() %>/userAssigned">Assigned</a></li>
                 	<li><a href="<%=request.getContextPath() %>/report">Report</a></li>
+                	<li><a href="<%=request.getContextPath() %>/reset">Reset</a></li>
                 </c:if>
                 
                 

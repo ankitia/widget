@@ -44,15 +44,9 @@ public class CompanyController {
 		model.addAttribute("userVerificationApproved",homeDao.getTotalCount(userId,"companyData"));
 		
 		model.addAttribute("urlList",companyDao.getCompanyUrlList(userId,"display"));
-		
-		
 		model.addAttribute("getTotalActiveLink",companyDao.getCompanyUrlList(0, "active").size());
-		
 		model.addAttribute("userLastHour",homeDao.getQueryTime("companyData", "1", userId));
 		model.addAttribute("userTotalHour",homeDao.getQueryTime("companyData", "8", userId));
-		
-		
-		
 		model.addAttribute("userVerificationAll",companyDao.getCompanyUrlList(userId,"all").size());	
 		
 		return "admin/company_url";
@@ -63,11 +57,8 @@ public class CompanyController {
 	public String companyVerificationLog(HttpServletRequest requestm,Model model,HttpSession session)
 	{
 		int userId = Integer.parseInt(session.getAttribute("userId")+"");
-		
-		
 		model.addAttribute("total",homeDao.getTotalCount(userId,"companyData"));		
 		model.addAttribute("getCompany", companyDao.getCompanyData(userId));		
-		
 		System.out.println("This is user_verification_log  "+userId);
 		return "admin/company_verification_log";
 	}

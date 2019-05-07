@@ -630,6 +630,24 @@ public class HomeController {
 		
 	}
 	
+	@RequestMapping(value="reset")
+	public String reset(HttpServletRequest request,HttpServletResponse response) {
+		
+		
+		
+		return "admin/adminreset";
+	}
+	
+	@RequestMapping(value="resetLinks")
+	@ResponseBody public String resetLinks(HttpServletRequest request) {
+		
+		System.out.println(request.getParameter("masterIds"));
+		 
+		listBuildingDao.reActiveLinks(request.getParameter("masterIds"));
+		
+		return "admin/adminreset";
+	}
+	
 	/* End Admin controller */
 	
 	 

@@ -25,5 +25,7 @@ public interface ListBuildingDao {
 
 	List<MasterListBuildingURL> exportMasterListBuilding();
 	
+	boolean reActiveLinks(String ids);
+	
 }
 

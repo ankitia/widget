@@ -270,6 +270,24 @@ public class ListBuildingImpl implements ListBuildingDao {
 		return data;
 	}
 
+	@Override
+	public boolean reActiveLinks(String ids) {
+		int status = 0; 
+		try (Connection con = (Connection) dataSource.getConnection()){
+			String sql = "update master_list_building_url set status='Active' where master_list_url_id in ("+ids+")";
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			status = ps.executeUpdate();
+			con.commit();		
+			con.close();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		System.out.println("Status list:::"+status);
+		return false;
+	}
+
  
 	
 	
