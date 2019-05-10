@@ -17,6 +17,7 @@ import com.ia.Dao.CompanyDao;
 import com.ia.Dao.HomeDao;
 import com.ia.Dao.ListBuildingDao;
 import com.ia.modal.ListBuilding;
+import com.ia.modal.Property;
 
 @Controller
 public class ListBuildingController {
@@ -137,5 +138,7 @@ public class ListBuildingController {
         
         return "true";
 	}
+	
+	
 
 }

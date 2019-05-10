@@ -177,6 +177,8 @@ public class HomeController {
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"companyData")+"";
 		}else if(action.equalsIgnoreCase("listBuild")){
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"listBuild")+"";
+		}else if(action.equalsIgnoreCase("googleData")){
+			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"googleData")+"";
 		}
 		
 		return "false";
@@ -245,7 +247,7 @@ public class HomeController {
 	public String admindashboard(HttpServletRequest requestm,Model model)
 	{
 		model.addAttribute("userList", homeDao.getUserDetails());		
-		System.out.println("This is admin dashboard -- "+homeDao.getUserDetails().size());
+		System.out.println("This is admin dashboard -- ");
 		return "admin/admindashboard";
 	}
 	
@@ -382,7 +384,7 @@ public class HomeController {
 			
 			/* Start List Building  */
 		
-			String[] empId = {"E00468","E00588", "E00101", "E00471", "E00014", "E00017","E00069","E00127","E00205","E00207","E00198","E00044","E00246","E00001","E00063"}; 
+			String[] empId = {"E00469","E00590","E00652","E00662","E00112","E00422", "E00468","E00588", "E00101", "E00471", "E00014", "E00017","E00069","E00127","E00205","E00207","E00198","E00044","E00246","E00001","E00063"};
 			boolean showList = false; 
 			for (int i = 0; i < empId.length; i++) {
 				if(session.getAttribute("userName").toString().equalsIgnoreCase(empId[i])) {
@@ -397,11 +399,7 @@ public class HomeController {
 				model.addAttribute("listBuildTotalHour",homeDao.getQueryTime("listBuild", "8", userId));	
 			}
 			
-			
-			
 			/* End List Building */ 
-			
-			
 			/*User user = homeDao.checkValidUser("", "","user",userId);
 			model.addAttribute("userDetail",user);
 			
@@ -467,7 +465,7 @@ public class HomeController {
 	{
 		int userId = Integer.parseInt(session.getAttribute("userId")+"");
 		model.addAttribute("urlList",homeDao.getProfileUrlList(userId,"missed"));	
-		System.out.println("This is user_verification_missed  "+userId);
+		System.out.println("This is userProfileMissed  "+userId);
 		return "admin/user_profile_missed";
 	}
 
@@ -478,7 +476,7 @@ public class HomeController {
 	{
 		model.addAttribute("categoryList",homeDao.getCategory());
 		
-		System.out.println("This is dashboard"+homeDao.getCategory().size());
+		System.out.println("This is category"+homeDao.getCategory().size());
 		return "admin/manageCategory";
 	}
 	
@@ -641,11 +639,10 @@ public class HomeController {
 	@RequestMapping(value="resetLinks")
 	@ResponseBody public String resetLinks(HttpServletRequest request) {
 		
-		System.out.println(request.getParameter("masterIds"));
-		 
-		listBuildingDao.reActiveLinks(request.getParameter("masterIds"));
+		String action = request.getParameter("reportList");
+		System.out.println(request.getParameter("masterIds")+"--"+action);
+		return homeDao.reActiveMasterURL(request.getParameter("masterIds"), action)+"";	
 		
-		return "admin/adminreset";
 	}
 	
 	/* End Admin controller */

@@ -156,7 +156,7 @@ function setOperation(){
        
       
   <div class="container">
-     <div class="row">
+     <div class="row row_set">
      	<div class="col-sm-3"></div>
 	    <div class="col-sm-6">
 	    	<h3>User List</h3>

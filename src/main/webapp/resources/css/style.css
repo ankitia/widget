@@ -129,3 +129,8 @@ body {
 margin: 0px; 	
   
 }  
+
+
+.row_set{
+margin-left: 0px !important;
+    margin-right:  25px;}

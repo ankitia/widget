@@ -51,8 +51,8 @@ function downloadReport(action){
       	<input type="hidden" name="action" id="action">
 	</form>
       
-  <div class="container">
-  		<div class="row">
+  <div class="container"> 
+  		<div class="row row_set">
   			<h3>Report</h3>
 	     	<div class="col-sm-3"> 
 	     		<select name="reportList" id="reportList" >

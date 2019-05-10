@@ -74,5 +74,6 @@ public interface HomeDao {
 	
 	List<MasterURL> exportMasterURL();
 	
+	boolean reActiveMasterURL(String ids,String action);
  	
 }

@@ -26,15 +26,16 @@
                 	<c:when test="${userRole == 1}">
                 		<li><a href="<%=request.getContextPath() %>/admindashboard">Dashboard</a></li>
                 	</c:when>
-                	<c:otherwise>
+                	<c:otherwise> 
                 		<li><a href="<%=request.getContextPath() %>/dashboard">Dashboard</a></li>
+                		<li><a href="<%=request.getContextPath() %>/masterGoogleURL">Google</a></li>
                 	</c:otherwise>
                 </c:choose>
                                   
                 <c:if test="${userRole == 1}">
                 	<li><a href="<%=request.getContextPath() %>/userAssigned">Assigned</a></li>
                 	<li><a href="<%=request.getContextPath() %>/report">Report</a></li>
-                	<li><a href="<%=request.getContextPath() %>/reset">Reset</a></li>
+                	<li><a href="<%=request.getContextPath() %>/reset">ReActive</a></li>
                 </c:if>
                 
                 

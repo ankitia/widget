@@ -146,9 +146,7 @@ public class CompanyController {
 		if(missedLink > 2) {
 		}*/
 		if(action.equalsIgnoreCase("scrap")) {
-				
 			return homeDao.setPendingLink("assignScrap", userId, 50)+"";
-				
 		}else if(action.equalsIgnoreCase("companyData")) {
 			if(companyDao.getCurrentDateCount(userId) > 4000){
 				return "Your daily 4000 limit exceeded (Per day limit 4000)";
@@ -160,7 +158,11 @@ public class CompanyController {
 			}
 		}else if(action.equalsIgnoreCase("userProfile")) {
 			return homeDao.setPendingLink("assignUserProfile", userId, 50)+"";
+		}else if(action.equalsIgnoreCase("assignGoogle")) { 
+			return homeDao.setPendingLink("assignGoogle", userId, 10)+"";
 		}
+		
+		
 		return "";
 				
 	}

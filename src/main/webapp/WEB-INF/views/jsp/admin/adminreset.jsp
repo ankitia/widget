@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Reset Links</title> 
+    <title>ReActive Links</title> 
     <link rel="icon" href="<c:url value="resources/image/favicone.jpg"></c:url>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="<c:url value="resources/css/bootstrap.css"></c:url>">     
     <link rel="stylesheet" href="<c:url value="resources/css/bootstrap-responsive.css"></c:url>">
     <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
-	<!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	  
       <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
@@ -35,7 +34,8 @@
 				  type : "POST", 
 				  url : "resetLinks",
 				  data : {
-					  masterIds :$("#masterId").val()
+					  masterIds :$("#masterId").val(),
+					  reportList : $("#reportList").val()
 				  },
 				  success :function(data){
 					  alert("List build reactive successfully");
@@ -59,15 +59,15 @@
       <!-- Fixed navbar End -->
        
   <div class="container">
-  		<div class="row">
-  			<h3>Reset</h3>
+  		<div class="row row_set">
+  			<h3>ReActive</h3>
 	     	<div class="col-sm-4"> 
 	     		<select name="reportList" id="reportList" >
 	     			<option value="">Select Option</option>
-	     			<!-- <option value="masterScrap">Master User Verification</option>
-	     			<option value="scrap">User Verification</option>
-	     			<option value="masterCompany">Master Company</option>
-	     			<option value="companyDetails">Company Details</option> -->
+	     			<option value="masterScrap">Master User Verification</option>
+	     			<!--<option value="scrap">User Verification</option>
+	     				<option value="companyDetails">Company Details</option> -->
+	     			<option value="masterCompany">Master Company</option> 
 	     			<option value="masterListBuild">Master List Building</option>
 	     			<!-- <option value="listBuilding">List Building</option> -->
 	     		</select>

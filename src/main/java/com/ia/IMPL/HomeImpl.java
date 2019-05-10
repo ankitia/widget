@@ -311,6 +311,8 @@ public class HomeImpl implements HomeDao {
 				sql = "select count(distinct(cdl.url_id)) as total_fi, (count(distinct(cdl.url_id)) - company_link_temp)  as total from company_detail_log cdl,user u   where cdl.user_id=u.user_id  and cdl.user_id = ?";
 			}else if(action.equalsIgnoreCase("listBuild")) {
 				sql = "select count(distinct(url_id)) as total from list_building_details where user_id = ?";
+			}else if(action.equalsIgnoreCase("googleData")) {
+				sql = "select count(distinct(url_id)) as total from property_data where user_id = ?";
 			}
 			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
@@ -448,9 +450,9 @@ public class HomeImpl implements HomeDao {
 				sql = "update  master_company_url set status = ? where company_url_id = ?";
 			}else if(action.equalsIgnoreCase("listBuild")){
 				sql = "update  master_list_building_url set status = ? where master_list_url_id = ?";
+			}else if(action.equalsIgnoreCase("googleData")){
+				sql = "update  master_google_url set status = ? where master_google_url_id = ?";
 			}
-			
-			 
 			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setString(1, status);
@@ -656,6 +658,11 @@ public class HomeImpl implements HomeDao {
 				ps.setInt(2, limit);
 			}else if(action.equalsIgnoreCase("assignUserProfile")){
 				sql = "UPDATE master_url_profile SET user_id=? 	WHERE master_url_id IN (SELECT master_url_id FROM (SELECT master_url_id FROM master_url_profile where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignGoogle")){
+				sql = "UPDATE master_google_url SET user_id=? 	WHERE master_google_url_id IN (SELECT master_google_url_id FROM (SELECT master_google_url_id FROM master_google_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1, userId);
 				ps.setInt(2, limit);
@@ -866,6 +873,31 @@ public class HomeImpl implements HomeDao {
 		// TODO: handle exception
 	}
 		return data;	
+	}
+
+	@Override
+	public boolean reActiveMasterURL(String ids,String action) {
+		int status = 0; 
+		try (Connection con = (Connection) dataSource.getConnection()){
+			String sql = "";
+			if(action.equalsIgnoreCase("masterScrap")) {
+				sql = "update master_url set status='Active' where master_url_id in ("+ids+")";
+			}else if(action.equalsIgnoreCase("masterListBuild")) {
+				sql = "update master_list_building_url set status='Active' where master_list_url_id in ("+ids+")";	
+			}else if(action.equalsIgnoreCase("masterCompany")) {
+				sql = "update master_company_url set status='Active' where company_url_id in ("+ids+")";
+			}
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			status = ps.executeUpdate();
+			con.commit();		
+			con.close();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		System.out.println("Status list:::"+status);
+		return false;
 	}	
 
 
