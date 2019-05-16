@@ -28,12 +28,24 @@ function downloadReport(action){
 	$("#exportStartDate").val($("#startDate").val());
 	$("#exportEndDate").val($("#endDate").val()); 
 	$("#action").val($("#reportList").val()); 
+	$("#exportUrlList").val($("#urlList").val());
 	document.getElementById("downloadFinalList").submit();
 }
+
+function checkReportList(checkList){
+	
+	if(checkList.value=="companyLocations"){
+		$("#checkUrlList").show();		
+	}else{ 
+		$("#checkUrlList").hide();
+	}
+	
+}
+
 </script>
 
 
-
+ 
  
   </head>
 
@@ -48,6 +60,7 @@ function downloadReport(action){
       <form action="<%=request.getContextPath()%>/downloadReport" name="downloadFinalList" id="downloadFinalList">
       	<input type="hidden" name="exportStartDate" id="exportStartDate">
       	<input type="hidden" name="exportEndDate" id="exportEndDate">
+      	<input type="hidden" name="exportUrlList" id="exportUrlList">
       	<input type="hidden" name="action" id="action">
 	</form>
       
@@ -55,18 +68,23 @@ function downloadReport(action){
   		<div class="row row_set">
   			<h3>Report</h3>
 	     	<div class="col-sm-3"> 
-	     		<select name="reportList" id="reportList" >
+	     		<select name="reportList" id="reportList" onchange="checkReportList(this)">
 	     			<option value="">Select Option</option>
 	     			<option value="masterScrap">Master User Verification</option>
 	     			<option value="scrap">User Verification</option>
 	     			<option value="masterCompany">Master Company</option>
 	     			<option value="companyDetails">Company Details</option>
+	     			<option value="companyLocations">Company Locations</option>
 	     			<option value="masterListBuild">Master List Building</option>
 	     			<option value="listBuilding">List Building</option>
 	     		</select> 
 	     		<input type = "text" id = "startDate"  placeholder = "Start Date">
 	     		<input type = "text" id = "endDate" placeholder = "End Date"> 
 	     		<button class="btn btn-primary" style="margin: -10px 0px 0px 10px;"  onclick="downloadReport()">Download</button>
+	     		<br />
+	     		<div style="display: none;" id="checkUrlList">	
+	     			<textarea rows="4" cols="5" id="urlList"></textarea>
+	     		</div>
 	     	</div>
 		    <div class="col-sm-6">
 		    

@@ -34,10 +34,13 @@ public class PropertyController {
 		 if(property.getUser_id()==null || property.getUser_id().equalsIgnoreCase("0") || property.getUser_id().equalsIgnoreCase("")) {
         	property.setUser_id("1");
         }
-        String urlId = property.getUrlId()+"";
+		 System.out.println(property.getUrl_id()+"--"+request.getAttribute("url_id"));
+        String urlId = property.getUrl_id()+"";
         if(urlId.equalsIgnoreCase("null") || urlId==null ) {
-        	property.setUrlId("0");
+        	property.setUrl_id("0");
         }
+        
+        
 		
 		property.setIpaddress(request.getRemoteAddr());
 		

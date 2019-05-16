@@ -26,6 +26,7 @@ import com.ia.Dao.HomeDao;
 import com.ia.Dao.ListBuildingDao;
 import com.ia.modal.Category;
 import com.ia.modal.CompanyDetails;
+import com.ia.modal.CompanyLocation;
 import com.ia.modal.ListBuilding;
 import com.ia.modal.ListContacts;
 import com.ia.modal.MasterCompanyURL;
@@ -617,6 +618,24 @@ public class HomeController {
      	        csvWriter.writeHeader(header);
      	        List<MasterListBuildingURL> tempUrls = listBuildingDao.exportMasterListBuilding();
      	        for (MasterListBuildingURL aBook : tempUrls) {
+     	            csvWriter.write(aBook, header);
+     	        }
+     	     csvWriter.close();
+     		} catch (IOException e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}
+       }else if(action.equalsIgnoreCase("companyLocations")) {
+    	   
+    	   String exportUrlList = request.getParameter("exportUrlList");
+    	   
+    	   csvFileName = "Master_List_Build.csv";
+      	   try {
+     			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+     			String[] header = { "company_location_id","company_id","country","geographic_area","postal_code","description","city","headquarter","line1","line2"};
+     	        csvWriter.writeHeader(header);
+     	        List<CompanyLocation> tempUrls = companyDao.exportCompanyLocations(exportUrlList);
+     	        for (CompanyLocation aBook : tempUrls) {
      	            csvWriter.write(aBook, header);
      	        }
      	     csvWriter.close();

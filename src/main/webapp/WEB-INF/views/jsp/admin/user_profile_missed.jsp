@@ -42,7 +42,7 @@
              <c:forEach items="${urlList }" var="urlList" varStatus="index">         
 	         	<tr>
 	         		<td>${index.count } </td> 
-	         		<td><a href="${urlList.url }&id=${urlList.userId}&urlId=${urlList.masterUrlId}"  onclick="setStatus('Done',${urlList.masterUrlId})" target="_blank"> Link ${urlList.masterUrlId }</a> </td>	         		
+	         		<td><a href="${urlList.url }?id=${urlList.userId}&urlId=${urlList.masterUrlId}"  onclick="setStatus('Done',${urlList.masterUrlId})" target="_blank"> Link ${urlList.masterUrlId }</a> </td>	         		
 	         	</tr>	
 	         </c:forEach>
          </table>

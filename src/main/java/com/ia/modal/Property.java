@@ -16,15 +16,36 @@ public class Property
 	private String ipaddress;
 	private String user_id;
 	private String record_start_number;
-	private String urlId;
-	
+	private String url_id;
+	private String current_page_no;
+	private String last_page_no;
+	private String is_success;
 	
 	 
-	public String getUrlId() {
-		return urlId;
+	 
+	public String getCurrent_page_no() {
+		return current_page_no;
 	}
-	public void setUrlId(String urlId) {
-		this.urlId = urlId;
+	public void setCurrent_page_no(String current_page_no) {
+		this.current_page_no = current_page_no;
+	}
+	public String getLast_page_no() {
+		return last_page_no;
+	}
+	public void setLast_page_no(String last_page_no) {
+		this.last_page_no = last_page_no;
+	}
+	public String getIs_success() {
+		return is_success;
+	}
+	public void setIs_success(String is_success) {
+		this.is_success = is_success;
+	}
+	public String getUrl_id() {
+		return url_id;
+	}
+	public void setUrl_id(String url_id) {
+		this.url_id = url_id;
 	}
 	public String getUrl() {
 		return url;

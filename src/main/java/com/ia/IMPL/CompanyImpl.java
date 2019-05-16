@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.ia.Dao.CompanyDao;
 import com.ia.modal.CompanyDetails;
+import com.ia.modal.CompanyLocation;
 import com.ia.modal.MasterCompanyURL;
 
 
@@ -176,6 +177,41 @@ public class CompanyImpl implements CompanyDao {
 			// TODO: handle exception
 		}
 		return data;
+	}
+
+	@Override
+	public List<CompanyLocation> exportCompanyLocations(String exportUrlList) {
+		List<CompanyLocation> companyLocations = new ArrayList<>();
+		try (Connection con = (Connection) dataSource.getConnection()){
+			String sql = "";
+			
+			if(exportUrlList.length() > 0) {
+				sql = "select * from company_location where company_id in ("+exportUrlList+")";
+			}else {
+				sql = "select * from company_location";
+			}
+			
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				CompanyLocation details = new CompanyLocation();
+				details.setCompany_id(rs.getInt("company_id"));
+				details.setCompany_location_id(rs.getInt("company_location_id"));;
+				details.setCountry(rs.getString("country"));;
+				details.setGeographic_area(rs.getString("geographic_area"));
+				details.setCity(rs.getString("city"));
+				details.setPostal_code(rs.getString("postal_code"));
+				details.setDescription(rs.getString("description"));
+				details.setHeadquarter(rs.getString("headquarter"));
+				details.setLine1(rs.getString("line1"));
+				details.setLine2(rs.getString("line2"));
+				companyLocations.add(details);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return companyLocations;
 	}
 	
 

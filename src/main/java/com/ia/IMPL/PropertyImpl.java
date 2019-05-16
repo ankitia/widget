@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import com.ia.Dao.PropertyDao;
 import com.ia.modal.MasterGoogleURL;
 import com.ia.modal.Property;
-import com.ia.modal.Scrap;
 import com.mysql.jdbc.Statement;
 
 
@@ -32,7 +31,7 @@ public class PropertyImpl implements PropertyDao {
 		// TODO Auto-generated method stub
 		int status = 0; 
 		try (Connection con = (Connection) dataSource.getConnection()){
-			String sql = "insert into property_data(name,rating,industry,address,phone_number,timing,direction,website,url,record_start_number,ipaddress,user_id,url_id) value(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into property_data(name,rating,industry,address,phone_number,timing,direction,website,url,record_start_number,ipaddress,user_id,url_id,current_page_no,last_page_no,is_success) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, property.getName());
 			ps.setString(2, property.getRating());
@@ -46,7 +45,10 @@ public class PropertyImpl implements PropertyDao {
 			ps.setString(10, property.getRecord_start_number());
 			ps.setString(11, property.getIpaddress());
 			ps.setString(12, property.getUser_id());
-			ps.setString(13, property.getUrlId());
+			ps.setString(13, property.getUrl_id());
+			ps.setString(14, property.getCurrent_page_no());
+			ps.setString(15, property.getLast_page_no());
+			ps.setString(16, property.getIs_success());
 			status = ps.executeUpdate();
 			con.commit();		
 			 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
@@ -130,7 +132,7 @@ public class PropertyImpl implements PropertyDao {
 				property.setRating(rs.getString("rating"));;
 				property.setIndustry(rs.getString("industry"));;
 				property.setUrl(rs.getString("url"));
-				property.setUrlId(rs.getString("url_id"));
+				property.setUrl_id(rs.getString("url_id"));
 				properties.add(property);
 			}
 			con.close();
