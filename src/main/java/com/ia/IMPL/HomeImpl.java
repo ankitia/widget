@@ -313,6 +313,8 @@ public class HomeImpl implements HomeDao {
 				sql = "select count(distinct(url_id)) as total from list_building_details where user_id = ?";
 			}else if(action.equalsIgnoreCase("googleData")) {
 				sql = "select count(distinct(url_id)) as total from property_data where user_id = ?";
+			}else if(action.equalsIgnoreCase("bingData")) {
+				sql = "select count(distinct(url_id)) as total from bing_data where user_id = ?";
 			}
 			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
@@ -452,7 +454,10 @@ public class HomeImpl implements HomeDao {
 				sql = "update  master_list_building_url set status = ? where master_list_url_id = ?";
 			}else if(action.equalsIgnoreCase("googleData")){
 				sql = "update  master_google_url set status = ? where master_google_url_id = ?";
+			}else if(action.equalsIgnoreCase("bingData")){
+				sql = "update  master_bing_url set status = ? where master_bing_url_id = ?";
 			}
+			
 			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setString(1, status);
@@ -666,7 +671,14 @@ public class HomeImpl implements HomeDao {
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1, userId);
 				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignBingData")){
+				sql = "UPDATE master_bing_url SET user_id=? 	WHERE master_bing_url_id IN (SELECT master_bing_url_id FROM (SELECT master_bing_url_id FROM master_bing_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
 			}
+			
+			
 			queryStatus = ps.executeUpdate();
 			
 		}catch (Exception e) {
@@ -720,6 +732,7 @@ public class HomeImpl implements HomeDao {
 			                throw new SQLException("Creating user failed, no ID obtained.");
 			            }
 			        }
+				 con.close();
 			}catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
@@ -734,7 +747,7 @@ public class HomeImpl implements HomeDao {
 		int status = 0;
 		try (Connection con = (Connection) dataSource.getConnection()){
 			
-			String sql = "insert into company_location(company_id,country,geographic_area,city,postal_code,description,headquarter,line1,line2) value(?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into company_location(company_id,country,geographic_area,city,postal_code,description,headquarter,line1,line2,li_co_id) value(?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setInt(1, companyLocation.getCompany_id());
 			ps.setString(2, companyLocation.getCountry());
@@ -745,9 +758,10 @@ public class HomeImpl implements HomeDao {
 			ps.setString(7, companyLocation.getHeadquarter());
 			ps.setString(8, companyLocation.getLine1());
 			ps.setString(9, companyLocation.getLine2());
+			ps.setString(10, companyLocation.getLi_id());
 			status = ps.executeUpdate();
 			con.commit();		
-			
+			con.close();
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -764,15 +778,16 @@ public class HomeImpl implements HomeDao {
 	public boolean insertCompanyAffiliate(CompanyAffiliate companyAffiliate) {
 		int status = 0;
 		try (Connection con = (Connection) dataSource.getConnection()){			
-			String sql = "insert into company_affiliate(company_id,company_name,company_link,company_description) value(?,?,?,?)";
+			String sql = "insert into company_affiliate(company_id,company_name,company_link,company_description,li_co_id) value(?,?,?,?,?)";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setInt(1, companyAffiliate.getCompany_id());
 			ps.setString(2, companyAffiliate.getCompany_name());
 			ps.setString(3, companyAffiliate.getCompany_link());
 			ps.setString(4, companyAffiliate.getCompany_description());
+			ps.setString(5, companyAffiliate.getLi_id());
 			status = ps.executeUpdate();
 			con.commit();		
-			
+			con.close();
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

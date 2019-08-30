@@ -97,6 +97,8 @@ public class CompanyController {
 
 			            CompanyLocation companyLocation = new CompanyLocation();
 			            
+			            companyLocation.setLi_id(companyDetails.getCompany_li_id());
+			            
 			            if(!jsonObj.isNull("city"))
 			            	companyLocation.setCity(jsonObj.get("city")+"");
 			            	companyLocation.setCompany_id(companyId);
@@ -123,6 +125,7 @@ public class CompanyController {
 			    	   	JSONObject jsonObj = jsonArr.getJSONObject(i);			            
 			            CompanyAffiliate companyAffiliate = new CompanyAffiliate();
 			            	companyAffiliate.setCompany_id(companyId);
+			            	companyAffiliate.setLi_id(companyDetails.getCompany_li_id());
 			            if(!jsonObj.isNull("company_name"))
 			            	companyAffiliate.setCompany_name(jsonObj.get("company_name")+"");
 			            if(!jsonObj.isNull("company_link"))
@@ -160,7 +163,11 @@ public class CompanyController {
 			return homeDao.setPendingLink("assignUserProfile", userId, 50)+"";
 		}else if(action.equalsIgnoreCase("assignGoogle")) { 
 			return homeDao.setPendingLink("assignGoogle", userId, 10)+"";
+		}else if(action.equalsIgnoreCase("assignBingData")) { 
+			return homeDao.setPendingLink("assignBingData", userId, 10)+"";
 		}
+		
+		
 		
 		
 		return "";

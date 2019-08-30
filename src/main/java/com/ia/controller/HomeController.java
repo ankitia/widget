@@ -180,7 +180,10 @@ public class HomeController {
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"listBuild")+"";
 		}else if(action.equalsIgnoreCase("googleData")){
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"googleData")+"";
+		}else if(action.equalsIgnoreCase("bingData")){
+			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"bingData")+"";
 		}
+
 		
 		return "false";
 	}
@@ -384,8 +387,8 @@ public class HomeController {
 			*/			
 			
 			/* Start List Building  */
-		
-			String[] empId = {"E00469","E00590","E00652","E00662","E00112","E00422", "E00468","E00588", "E00101", "E00471", "E00014", "E00017","E00069","E00127","E00205","E00207","E00198","E00044","E00246","E00001","E00063"};
+		 
+			String[] empId = {"E00591","E00592","E00593","E00469","E00590","E00652","E00662","E00112","E00422", "E00468","E00588", "E00101", "E00471", "E00014", "E00017","E00069","E00127","E00205","E00207","E00198","E00044","E00246","E00001","E00063"};
 			boolean showList = false; 
 			for (int i = 0; i < empId.length; i++) {
 				if(session.getAttribute("userName").toString().equalsIgnoreCase(empId[i])) {

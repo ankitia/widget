@@ -12,6 +12,16 @@ public class CompanyLocation
 	private String headquarter;
 	private String line2;
 	private String line1;
+	private String li_id;
+	
+	
+	
+	public String getLi_id() {
+		return li_id;
+	}
+	public void setLi_id(String li_id) {
+		this.li_id = li_id;
+	}
 	public int getCompany_location_id() {
 		return company_location_id;
 	}

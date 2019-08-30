@@ -28,7 +28,7 @@ public class CompanyImpl implements CompanyDao {
 	@Override
 	public List<MasterCompanyURL> getCompanyUrlList(int userId, String action) {
 		List<MasterCompanyURL> data = new ArrayList<>();
-		try(Connection con = (Connection) dataSource.getConnection();) {
+		try(Connection con = (Connection) dataSource.getConnection()) {
 			ResultSet rs = null;
 			PreparedStatement ps = null;
 			String sql = "";
@@ -90,6 +90,7 @@ public class CompanyImpl implements CompanyDao {
 				details.setCompany_li_id(rs.getString("li_co_id"));
 				companyDetails.add(details);
 			}
+			con.close();
 		}catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception
@@ -107,6 +108,7 @@ public class CompanyImpl implements CompanyDao {
 			while (rs.next()) {
 				return rs.getInt("count");				
 			}
+			con.close();
 		}catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception

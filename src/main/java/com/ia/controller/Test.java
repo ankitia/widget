@@ -1,89 +1,171 @@
 package com.ia.controller;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Test {
 
 
     public static void main(String[] args)
     {
-        String passwordToHash = "Info123*";
-        String generatedPassword = null;
-        try {
-            // Create MessageDigest instance for MD5
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            //Add password bytes to digest
-            md.update(passwordToHash.getBytes());
-            //Get the hash's bytes
-            byte[] bytes = md.digest();
-            //This bytes[] has bytes in decimal format;
-            //Convert it to hexadecimal format
-            StringBuilder sb = new StringBuilder();
-            for(int i=0; i< bytes.length ;i++)
-            {
-                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-            }
-            //Get complete hashed password in hex format
-            generatedPassword = sb.toString();
-        }
-        catch (NoSuchAlgorithmException e)
-        {
-            e.printStackTrace();
-        }
-        System.out.println(generatedPassword);
+		  List<Book> books = readBooksFromCSV("/home/jaynil/Desktop/shagnik/BH-xls.csv");
+		  
+		  String action = "BH";
+		  
+		  
+	      // let's print all the person read from CSV file
+	      List<Book> books2 = new ArrayList<>();
+		  for (Book b : books) {
+			  Book book = new Book();
+			  
+			  
+			  if(action.equalsIgnoreCase("BH")) {
+				  if(b.getName().equalsIgnoreCase("Message Subject:")) {
+		        	  book.setName(b.getName());
+		        	  book.setValue(b.getValue());
+		          }else if(b.getName().equalsIgnoreCase("Message Subject:")) {
+		        	  book.setName(b.getName());
+		        	  book.setValue(b.getValue());
+		          }else if(b.getName().equalsIgnoreCase("Sent")) {
+		        	  book.setName(b.getName());
+		        	  book.setValue(b.getValue());
+		          }else if(b.getName().equalsIgnoreCase("Delivered")) {
+		        	  book.setName(b.getName());
+		        	  book.setValue(b.getValue());
+		          }else if(b.getName().equalsIgnoreCase("Bounced")) {
+		        	  book.setName(b.getName());
+		        	  book.setValue(b.getValue());
+		          }else if(b.getName().equalsIgnoreCase("opened")) {
+		        	  book.setName(b.getName());
+		        	  book.setValue(b.getValue());
+		          }else if(b.getName().equalsIgnoreCase("Clicked")) {
+		        	  book.setName(b.getName());
+		        	  book.setValue(b.getValue());
+		          }else if(b.getName().equalsIgnoreCase("Soft Bounce")) {
+		        	  book.setName(b.getName());
+		        	  book.setValue(b.getValue());
+		          }
+			  }else if(action.equalsIgnoreCase("ER")) {
+				  
+			  }
+			  
+	         
+	          
+	          if(book.getName()!=null && !book.getName().equalsIgnoreCase("null")) {
+	        	  books2.add(book);
+	          }
+	         // System.out.println(book.getName());
+	      }
+		  
+		  
+      System.out.println("Test----"+books2.size());
+      
+      for (int i=0;i<books2.size();i++) {
+		
+    	  System.out.println(books2.get(i).getName() +"--"+books2.get(i).getValue());
+		
+	}
+      
     }
   
-   /* public static void check(String host, String storeType, String user,
-    	      String password) 
-    	   {
-    	      try {
+   
+    private static List<Book> readBooksFromCSV(String fileName) {
+        List<Book> books = new ArrayList<>();
+        Path pathToFile = Paths.get(fileName);
 
-    	      //create properties field
-    	      Properties properties = new Properties();
+        // create an instance of BufferedReader
+        // using try with resource, Java 7 feature to close resources
+        try (BufferedReader br = Files.newBufferedReader(pathToFile,
+                StandardCharsets.US_ASCII)) {
 
-    	      properties.put("mail.pop3.host", host);
-    	      properties.put("mail.pop3.port", "995");
-    	      properties.put("mail.pop3.starttls.enable", "true");
-    	      Session emailSession = Session.getDefaultInstance(properties);
-    	  
-    	      //create the POP3 store object and connect with the pop server
-    	      Store store = emailSession.getStore("pop3s");
+            // read the first line from the text file
+            String line = br.readLine();
 
-    	      store.connect(host, user, password);
+            // loop until all lines are read
+            while (line != null) {
 
-    	      //create the folder object and open it
-    	      Folder emailFolder = store.getFolder("INBOX");
-    	      emailFolder.open(Folder.READ_ONLY);
-    	      
+                // use string.split to load a string array with the values from
+                // each line of
+                // the file, using a comma as the delimiter
+                String[] attributes = line.split(",");
 
-    	      // retrieve the messages from the folder in an array and print it
-    	      Message[] messages = emailFolder.getMessages();
-    	      System.out.println("messages.length---" + messages.length);
+                Book book = createBook(attributes);
 
-    	      for (int i = 0, n = messages.length; i < n; i++) {
-    	         Message message = messages[i];
-    	         System.out.println("---------------------------------");
-    	         System.out.println("Email Number " + (i + 1));
-    	         System.out.println("Subject: " + message.getSubject());
-    	         System.out.println("From: " + message.getFrom()[0]);
-    	         System.out.println("Text: " + message.getContent().toString());
-    	         System.out.println("Date: " + message.getSentDate() +"--");
+                // adding book into ArrayList
+                books.add(book);
 
-    	      }
+                // read next line before looping
+                // if end of file reached, line would be null
+                line = br.readLine();
+            }
 
-    	      //close the store and folder objects
-    	      emailFolder.close(false);
-    	      store.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
 
-    	      } catch (NoSuchProviderException e) {
-    	         e.printStackTrace();
-    	      } catch (MessagingException e) {
-    	         e.printStackTrace();
-    	      } catch (Exception e) {
-    	         e.printStackTrace();
-    	      }
-    	   }*/
-    
-	
+        return books;
+    }
+    private static Book createBook(String[] metadata) {
+        
+    	String name = "",value="";
+    	if(metadata.length > 0) {
+    		name = metadata[0];	
+    	}
+    	if(metadata.length > 1) {
+    		value = metadata[1];	
+    	}
+    	
+
+        // create and return book of this metadata
+        return new Book(name, value);
+    }
+
 }
+
+class Book {
+    private String name;
+    private String value;
+    
+    
+    public Book() {
+    	
+    }
+
+    public Book(String name, String value) {
+        this.name = name;
+        this.value = value;
+    
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    
+
+    @Override
+    public String toString() {
+        return "Book [name=" + name + ", value=" + value  + "]";
+    }
+
+}
+

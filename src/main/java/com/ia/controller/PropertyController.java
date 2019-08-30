@@ -79,8 +79,6 @@ public class PropertyController {
 	@RequestMapping(value="masterGoogleURL")
 	public String masterGoogleURL(HttpServletRequest reques,Model model,HttpSession session)
 	{
-		System.out.println("User url");
-		
 		int userId = Integer.parseInt(session.getAttribute("userId")+"");
 		model.addAttribute("urlList",propertyDao.getGoogleUrlList(userId,"display"));
 		

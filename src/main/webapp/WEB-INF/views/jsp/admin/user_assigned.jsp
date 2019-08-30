@@ -193,7 +193,7 @@ function setOperation(){
       		</div>
       		
       		
-	    	<input type="hidden" name="pendingLink" id="pendingLink" ">
+	    	<input type="hidden" name="pendingLink" id="pendingLink" >
 	    	<div class="text-right"><c:out value="${count }"></c:out></div>
 		     
 	    </div>
