@@ -26,7 +26,7 @@
       
 
       <!-- Begin page content --> 
-      <div class="container text-center" style="margin-top: 50px;">
+      <div class="container text-center">
          
          
          

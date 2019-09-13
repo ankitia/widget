@@ -68,8 +68,8 @@ function setTotal(total,action){
       <!-- Fixed navbar End -->
        
 
-      <!-- Begin page content --> 
-      <div class="container text-center" style="margin-top: 50px;">
+      <!-- Begin page content -->  
+      <div class="container text-center">
          
          <font color="red" size="4" style="float: right;"> Welcome, <%=session.getAttribute("userName") %> </font>
          

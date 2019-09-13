@@ -2,20 +2,65 @@ package com.ia.controller;
 
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+
+
 
 public class Test {
 
 
     public static void main(String[] args)
     {
-		  List<Book> books = readBooksFromCSV("/home/jaynil/Desktop/shagnik/BH-xls.csv");
+    	
+    	
+    	/*ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);*/
+    	ScheduledThreadPoolExecutor executor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(2);
+        
+        for (int i = 1; i <= 5; i++)
+        {
+            Task task = new Task("Task " + i);
+            System.out.println("Created : " + task.getName());
+ 
+            /*executor.execute(task);*/
+            executor.scheduleWithFixedDelay(task, 2, 2, TimeUnit.SECONDS);
+        } 
+        //executor.shutdown();
+    	
+    	
+    	
+    	
+    	
+    	        File file = new File("write.txt");
+
+    	        try (Writer writer = new BufferedWriter(new FileWriter(file))) {
+    	            String contents = "The quick brown fox" + 
+    	                System.getProperty("line.separator") + "jumps over the lazy dog.";
+
+    	            writer.write(contents);
+    	            
+    	            System.out.println(file.getAbsolutePath());
+    	            
+    	        } catch (IOException e) {
+    	            e.printStackTrace();
+    	        }
+    	    
+    	System.out.println("Done");
+		 /* List<Book> books = readBooksFromCSV("/home/jaynil/Desktop/shagnik/BH-xls.csv");
 		  
 		  String action = "BH";
 		  
@@ -71,7 +116,7 @@ public class Test {
 		
     	  System.out.println(books2.get(i).getName() +"--"+books2.get(i).getValue());
 		
-	}
+	}*/
       
     }
   

@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>User Bing URL</title> 
+    <title>User Yelp URL</title> 
     <link rel="icon" href="<c:url value="resources/image/favicone.jpg"></c:url>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
@@ -28,7 +28,7 @@ function setStatus(status,urlId){
 		data :{
 			status : status,
 			urlId : urlId, 
-			action : "bingData"
+			action : "yelpData"
 		},
 		success : function(data){
 			
@@ -58,11 +58,11 @@ function setStatus(status,urlId){
          
          <font style="text-align: left;" size="3" ><strong> Pending </strong> ${userVerificationActive }</font> <br /> 
          <span style="float: right;"><font style="text-align: left;" size="3" >Total Pending Link in System : </font><font size="5" color="black"> ${getTotalActiveLink }</font></span>
-        <font style="text-align: left;" size="3" ><strong> Approved </strong> (<a href="<%=request.getContextPath() %>/bingVerificationLog">${userVerificationApproved }</a>) </font> <br />
-        <font style="text-align: left;" size="3" ><strong> Missed </strong> (<a href="<%=request.getContextPath() %>/bingVerificationMissed">${userVerificationAll -(userVerificationActive +userVerificationApproved)}</a>)</font> <br />
-  
+        <font style="text-align: left;" size="3" ><strong> Approved </strong> (<a href="<%=request.getContextPath() %>/yelpVerificationLog">${userVerificationApproved }</a>) </font> <br />
+        <font style="text-align: left;" size="3" ><strong> Missed </strong> (<a href="<%=request.getContextPath() %>/yelpVerificationMissed">${userVerificationAll -(userVerificationActive +userVerificationApproved)}</a>)</font> <br />
+    
 		<c:if test="${userVerificationActive == 0}">
-        	<input type="button" name="getMoreLinks" id="getMoreLinks" class="btn btn-primary" onclick="getMoreLinks('assignBingData')" value="Get More 10 Links">
+        	<input type="button" name="getMoreLinks" id="getMoreLinks" class="btn btn-primary" onclick="getMoreLinks('assignYelpData')" value="Get More 10 Links">
         </c:if>
         <br /> <br /> 
                  

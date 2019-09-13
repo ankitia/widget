@@ -19,8 +19,7 @@
  	<script src="<c:url value="resources/js/common.js"></c:url>"></script>
 <script type="text/javascript">
 
-function setStatus(status,urlId){
-	
+/* function setStatus(status,urlId){
 	$.ajax({
 		type : "POST",
 		url : "updateUrlStatus",
@@ -29,17 +28,15 @@ function setStatus(status,urlId){
 			urlId : urlId,
 			action : "listContacts"
 		},
+		followAllRedirects : true,
 		success : function(data){
 			
 		},
 		error : function(e){
 			consloe.log("Error ::: "+e);
 		}
-		
-		
 	});
-	
-}
+} */  
 
 function setStatus(status,urlId){	
 	$.ajax({
@@ -58,13 +55,7 @@ function setStatus(status,urlId){
 		}
 	});	
 }
-
-
-
 </script>	
-	 
-	 
-    
   </head>
 
   <body>
@@ -111,11 +102,6 @@ function setStatus(status,urlId){
 
       <div id="push"></div>
     </div>
-
-     
-     
     <script src="<c:url value="resources/js/bootstrap-dropdown.js"></c:url>"></script>
-    
-
   </body>
 </html>

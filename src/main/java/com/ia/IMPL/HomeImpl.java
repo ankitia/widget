@@ -315,7 +315,12 @@ public class HomeImpl implements HomeDao {
 				sql = "select count(distinct(url_id)) as total from property_data where user_id = ?";
 			}else if(action.equalsIgnoreCase("bingData")) {
 				sql = "select count(distinct(url_id)) as total from bing_data where user_id = ?";
+			}else if(action.equalsIgnoreCase("zillowData")) {
+				sql = "select count(distinct(url_id)) as total from zillow_data where user_id = ?";
+			}else if(action.equalsIgnoreCase("yelpData")) {
+				sql = "select count(distinct(url_id)) as total from yelp_data where user_id = ?";
 			}
+			
 			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setInt(1, userId);
@@ -456,6 +461,10 @@ public class HomeImpl implements HomeDao {
 				sql = "update  master_google_url set status = ? where master_google_url_id = ?";
 			}else if(action.equalsIgnoreCase("bingData")){
 				sql = "update  master_bing_url set status = ? where master_bing_url_id = ?";
+			}else if(action.equalsIgnoreCase("zillowData")){
+				sql = "update master_zillow_url set status = ? where master_zillow_url_id = ?";
+			}else if(action.equalsIgnoreCase("yelpData")){
+				sql = "update master_yelp_url set status = ? where master_yelp_url_id = ?";
 			}
 			
 			
@@ -673,6 +682,16 @@ public class HomeImpl implements HomeDao {
 				ps.setInt(2, limit);
 			}else if(action.equalsIgnoreCase("assignBingData")){
 				sql = "UPDATE master_bing_url SET user_id=? 	WHERE master_bing_url_id IN (SELECT master_bing_url_id FROM (SELECT master_bing_url_id FROM master_bing_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignZillowData")){
+				sql = "UPDATE master_zillow_url SET user_id=? 	WHERE master_zillow_url_id IN (SELECT master_zillow_url_id FROM (SELECT master_zillow_url_id FROM master_zillow_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignYelpData")){
+				sql = "UPDATE master_yelp_url SET user_id=? 	WHERE master_yelp_url_id IN (SELECT master_yelp_url_id FROM (SELECT master_yelp_url_id FROM master_yelp_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1, userId);
 				ps.setInt(2, limit);

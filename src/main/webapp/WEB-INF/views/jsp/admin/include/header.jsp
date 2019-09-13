@@ -30,7 +30,9 @@
                 		<li><a href="<%=request.getContextPath() %>/dashboard">Dashboard</a></li>
                 		<li><a href="<%=request.getContextPath() %>/masterGoogleURL">Google</a></li>
                 		<li><a href="<%=request.getContextPath() %>/masterBingURL">Bing</a></li>
-                	</c:otherwise> 
+                		<li><a href="<%=request.getContextPath() %>/masterZillowURL">Zillow</a></li>
+                		<li><a href="<%=request.getContextPath() %>/masterYelpURL">Yelp</a></li>
+                	</c:otherwise>  
                 </c:choose>
                                   
                 <c:if test="${userRole == 1}">
