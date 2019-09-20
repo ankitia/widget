@@ -14,6 +14,6 @@ public interface YelpDao {
 	
 	List<YelpData> getYelpData(int userId);
 		
-	 
+	List<MasterYelpURL> exportMasterYelpUrlList();	 
 }
 

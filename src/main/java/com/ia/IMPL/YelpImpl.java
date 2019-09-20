@@ -62,7 +62,7 @@ public class YelpImpl implements YelpDao {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-		System.out.println("Status insertZillowData:::"+status);
+		System.out.println("Status insertYelpData:::"+status);
 		return status;
 	}
 	
@@ -139,6 +139,32 @@ public class YelpImpl implements YelpDao {
 			// TODO: handle exception
 		}
 		return bingDatas;
+	}
+
+	@Override
+	public List<MasterYelpURL> exportMasterYelpUrlList() {
+		// TODO Auto-generated method stub
+		List<MasterYelpURL> data = new ArrayList<>();
+		try(Connection con = (Connection) dataSource.getConnection();) {
+			ResultSet rs = null;
+			PreparedStatement ps = null;
+			String sql = "select * from master_yelp_url";
+			ps = (PreparedStatement) con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				MasterYelpURL masterURL = new MasterYelpURL();
+				masterURL.setUrlId(Long.parseLong(rs.getString("master_yelp_url_id")));
+				masterURL.setUrl((rs.getString("url")));
+				masterURL.setUserId(rs.getString("user_id").trim()!=""?Integer.parseInt(rs.getString("user_id")): 0);
+				masterURL.setStatus(rs.getString("status"));
+				data.add(masterURL);
+			}
+			con.close();			
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return data;
 	}
 
 	 

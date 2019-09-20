@@ -14,6 +14,8 @@ public interface PropertyDao {
 	
 	List<Property> getGoogleData(int userId);
 	
+	List<MasterGoogleURL> exportMasterGoogleUrlList();
+	
 	/*List<MasterListBuildingURL> getListBuildingUrlList(int userId,String action);
 	
 	List<ListBuildingView> getListBuildingData(int userId,String action); 

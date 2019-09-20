@@ -24,14 +24,20 @@ import org.supercsv.prefs.CsvPreference;
 import com.ia.Dao.CompanyDao;
 import com.ia.Dao.HomeDao;
 import com.ia.Dao.ListBuildingDao;
+import com.ia.Dao.MapsDao;
+import com.ia.Dao.PropertyDao;
+import com.ia.Dao.YelpDao;
 import com.ia.modal.Category;
 import com.ia.modal.CompanyDetails;
 import com.ia.modal.CompanyLocation;
 import com.ia.modal.ListBuilding;
 import com.ia.modal.ListContacts;
 import com.ia.modal.MasterCompanyURL;
+import com.ia.modal.MasterGoogleURL;
 import com.ia.modal.MasterListBuildingURL;
+import com.ia.modal.MasterMapsURL;
 import com.ia.modal.MasterURL;
+import com.ia.modal.MasterYelpURL;
 import com.ia.modal.Scrap;
 import com.ia.modal.User;
 
@@ -43,6 +49,15 @@ public class HomeController {
 	
 	@Autowired
 	CompanyDao companyDao;
+	
+	@Autowired
+	PropertyDao propertyDao; 
+	
+	@Autowired
+	MapsDao mapsDao; 
+	
+	@Autowired
+	YelpDao yelpDao; 
 	
 	@Autowired
 	ListBuildingDao  listBuildingDao; 
@@ -186,6 +201,8 @@ public class HomeController {
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"zillowData")+"";
 		}else if(action.equalsIgnoreCase("yelpData")){
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"yelpData")+"";
+		}else if(action.equalsIgnoreCase("mapsData")){
+			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"mapsData")+"";
 		}
 		
 		
@@ -652,7 +669,54 @@ public class HomeController {
      			// TODO Auto-generated catch block
      			e.printStackTrace();
      		}
+       }else if(action.equalsIgnoreCase("masterGoogleData")) {
+    	   csvFileName = "Master_List_Build.csv";
+      	   try {
+     			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+     			String[] header = { "urlId","url","userId","status"};
+     	        csvWriter.writeHeader(header);
+     	        List<MasterGoogleURL> tempUrls = propertyDao.exportMasterGoogleUrlList();
+     	        for (MasterGoogleURL aBook : tempUrls) {
+     	            csvWriter.write(aBook, header);
+     	        }
+     	     csvWriter.close();
+     		} catch (IOException e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}
+       }else if(action.equalsIgnoreCase("masterGoogleMaps")) {
+    	   csvFileName = "Master_List_Build.csv";
+      	   try {
+     			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+     			String[] header = { "urlId","url","userId","status"};
+     	        csvWriter.writeHeader(header);
+     	        List<MasterMapsURL> tempUrls = mapsDao.exportMapsDataUrlList();
+     	        for (MasterMapsURL aBook : tempUrls) {
+     	            csvWriter.write(aBook, header);
+     	        }
+     	     csvWriter.close();
+     		} catch (IOException e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}
+       }else if(action.equalsIgnoreCase("masterYelpData")) {
+    	   csvFileName = "Master_List_Build.csv";
+      	   try {
+     			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+     			String[] header = { "urlId","url","userId","status"};
+     	        csvWriter.writeHeader(header);
+     	        List<MasterYelpURL> tempUrls = yelpDao.exportMasterYelpUrlList();
+     	        for (MasterYelpURL aBook : tempUrls) {
+     	            csvWriter.write(aBook, header);
+     	        }
+     	     csvWriter.close();
+     		} catch (IOException e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}
        }
+       
+       
 		
 	}
 	

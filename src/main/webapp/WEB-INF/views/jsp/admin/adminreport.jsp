@@ -77,6 +77,9 @@ function checkReportList(checkList){
 	     			<option value="companyLocations">Company Locations</option>
 	     			<option value="masterListBuild">Master List Building</option>
 	     			<option value="listBuilding">List Building</option>
+	     			<option value="masterGoogleData">Master Google Data</option>
+	     			<option value="masterGoogleMaps">Master Google Maps</option>
+	     			<option value="masterYelpData">Master Yelp Data</option>
 	     		</select> 
 	     		<input type = "text" id = "startDate"  placeholder = "Start Date">
 	     		<input type = "text" id = "endDate" placeholder = "End Date"> 

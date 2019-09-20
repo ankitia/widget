@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Yelp Verification Missed</title> 
+    <title>Maps Verification Missed</title> 
     <link rel="icon" href="<c:url value="resources/image/favicone.jpg"></c:url>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
@@ -37,7 +37,7 @@
              <c:forEach items="${urlList }" var="urlList" varStatus="index">         
 	         	<tr> 
 	         		<td>${index.count } </td> 
-	         		<td><a href="${urlList.url }&id=${urlList.userId}&urlId=${urlList.urlId}"  onclick="setStatus('Done',${urlList.urlId})" target="_blank"> Link ${urlList.urlId }</a> </td>	         		
+	         		<td><a href="${urlList.url }?id=${urlList.userId}&urlId=${urlList.urlId}"  onclick="setStatus('Done',${urlList.urlId})" target="_blank"> Link ${urlList.urlId }</a> </td>	         		
 	         	</tr>	
 	         </c:forEach>
          </table>

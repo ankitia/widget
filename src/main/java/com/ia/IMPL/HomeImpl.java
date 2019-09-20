@@ -319,7 +319,10 @@ public class HomeImpl implements HomeDao {
 				sql = "select count(distinct(url_id)) as total from zillow_data where user_id = ?";
 			}else if(action.equalsIgnoreCase("yelpData")) {
 				sql = "select count(distinct(url_id)) as total from yelp_data where user_id = ?";
+			}else if(action.equalsIgnoreCase("mapsData")) {
+				sql = "select count(distinct(url_id)) as total from maps_data where user_id = ?";
 			}
+			
 			
 			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
@@ -465,6 +468,8 @@ public class HomeImpl implements HomeDao {
 				sql = "update master_zillow_url set status = ? where master_zillow_url_id = ?";
 			}else if(action.equalsIgnoreCase("yelpData")){
 				sql = "update master_yelp_url set status = ? where master_yelp_url_id = ?";
+			}else if(action.equalsIgnoreCase("mapsData")){
+				sql = "update master_maps_url set status = ? where master_maps_url_id = ?";
 			}
 			
 			
@@ -695,9 +700,12 @@ public class HomeImpl implements HomeDao {
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1, userId);
 				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignMapsData")){
+				sql = "UPDATE master_maps_url SET user_id=? 	WHERE master_maps_url_id IN (SELECT master_maps_url_id FROM (SELECT master_maps_url_id FROM master_maps_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
 			}
-			
-			
 			queryStatus = ps.executeUpdate();
 			
 		}catch (Exception e) {

@@ -152,7 +152,7 @@ public class ZillowImpl implements ZillowDao {
 			String sql = "select * from zillow_data where user_id = ? order by zillow_id desc limit 0,10";
 			
 			if(action.equalsIgnoreCase("all")) {
-				sql = "select * from zillow_data where user_id = ? order by zillow_id desc limit 35000,20000";
+				sql = "select * from zillow_data where user_id = ? and  zillow_id > 190479	";
 			}else if(action.equalsIgnoreCase("display")){
 				sql = "select * from zillow_data where user_id = ? order by zillow_id desc limit 0,10";
 			}
@@ -165,7 +165,8 @@ public class ZillowImpl implements ZillowDao {
 				ZillowData bingData = new ZillowData();
 				bingData.setZillowId(rs.getInt("zillow_id"));
 				bingData.setData_lst(rs.getString("data_lst"));;
-				bingData.setSub_section_container0(rs.getString("sub_section_container0"));;
+				//bingData.setSub_section_container0(rs.getString("sub_section_container0"));;
+				bingData.setSub_section_container0(""	);
 				bingData.setPopup_div(rs.getString("popup_div"));
 				bingData.setUrl(rs.getString("url"));
 				bingData.setUrl_id(rs.getString("url_id"));

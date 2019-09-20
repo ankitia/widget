@@ -1,7 +1,7 @@
 package com.ia.modal;
 
 /**
- * @author jaynil
+ * @author Ankit
  *
  */
 public class YelpData {
