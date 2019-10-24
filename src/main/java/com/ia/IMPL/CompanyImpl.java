@@ -145,8 +145,10 @@ public class CompanyImpl implements CompanyDao {
 				details.setUrl(rs.getString("url"));
 				details.setUser_id(rs.getString("user_id"));
 				details.setUrl_id(rs.getString("url_id"));
+				details.setPhone_number(rs.getString("phone_number"));
 				details.setCompany_li_id(rs.getString("li_co_id"));
 				details.setCreated_date(rs.getString("created_date"));
+				
 				companyDetails.add(details);
 			}
 		}catch (Exception e) {
@@ -207,6 +209,7 @@ public class CompanyImpl implements CompanyDao {
 				details.setHeadquarter(rs.getString("headquarter"));
 				details.setLine1(rs.getString("line1"));
 				details.setLine2(rs.getString("line2"));
+				details.setLi_id(rs.getString("li_co_id"));
 				companyLocations.add(details);
 			}
 		}catch (Exception e) {

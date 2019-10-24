@@ -151,10 +151,13 @@ public class CompanyController {
 		if(action.equalsIgnoreCase("scrap")) {
 			return homeDao.setPendingLink("assignScrap", userId, 50)+"";
 		}else if(action.equalsIgnoreCase("companyData")) {
-			if(companyDao.getCurrentDateCount(userId) > 4000){
+			/*if(companyDao.getCurrentDateCount(userId) > 4000){
 				return "Your daily 4000 limit exceeded (Per day limit 4000)";
-			}else	
-				return homeDao.setPendingLink("assignCompany", userId, 50)+"";	
+			}else*/	
+			if(companyDao.getCompanyUrlList(userId, "active").size()<50) {
+				return homeDao.setPendingLink("assignCompany", userId, 50)+"";
+			}
+					
 		}else if(action.equalsIgnoreCase("listBuild")) {
 			if(listBuildingDao.getListBuildingUrlList(userId, "active").size() < 2) {
 				return homeDao.setPendingLink("assignListBuild", userId, 2)+"";	
@@ -171,7 +174,10 @@ public class CompanyController {
 			return homeDao.setPendingLink("assignYelpData", userId, 10)+"";
 		}else if(action.equalsIgnoreCase("assignMapsData")) { 
 			return homeDao.setPendingLink("assignMapsData", userId, 10)+"";
+		}else if(action.equalsIgnoreCase("assignProfileEmailData")) { 
+			return homeDao.setPendingLink("assignProfileEmailData", userId, 10)+"";
 		}
+		
 		
 		return "";
 				

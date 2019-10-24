@@ -203,10 +203,9 @@ public class HomeController {
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"yelpData")+"";
 		}else if(action.equalsIgnoreCase("mapsData")){
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"mapsData")+"";
+		}else if(action.equalsIgnoreCase("profileEmailData")){
+			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"profileEmailData")+"";
 		}
-		
-		
-		
 		
 		return "false";
 	}
@@ -572,7 +571,7 @@ public class HomeController {
     	   
     	   try {
       			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
-      			String[] header = { "company_id","company_name","company_location","employee_count","company_url","company_headquater","year_founded","company_size","company_speciality","url","url_id","user_id","company_li_id","locationCount","company_type","company_stock_name","company_industry","ipaddress","created_date"};
+      			String[] header = { "company_id","company_name","company_location","employee_count","company_url","company_headquater","year_founded","company_size","company_speciality","url","url_id","user_id","company_li_id","locationCount","company_type","company_stock_name","company_industry","phone_number","ipaddress","created_date"};
       	        csvWriter.writeHeader(header);
       	        List<CompanyDetails> tempUrls = companyDao.exportCompanyData(request.getParameter("exportStartDate"),request.getParameter("exportEndDate"));
       	        for (CompanyDetails aBook : tempUrls) {
@@ -658,7 +657,7 @@ public class HomeController {
     	   csvFileName = "Master_List_Build.csv";
       	   try {
      			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
-     			String[] header = { "company_location_id","company_id","country","geographic_area","postal_code","description","city","headquarter","line1","line2"};
+     			String[] header = { "company_location_id","company_id","country","geographic_area","postal_code","description","city","headquarter","line1","line2","li_id"};
      	        csvWriter.writeHeader(header);
      	        List<CompanyLocation> tempUrls = companyDao.exportCompanyLocations(exportUrlList);
      	        for (CompanyLocation aBook : tempUrls) {

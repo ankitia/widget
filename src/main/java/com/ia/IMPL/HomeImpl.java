@@ -321,6 +321,8 @@ public class HomeImpl implements HomeDao {
 				sql = "select count(distinct(url_id)) as total from yelp_data where user_id = ?";
 			}else if(action.equalsIgnoreCase("mapsData")) {
 				sql = "select count(distinct(url_id)) as total from maps_data where user_id = ?";
+			}else if(action.equalsIgnoreCase("profileEmailData")) {
+				sql = "select count(distinct(url_id)) as total from profile_email_data where user_id = ?";
 			}
 			
 			
@@ -470,6 +472,8 @@ public class HomeImpl implements HomeDao {
 				sql = "update master_yelp_url set status = ? where master_yelp_url_id = ?";
 			}else if(action.equalsIgnoreCase("mapsData")){
 				sql = "update master_maps_url set status = ? where master_maps_url_id = ?";
+			}else if(action.equalsIgnoreCase("profileEmailData")){
+				sql = "update master_profile_email_data set status = ? where master_profile_email_data_id = ?";
 			}
 			
 			
@@ -705,7 +709,14 @@ public class HomeImpl implements HomeDao {
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1, userId);
 				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignProfileEmailData")){
+				sql = "UPDATE master_profile_email_data SET user_id=? 	WHERE master_profile_email_data_id IN (SELECT master_profile_email_data_id FROM (SELECT master_profile_email_data_id FROM master_profile_email_data where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
 			}
+			
+			
 			queryStatus = ps.executeUpdate();
 			
 		}catch (Exception e) {

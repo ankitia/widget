@@ -152,7 +152,9 @@ public class ZillowImpl implements ZillowDao {
 			String sql = "select * from zillow_data where user_id = ? order by zillow_id desc limit 0,10";
 			
 			if(action.equalsIgnoreCase("all")) {
-				sql = "select * from zillow_data where user_id = ? and  zillow_id > 190479	";
+				//sql = "select * from zillow_data where user_id = ? and  zillow_id > 15000 limit 15000	";
+				sql = "select * from zillow_data where  zillow_id = ?";
+				
 			}else if(action.equalsIgnoreCase("display")){
 				sql = "select * from zillow_data where user_id = ? order by zillow_id desc limit 0,10";
 			}
