@@ -68,11 +68,11 @@ public class ZillowController {
 	@RequestMapping(value="downloadZillowFile", method=RequestMethod.GET)
 	public String downloadZillowFile(ZillowData zillowData,HttpServletRequest request) {
 
-		for (int j = 31000; j < 95017; j++) {
+		for (int j = 95017; j < 113216; j++) {
 			
 			List<ZillowData> zillowDatas = zillowDao.getZillowData(j,"all");
 			for (int i = 0; i < zillowDatas.size(); i++) {
-				File file = new File("/home/jaynil/Desktop/zillow_output/zillow_"+zillowDatas.get(i).getZillowId()+".txt");
+				File file = new File("/home/ankit/Desktop/zillow_output/zillow_"+zillowDatas.get(i).getZillowId()+".txt");
 		        try (Writer writer = new BufferedWriter(new FileWriter(file))) {
 		            String contents = zillowDatas.get(i).getData_lst()+""+zillowDatas.get(i).getPopup_div()+"</zillowlink>"+zillowDatas.get(i).getUrl();
 		            writer.write(contents);

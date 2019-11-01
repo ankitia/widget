@@ -76,4 +76,8 @@ public interface HomeDao {
 	
 	boolean reActiveMasterURL(String ids,String action);
  	
+	List<MasterURLProfile> exportMasterURLProfile();
+	
+	List<ListContacts> exportListContacts(String startDate,String endDate);
+	
 }

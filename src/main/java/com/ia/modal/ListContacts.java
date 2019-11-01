@@ -25,10 +25,16 @@ public class ListContacts {
 	private String user_id;
 	private String url_id;
 	private String ipaddress;
+	private String createdDate;
 	
 	
 	
-	
+	public String getCreatedDate() {
+		return createdDate;
+	}
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
+	}
 	public String getIpaddress() {
 		return ipaddress;
 	}

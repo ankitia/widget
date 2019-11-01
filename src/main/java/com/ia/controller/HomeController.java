@@ -37,6 +37,7 @@ import com.ia.modal.MasterGoogleURL;
 import com.ia.modal.MasterListBuildingURL;
 import com.ia.modal.MasterMapsURL;
 import com.ia.modal.MasterURL;
+import com.ia.modal.MasterURLProfile;
 import com.ia.modal.MasterYelpURL;
 import com.ia.modal.Scrap;
 import com.ia.modal.User;
@@ -61,6 +62,8 @@ public class HomeController {
 	
 	@Autowired
 	ListBuildingDao  listBuildingDao; 
+	
+	
 	
 	@RequestMapping(value="/")
 	public String home(Model model,HttpSession session) {
@@ -706,6 +709,36 @@ public class HomeController {
      	        csvWriter.writeHeader(header);
      	        List<MasterYelpURL> tempUrls = yelpDao.exportMasterYelpUrlList();
      	        for (MasterYelpURL aBook : tempUrls) {
+     	            csvWriter.write(aBook, header);
+     	        }
+     	     csvWriter.close();
+     		} catch (IOException e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}
+       }else if(action.equalsIgnoreCase("masterFullDetails")) {
+    	   csvFileName = "masterFullDetails.csv";
+      	   try {
+     			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+     			String[] header = { "masterUrlId","url","userId","status"};
+     	        csvWriter.writeHeader(header);
+     	        List<MasterURLProfile> tempUrls = homeDao.exportMasterURLProfile();
+     	        for (MasterURLProfile aBook : tempUrls) {
+     	            csvWriter.write(aBook, header);
+     	        }
+     	     csvWriter.close();
+     		} catch (IOException e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}
+       }else if(action.equalsIgnoreCase("fullDetails")) {
+    	   csvFileName = "fullDetails.csv";
+      	   try {
+     			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+     			String[] header = { "full_name","head_title","head_location","company_name","university","university_url","current_title","current_company","current_company_link","current_duration_start","current_duration_end","current_location","past_title","past_company","past_company_link","past_duration_start","past_duration_end","past_location","url","user_id","url_id","createdDate"};
+     	        csvWriter.writeHeader(header);
+     	        List<ListContacts> tempUrls = homeDao.exportListContacts(request.getParameter("exportStartDate"),request.getParameter("exportEndDate"));
+     	        for (ListContacts aBook : tempUrls) {
      	            csvWriter.write(aBook, header);
      	        }
      	     csvWriter.close();

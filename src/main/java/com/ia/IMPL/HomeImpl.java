@@ -738,7 +738,7 @@ public class HomeImpl implements HomeDao {
 			try (Connection con = (Connection) dataSource.getConnection()){
 				
 				String sql = "insert into company_detail(company_name,company_location,employee_count,company_url,company_headquater,year_founded,company_size,"
-						+ "company_speciality,company_confirmed_location,affiliate_company,showcase_page,url,url_id,user_id,ipaddress,li_co_id,company_type,company_stock_name,company_industry,phone_number) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+						+ "company_speciality,company_confirmed_location,affiliate_company,showcase_page,url,url_id,user_id,ipaddress,li_co_id,company_type,company_stock_name,company_industry,phone_number,employees_link) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 				PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, companyDetails.getCompany_name());
 				ps.setString(2, companyDetails.getCompany_location());
@@ -760,6 +760,7 @@ public class HomeImpl implements HomeDao {
 				ps.setString(18, companyDetails.getCompany_stock_name());
 				ps.setString(19, companyDetails.getCompany_industry());
 				ps.setString(20, companyDetails.getPhone_number());
+				ps.setString(21, companyDetails.getEmployees_link());
 				status = ps.executeUpdate();
 				con.commit();		
 				 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
@@ -951,6 +952,75 @@ public class HomeImpl implements HomeDao {
 		
 		System.out.println("Status list:::"+status);
 		return false;
+	}
+
+	@Override
+	public List<MasterURLProfile> exportMasterURLProfile() {
+		List<MasterURLProfile> data = new ArrayList<>();
+		try(Connection con = (Connection) dataSource.getConnection();) {
+			ResultSet rs = null;
+			PreparedStatement ps = null;
+			String sql = "select * from master_url_profile";
+			ps = (PreparedStatement) con.prepareStatement(sql);
+			rs = ps.executeQuery();
+		while (rs.next()) {
+			MasterURLProfile masterURL = new MasterURLProfile();
+			masterURL.setMasterUrlId(Long.parseLong(rs.getString("master_url_id")));
+			masterURL.setUrl((rs.getString("url")));
+			masterURL.setStatus(rs.getString("status"));
+			masterURL.setUserId(rs.getString("user_id").trim()!=""?Integer.parseInt(rs.getString("user_id")): 0);
+			data.add(masterURL);
+		}
+		con.close();			
+	}catch (Exception e) {
+		e.printStackTrace();
+		// TODO: handle exception
+	}
+		return data;
+	}
+
+	@Override
+	public List<ListContacts> exportListContacts(String startDate, String endDate) {
+		List<ListContacts> liContacts = new ArrayList<>();
+		try {
+			Connection con = (Connection) dataSource.getConnection();
+			String sql = "select * from list_contacts  where DATE_FORMAT(created_date,'%m/%d/%Y') BETWEEN ? AND ?";
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setString(1,startDate);
+			ps.setString(2,startDate);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				ListContacts contacts = new ListContacts();
+				contacts.setFull_name(rs.getString("full_name"));;
+				contacts.setHead_title(rs.getString("head_title"));;
+				contacts.setHead_location(rs.getString("head_location"));;
+				contacts.setCompany_name(rs.getString("head_location"));
+				contacts.setUniversity(rs.getString("university"));
+				contacts.setUniversity_url(rs.getString("university_url"));
+				contacts.setCurrent_title(rs.getString("current_title"));
+				contacts.setCurrent_company(rs.getString("current_company"));
+				contacts.setCurrent_company_link(rs.getString("current_company_link"));
+				contacts.setCurrent_duration_start(rs.getString("current_duration_start"));
+				contacts.setCurrent_duration_end(rs.getString("current_duration_end"));
+				contacts.setCurrent_location(rs.getString("current_location"));
+				contacts.setPast_title(rs.getString("past_title"));
+				contacts.setPast_company(rs.getString("past_company"));
+				contacts.setPast_company_link(rs.getString("past_company_link"));
+				contacts.setPast_duration_start(rs.getString("past_duration_start"));
+				contacts.setPast_duration_end(rs.getString("past_duration_end"));
+				contacts.setPast_location(rs.getString("past_location"));
+				contacts.setUrl(rs.getString("url"));
+				contacts.setCreatedDate(rs.getString("created_date"));
+				contacts.setUrl_id(rs.getString("url_id"));
+				liContacts.add(contacts);
+			}
+			con.close();
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return liContacts;
 	}	
 
 

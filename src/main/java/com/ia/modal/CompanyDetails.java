@@ -25,6 +25,7 @@ public class CompanyDetails
 	private String company_industry;
 	private String phone_number;
 	private String created_date;
+	private String employees_link;
 	
 		
 	public String getCreated_date() {
@@ -165,6 +166,13 @@ public class CompanyDetails
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
 	}
+	public String getEmployees_link() {
+		return employees_link;
+	}
+	public void setEmployees_link(String employees_link) {
+		this.employees_link = employees_link;
+	}
+	 
 	
 	
 	
