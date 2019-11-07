@@ -56,29 +56,6 @@ CREATE TABLE `bing_data` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `bing_maps_data`
---
-
-DROP TABLE IF EXISTS `bing_maps_data`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `bing_maps_data` (
-  `bing_maps_data_id` int(11) NOT NULL AUTO_INCREMENT,
-  `query` varchar(2000) DEFAULT NULL,
-  `entry_point` varchar(1000) DEFAULT NULL,
-  `title` varchar(1000) DEFAULT NULL,
-  `entity_id` varchar(1000) DEFAULT NULL,
-  `filter_url_param` varchar(1000) DEFAULT NULL,
-  `url` varchar(1000) DEFAULT NULL,
-  `url_id` int(11) DEFAULT '0',
-  `user_id` int(11) DEFAULT '0',
-  `ipaddress` varchar(100) DEFAULT NULL,
-  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`bing_maps_data_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `bing_page_data`
 --
 
@@ -126,7 +103,7 @@ CREATE TABLE `company_affiliate` (
   `company_description` varchar(3000) DEFAULT NULL,
   `li_co_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`company_affiliate_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=643 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
+) ENGINE=InnoDB AUTO_INCREMENT=22993 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -159,11 +136,10 @@ CREATE TABLE `company_detail` (
   `company_stock_name` varchar(100) DEFAULT NULL,
   `company_industry` varchar(200) DEFAULT NULL,
   `phone_number` varchar(100) DEFAULT NULL,
-  `employees_link` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`company_id`),
   KEY `IX_user_id_company_detail` (`user_id`),
   KEY `IX_url_id_company_detail` (`url_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7762 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
+) ENGINE=InnoDB AUTO_INCREMENT=580579 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -318,7 +294,7 @@ CREATE TABLE `company_location` (
   `line2` varchar(2000) DEFAULT NULL,
   `li_co_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`company_location_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13818 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
+) ENGINE=InnoDB AUTO_INCREMENT=749700 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -367,7 +343,7 @@ CREATE TABLE `list_building_details` (
   `page_number` int(11) DEFAULT NULL,
   `record_no` int(11) DEFAULT NULL,
   PRIMARY KEY (`list_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1395412 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
+) ENGINE=InnoDB AUTO_INCREMENT=39004 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -403,7 +379,7 @@ CREATE TABLE `list_contacts` (
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ipaddress` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`list_contacts_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=76944 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
+) ENGINE=InnoDB AUTO_INCREMENT=678 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -482,23 +458,6 @@ CREATE TABLE `maps_tile_data` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `master_bing_maps_url`
---
-
-DROP TABLE IF EXISTS `master_bing_maps_url`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `master_bing_maps_url` (
-  `master_bing_maps_url_id` int(11) NOT NULL AUTO_INCREMENT,
-  `url` varchar(1000) DEFAULT NULL,
-  `status` varchar(10) NOT NULL DEFAULT 'Active',
-  `user_id` int(11) NOT NULL DEFAULT '0',
-  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`master_bing_maps_url_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `master_bing_url`
 --
 
@@ -536,7 +495,7 @@ CREATE TABLE `master_company_url` (
   PRIMARY KEY (`company_url_id`),
   KEY `IX_user_id_master_company_url` (`user_id`),
   KEY `IX_status_master_company_url` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=7429 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
+) ENGINE=InnoDB AUTO_INCREMENT=677242 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -568,7 +527,7 @@ CREATE TABLE `master_list_building_url` (
   `user_id` int(11) NOT NULL DEFAULT '0',
   `status` varchar(10) NOT NULL DEFAULT 'Active',
   PRIMARY KEY (`master_list_url_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14511 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
+) ENGINE=InnoDB AUTO_INCREMENT=1046 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -602,7 +561,7 @@ CREATE TABLE `master_profile_email_data` (
   `status` varchar(10) NOT NULL DEFAULT 'Active',
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`master_profile_email_data_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -618,7 +577,7 @@ CREATE TABLE `master_url` (
   `user_id` int(11) NOT NULL DEFAULT '0',
   `status` varchar(10) NOT NULL DEFAULT 'Active',
   PRIMARY KEY (`master_url_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19357 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
+) ENGINE=InnoDB AUTO_INCREMENT=11798 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -691,10 +650,10 @@ DROP TABLE IF EXISTS `master_url_profile`;
 CREATE TABLE `master_url_profile` (
   `master_url_id` int(11) NOT NULL AUTO_INCREMENT,
   `url` varchar(1000) DEFAULT NULL,
-  `user_id` int(11) DEFAULT '0',
+  `user_id` int(11) DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'Active',
   PRIMARY KEY (`master_url_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=89724 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
+) ENGINE=InnoDB AUTO_INCREMENT=823 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -802,9 +761,8 @@ CREATE TABLE `scrap` (
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `contact_url` varchar(1000) DEFAULT NULL,
   `url_id` varchar(255) DEFAULT NULL,
-  `remarks` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`scrap_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37646 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
+) ENGINE=InnoDB AUTO_INCREMENT=11116 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -997,7 +955,7 @@ CREATE TABLE `user` (
   `company_link` varchar(11) NOT NULL DEFAULT '0',
   `company_link_temp` int(11) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=167 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
+) ENGINE=InnoDB AUTO_INCREMENT=152 DEFAULT CHARSET=latin1 COMMENT='latin1_swedish_ci';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1117,4 +1075,4 @@ SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-07 12:30:32
+-- Dump completed on 2019-10-24 11:15:54
