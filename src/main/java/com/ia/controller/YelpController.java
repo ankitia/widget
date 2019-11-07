@@ -76,7 +76,7 @@ public class YelpController {
 	        }
 	        yelpData.setIpaddress(request.getRemoteAddr());
 	        
-	        int bingId = yelpDao.insertYelpData(yelpData);
+	        yelpDao.insertYelpData(yelpData);
 	        
 	        
 	        

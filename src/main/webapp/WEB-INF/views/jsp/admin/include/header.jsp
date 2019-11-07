@@ -34,6 +34,7 @@
                 		<li><a href="<%=request.getContextPath() %>/masterYelpURL">Yelp</a></li>
                 		<li><a href="<%=request.getContextPath() %>/masterMapsURL">Maps</a></li>
                 		<li><a href="<%=request.getContextPath() %>/masterProfileEmailURL">Profile Email</a></li>
+                		<li><a href="<%=request.getContextPath() %>/masterBingMaps">Bing Maps</a></li>
                 	</c:otherwise>  
                 </c:choose>
                                   

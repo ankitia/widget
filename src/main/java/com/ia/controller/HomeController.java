@@ -208,7 +208,11 @@ public class HomeController {
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"mapsData")+"";
 		}else if(action.equalsIgnoreCase("profileEmailData")){
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"profileEmailData")+"";
+		}else if(action.equalsIgnoreCase("bingMapsData")){
+			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"bingMapsData")+"";
 		}
+		
+		
 		
 		return "false";
 	}

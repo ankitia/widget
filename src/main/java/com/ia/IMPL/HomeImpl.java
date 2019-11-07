@@ -323,9 +323,9 @@ public class HomeImpl implements HomeDao {
 				sql = "select count(distinct(url_id)) as total from maps_data where user_id = ?";
 			}else if(action.equalsIgnoreCase("profileEmailData")) {
 				sql = "select count(distinct(url_id)) as total from profile_email_data where user_id = ?";
+			}else if(action.equalsIgnoreCase("bingMapsData")) {
+				sql = "select count(distinct(url_id)) as total from bing_maps_data where user_id = ?";
 			}
-			
-			
 			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setInt(1, userId);
@@ -474,7 +474,10 @@ public class HomeImpl implements HomeDao {
 				sql = "update master_maps_url set status = ? where master_maps_url_id = ?";
 			}else if(action.equalsIgnoreCase("profileEmailData")){
 				sql = "update master_profile_email_data set status = ? where master_profile_email_data_id = ?";
+			}else if(action.equalsIgnoreCase("bingMapsData")){
+				sql = "update master_bing_maps_url set status = ? where master_bing_maps_url_id = ?";
 			}
+			
 			
 			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
@@ -711,6 +714,11 @@ public class HomeImpl implements HomeDao {
 				ps.setInt(2, limit);
 			}else if(action.equalsIgnoreCase("assignProfileEmailData")){
 				sql = "UPDATE master_profile_email_data SET user_id=? 	WHERE master_profile_email_data_id IN (SELECT master_profile_email_data_id FROM (SELECT master_profile_email_data_id FROM master_profile_email_data where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignBingMapsData")){
+				sql = "UPDATE master_bing_maps_url SET user_id=? 	WHERE master_bing_maps_url_id IN (SELECT master_bing_maps_url_id FROM (SELECT master_bing_maps_url_id FROM master_bing_maps_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1, userId);
 				ps.setInt(2, limit);
@@ -987,7 +995,7 @@ public class HomeImpl implements HomeDao {
 			String sql = "select * from list_contacts  where DATE_FORMAT(created_date,'%m/%d/%Y') BETWEEN ? AND ?";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setString(1,startDate);
-			ps.setString(2,startDate);
+			ps.setString(2,endDate);
 			ResultSet rs = ps.executeQuery();
 			
 			while (rs.next()) {

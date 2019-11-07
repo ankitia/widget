@@ -60,7 +60,7 @@ public class ZillowController {
 	        zillowData.setIpaddress(request.getRemoteAddr());
 	        zillowData.setUser_id("0");
 	        zillowData.setUrl_id("1");
-	        int bingId = zillowDao.insertZillowData(zillowData);
+	        zillowDao.insertZillowData(zillowData);
 	        
 	        return "";
 	}       

@@ -76,7 +76,7 @@ public class ProfileEmailController {
 	        }
 	        profileEmail.setIpaddress(request.getRemoteAddr());
 	        
-	        int bingId = profileEmailDao.insertProfileEmailData(profileEmail);
+	        profileEmailDao.insertProfileEmailData(profileEmail);
 	        
 	        
 	        

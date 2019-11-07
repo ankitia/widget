@@ -176,6 +176,8 @@ public class CompanyController {
 			return homeDao.setPendingLink("assignMapsData", userId, 10)+"";
 		}else if(action.equalsIgnoreCase("assignProfileEmailData")) { 
 			return homeDao.setPendingLink("assignProfileEmailData", userId, 10)+"";
+		}else if(action.equalsIgnoreCase("assignBingMapsData")) { 
+			return homeDao.setPendingLink("assignBingMapsData", userId, 10)+"";
 		}
 		
 		
