@@ -13,7 +13,9 @@ public interface ProfileEmailDao {
 	List<MasterProfileEmailURL> getProfileEmailUrlList(int userId,String action);
 	
 	List<ProfileEmail> getProfileEmailData(int userId);
-		
-	List<MasterProfileEmailURL> exportMasterProfileEmailUrlList();	 
+	
+	MasterProfileEmailURL getMasterURLDetail(String url);
+	
+	
 }
 

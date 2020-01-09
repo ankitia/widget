@@ -32,7 +32,7 @@ public class BingImpl implements BingDao {
 		// TODO Auto-generated method stub
 		int status = 0; 
 		try (Connection con = (Connection) dataSource.getConnection()){
-			String sql = "insert into bing_data(page_urls,entity_title,entity_sub_title,innercards_lst,vlist_lst,official_site,wikipedia,twitter,facebook,linkedin,revenue,founded,headquarters,ceo,founders,url,url_id,user_id,ipaddress) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into bing_data(page_urls,entity_title,entity_sub_title,innercards_lst,vlist_lst,official_site,wikipedia,twitter,facebook,linkedin,revenue,founded,headquarters,ceo,founders,url,url_id,user_id,ipaddress,search_string) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, bingData.getPage_urls());
 			ps.setString(2, bingData.getEntity_title());
@@ -53,6 +53,7 @@ public class BingImpl implements BingDao {
 			ps.setString(17, bingData.getUrl_id());
 			ps.setString(18, bingData.getUser_id());
 			ps.setString(19, bingData.getIpaddress());
+			ps.setString(20, bingData.getSearch_string());
 			
 			
 			status = ps.executeUpdate();
@@ -152,12 +153,17 @@ public class BingImpl implements BingDao {
 	public int insertBingPageData(BingPageUrlsData bingPageUrlsData) {
 		int status = 0; 
 		try (Connection con = (Connection) dataSource.getConnection()){
-			String sql = "insert into bing_page_data(text_data,link,bing_data_id,type) value(?,?,?,?)";
+			String sql = "insert into bing_page_data(text_data,link,bing_data_id,type,location,description,phone_number,address_location,rating) value(?,?,?,?,?,?,?,?,?)";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setString(1, bingPageUrlsData.getText());
 			ps.setString(2, bingPageUrlsData.getLink());
 			ps.setInt(3, bingPageUrlsData.getBingId());
 			ps.setString(4, bingPageUrlsData.getType());
+			ps.setString(5, bingPageUrlsData.getLocation());
+			ps.setString(6, bingPageUrlsData.getDescription());
+			ps.setString(7, bingPageUrlsData.getPhone_number());
+			ps.setString(8, bingPageUrlsData.getAddress_location());
+			ps.setString(9, bingPageUrlsData.getRating());
 			status = ps.executeUpdate();
 			con.commit();		
 			con.close();

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ia.Dao.HomeDao;
 import com.ia.Dao.ProfileEmailDao;
+import com.ia.modal.MasterProfileEmailURL;
 import com.ia.modal.ProfileEmail;
 
 @Controller
@@ -63,8 +64,8 @@ public class ProfileEmailController {
 	}
 	
 	@CrossOrigin
-	@RequestMapping(value="insertProfileEmailData", method=RequestMethod.POST)
- 	@ResponseBody public String insertProfileEmailData(ProfileEmail profileEmail,HttpServletRequest request) 
+	@RequestMapping(value="insertProfileEmailsData", method=RequestMethod.POST)
+ 	@ResponseBody public String insertProfileEmailsData(ProfileEmail profileEmail,HttpServletRequest request) 
 	{
 		 if(profileEmail.getUser_id()==null || profileEmail.getUser_id().equalsIgnoreCase("0") || profileEmail.getUser_id().equalsIgnoreCase("")) {
 	        	profileEmail.setUser_id("1");
@@ -76,8 +77,22 @@ public class ProfileEmailController {
 	        }
 	        profileEmail.setIpaddress(request.getRemoteAddr());
 	        
-	        profileEmailDao.insertProfileEmailData(profileEmail);
+	                
+	        MasterProfileEmailURL ma =  profileEmailDao.getMasterURLDetail(profileEmail.getUrl());
 	        
+	        if(ma!=null) {
+	        	profileEmail.setUrl_id(ma.getUrlId()+"");
+		        profileEmail.setUser_id(ma.getUserId()+"");
+	        }else {
+	        	profileEmail.setUrl_id(0+"");
+		        profileEmail.setUser_id(0+"");
+	        }
+	        
+	        if(!profileEmail.getMessage().equalsIgnoreCase("") && profileEmail.getMessage().equalsIgnoreCase("You've reached the use limit on Sales Navigator for Gmail. Please try again later.")) {
+	        	System.out.println(profileEmail.getMessage());
+	        }else {
+	        	profileEmailDao.insertProfileEmailData(profileEmail);	
+	        }
 	        
 	        
 	        return "";

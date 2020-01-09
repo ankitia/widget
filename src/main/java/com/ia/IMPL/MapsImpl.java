@@ -182,34 +182,4 @@ public class MapsImpl implements MapsDao {
 		return status;
 		
 	}
-
-	@Override
-	public List<MasterMapsURL> exportMapsDataUrlList() {
-		// TODO Auto-generated method stub
-		List<MasterMapsURL> data = new ArrayList<>();
-		try(Connection con = (Connection) dataSource.getConnection();) {
-			ResultSet rs = null;
-			PreparedStatement ps = null;
-			String sql = "select * from master_maps_url";
-			ps = (PreparedStatement) con.prepareStatement(sql);
-			rs = ps.executeQuery();
-			while (rs.next()) {
-				MasterMapsURL masterURL = new MasterMapsURL();
-				masterURL.setUrlId(Long.parseLong(rs.getString("master_maps_url_id")));
-				masterURL.setUrl((rs.getString("url")));
-				masterURL.setUserId(rs.getString("user_id").trim()!=""?Integer.parseInt(rs.getString("user_id")): 0);
-				masterURL.setStatus(rs.getString("status"));
-				data.add(masterURL);
-			}
-			con.close();			
-		}catch (Exception e) {
-			e.printStackTrace();
-			// TODO: handle exception
-		}
-		return data;
-	}
-
-	 
-
 }
-

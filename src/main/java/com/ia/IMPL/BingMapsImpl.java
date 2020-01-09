@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import com.ia.Dao.BingMapsDao;
 import com.ia.modal.BingMapsData;
 import com.ia.modal.MasterBingMapsURL;
+import com.ia.modal.MasterCompanyURL;
 import com.mysql.jdbc.Statement;
 
 
@@ -31,7 +32,7 @@ public class BingMapsImpl implements BingMapsDao {
 		// TODO Auto-generated method stub
 		int status = 0; 
 		try (Connection con = (Connection) dataSource.getConnection()){
-			String sql = "insert into bing_maps_data(query,entry_point,title,entity_id,filter_url_param,url,url_id,user_id,ipaddress) value(?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into bing_maps_data(query,entry_point,title,entity_id,filter_url_param,url,url_id,user_id,ipaddress,address,remark,property_type,sub_title,top_fact_lst,snippet_text,fact_lst,links,price_sold,category) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, bingData.getQuery());
 			ps.setString(2, bingData.getEntry_point());
@@ -42,6 +43,18 @@ public class BingMapsImpl implements BingMapsDao {
 			ps.setString(7, bingData.getUrl_id());
 			ps.setString(8, bingData.getUser_id());
 			ps.setString(9, bingData.getIpaddress());
+			ps.setString(10, bingData.getAddress());
+			ps.setString(11, bingData.getRemark());
+			ps.setString(12, bingData.getProperty_type());
+			ps.setString(13, bingData.getSub_title());
+			ps.setString(14, bingData.getTop_fact_lst());
+			ps.setString(15, bingData.getSnippet_text());
+			ps.setString(16, bingData.getFact_lst());
+			ps.setString(17, bingData.getLinks());
+			ps.setString(18, bingData.getPrice_sold());
+			ps.setString(19, bingData.getCategory());
+			
+			
 			status = ps.executeUpdate();
 			con.commit();		
 			 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
@@ -81,7 +94,7 @@ public class BingMapsImpl implements BingMapsDao {
 				ps.setInt(1,userId);
 			}else if(action.equalsIgnoreCase("missed")) {
 				//sql = "select m.* from master_bing_maps_url m where  m.status='Done' and  m.user_id = ? and m.master_bing_maps_url_id not in (select group_concat(url_id) from scrap where user_id=?)  limit 0,20;";
-				sql = "select m.* from master_bing_maps_url m where  m.status='Done' and  m.user_id = ? and m.master_bing_maps_url_id not in (select url_id from bing_data where user_id=?);";
+				sql = "select m.* from master_bing_maps_url m where  m.status='Done' and  m.user_id = ? and m.master_bing_maps_url_id not in (select url_id from bing_maps_data where user_id=?);";
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);
 				ps.setInt(2,userId);	
@@ -134,6 +147,8 @@ public class BingMapsImpl implements BingMapsDao {
 		}
 		return bingDatas;
 	}
+
+	
  
 
 }

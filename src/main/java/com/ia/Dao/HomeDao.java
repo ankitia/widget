@@ -80,4 +80,6 @@ public interface HomeDao {
 	
 	List<ListContacts> exportListContacts(String startDate,String endDate);
 	
+	int fileUploadDataBase(String filePath,String tableName);
+	
 }

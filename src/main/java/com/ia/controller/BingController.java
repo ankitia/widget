@@ -96,6 +96,17 @@ public class BingController {
 			    	   		bingPageUrlsData.setText(jsonObj.get("text")+"");
 			    	   	if(!jsonObj.isNull("link"))
 			    	   		bingPageUrlsData.setLink(jsonObj.get("link")+"");
+			    	   	if(!jsonObj.isNull("location"))
+			    	   		bingPageUrlsData.setLocation(jsonObj.get("location")+"");
+			    	   	if(!jsonObj.isNull("description"))
+			    	   		bingPageUrlsData.setDescription(jsonObj.get("description")+"");
+			    	   	if(!jsonObj.isNull("phone_number"))
+			    	   		bingPageUrlsData.setPhone_number(jsonObj.get("phone_number")+"");
+			    	   	if(!jsonObj.isNull("address_location"))
+			    	   		bingPageUrlsData.setAddress_location(jsonObj.get("address_location")+"");
+			    	   	if(!jsonObj.isNull("rating"))
+			    	   		bingPageUrlsData.setRating(jsonObj.get("rating")+"");
+			    	   	
 			    	   		
 			    	   		bingPageUrlsData.setType("PAGEURL");
 			    	   		bingPageUrlsData.setBingId(bingId);

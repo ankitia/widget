@@ -73,8 +73,8 @@ public class CompanyController {
 	}
 	
 	@CrossOrigin
-	@RequestMapping(value="insertCompany" , method = RequestMethod.POST)
- 	@ResponseBody public String insertCompany(CompanyDetails companyDetails,HttpServletRequest request,HttpSession session) throws UnknownHostException, SocketException
+	@RequestMapping(value="insertCompanyData" , method = RequestMethod.POST)
+ 	@ResponseBody public String insertCompanyData(CompanyDetails companyDetails,HttpServletRequest request,HttpSession session) throws UnknownHostException, SocketException
 	{
 		System.out.println("This is call compnay");
 	        if(companyDetails.getUser_id()==null || companyDetails.getUser_id().equalsIgnoreCase("0") || companyDetails.getUser_id().equalsIgnoreCase("")) {
@@ -91,7 +91,11 @@ public class CompanyController {
 	        //String s = "[{\"country\":\"US\",\"geographicArea\":\"IL\",\"city\":\"Oakbrook Terrace\",\"postalCode\":\"60181\",\"description\":\"Indusa Technical Corp. is a CMM Level 4 certified Software Solutions and Consulting Company, focused on providing cutting edge technology solutions to clients, worldwide.\",\"$type\":\"com.linkedin.voyager.organization.OrganizationAddress\",\"headquarter\":true,\"line2\":\"Suite 350\",\"line1\":\"1 TransAm Plaza Drive\"},{\"country\":\"IN\",\"geographicArea\":\"Gujarat\",\"city\":\"Ahmedabad\",\"postalCode\":\"380054\",\"description\":\"Indusa Technical Corp. is a CMM Level 4 certified Software Solutions and Consulting Company, focused on providing cutting edge technology solutions to clients, worldwide.\",\"$type\":\"com.linkedin.voyager.organization.OrganizationAddress\",\"headquarter\":false,\"line2\":\"SG Road\",\"line1\":\"2nd Floor, GNFC Info tower\"},{\"country\":\"GB\",\"geographicArea\":\"London\",\"city\":\"Hammersmith\",\"postalCode\":\"W1B 2HA\",\"description\":\"Indusa Technical Corp. is a CMM Level 4 certified Software Solutions and Consulting Company, focused on providing cutting edge technology solutions to clients, worldwide.\",\"$type\":\"com.linkedin.voyager.organization.OrganizationAddress\",\"headquarter\":false,\"line2\":\"Hammersmith\",\"line1\":\"1 Lyric Square, Suite 03-25\"}]";
 		    
 	        try {
-	        	   JSONArray jsonArr = new JSONArray(companyDetails.getCompany_confirmed_location());
+	        	JSONArray jsonArr =  null;
+	        	 
+	        	
+	        	if(companyDetails.getCompany_confirmed_location().length() > 0) {
+	        	   jsonArr = new JSONArray(companyDetails.getCompany_confirmed_location());
 			       for (int i = 0; i < jsonArr.length(); i++) {			            
 			    	   	JSONObject jsonObj = jsonArr.getJSONObject(i);
 
@@ -119,8 +123,10 @@ public class CompanyController {
 			            
 			            homeDao.insertCompanyLocation(companyLocation);
 			        }
-			       
-			       jsonArr = new JSONArray(companyDetails.getAffiliate_company());
+	        	}
+			    
+	        	if(companyDetails.getAffiliate_company().length() > 0) {
+	        	jsonArr = new JSONArray(companyDetails.getAffiliate_company());
 			       for (int i = 0; i < jsonArr.length(); i++) {			            
 			    	   	JSONObject jsonObj = jsonArr.getJSONObject(i);			            
 			            CompanyAffiliate companyAffiliate = new CompanyAffiliate();
@@ -134,6 +140,7 @@ public class CompanyController {
 			            	companyAffiliate.setCompany_description(jsonObj.get("company_description")+"");				            
 			            homeDao.insertCompanyAffiliate(companyAffiliate);
 			        }
+	        	 } 
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -178,7 +185,18 @@ public class CompanyController {
 			return homeDao.setPendingLink("assignProfileEmailData", userId, 10)+"";
 		}else if(action.equalsIgnoreCase("assignBingMapsData")) { 
 			return homeDao.setPendingLink("assignBingMapsData", userId, 10)+"";
+		}else if(action.equalsIgnoreCase("assignBingMapsDetail")) { 
+			return homeDao.setPendingLink("assignBingMapsDetail", userId, 10)+"";
+		}else if(action.equalsIgnoreCase("assignGooglePlaceData")) { 
+			return homeDao.setPendingLink("assignGooglePlaceData", userId, 10)+"";
+		}else if(action.equalsIgnoreCase("assignSpokeoData")) { 
+			return homeDao.setPendingLink("assignSpokeoData", userId, 10)+"";
+		}else if(action.equalsIgnoreCase("assignSmartyStreetData")) { 
+			return homeDao.setPendingLink("assignSmartyStreetData", userId, 10)+"";
+		}else if(action.equalsIgnoreCase("assignGovShopData")) { 
+			return homeDao.setPendingLink("assignGovShopData", userId, 10)+"";
 		}
+		
 		
 		
 		return "";

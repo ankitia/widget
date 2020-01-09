@@ -22,7 +22,16 @@ public class BingData
 	private String ceo;
 	private String founders;
 	private String url_id;
+	private String search_string;
 	
+	
+	
+	public String getSearch_string() {
+		return search_string;
+	}
+	public void setSearch_string(String search_string) {
+		this.search_string = search_string;
+	}
 	public int getBingId() {
 		return bingId;
 	}

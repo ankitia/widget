@@ -50,8 +50,6 @@ public class HomeImpl implements HomeDao {
 				data.add(rs.getString("username"));
 				
 			}
-			System.out.println("Size:: "+rs.last());
-			System.out.println("Size:: "+rs.getRow());
 			 con.close();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -209,7 +207,7 @@ public class HomeImpl implements HomeDao {
 		int status = 0;
 		try (Connection con = (Connection) dataSource.getConnection()){
 			
-			String sql = "insert into scrap(name,current_org,current_position,location,url,ipaddress,user_id,contact_url,url_id) value(?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into scrap(name,current_org,current_position,location,url,ipaddress,user_id,contact_url,url_id,past_org,past_position,remarks) value(?,?,?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setString(1, scrap.getName());
 			ps.setString(2, scrap.getCurrent_org());
@@ -220,6 +218,9 @@ public class HomeImpl implements HomeDao {
 			ps.setString(7, scrap.getUser_id());
 			ps.setString(8, scrap.getContact_url());
 			ps.setLong(9, scrap.getUrl_id());
+			ps.setString(10, scrap.getPast_org());
+			ps.setString(11, scrap.getPast_position());
+			ps.setString(12, scrap.getRemarks());
 			status = ps.executeUpdate();
 			con.commit();		
 			con.close();
@@ -247,7 +248,7 @@ public class HomeImpl implements HomeDao {
 		int status = 0;
 		try {
 			Connection con = (Connection) dataSource.getConnection();
-			String sql = "insert into list_contacts(full_name,head_title,head_location,company_name,university,university_url,current_title,current_company,current_company_link,current_duration_start,current_duration_end,current_location,past_title,past_company,past_company_link,past_duration_start,past_duration_end,past_location,url,user_id,url_id,ipaddress) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into list_contacts(full_name,head_title,head_location,company_name,university,university_url,current_title,current_company,current_company_link,current_duration_start,current_duration_end,current_location,past_title,past_company,past_company_link,past_duration_start,past_duration_end,past_location,url,user_id,url_id,ipaddress,remarks) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setString(1,listContacts.getFull_name());
 			ps.setString(2,listContacts.getHead_title());
@@ -271,6 +272,7 @@ public class HomeImpl implements HomeDao {
 			ps.setString(20,listContacts.getUser_id());
 			ps.setString(21,listContacts.getUrl_id());
 			ps.setString(22,listContacts.getIpaddress());
+			ps.setString(23,listContacts.getRemarks());
 			status = ps.executeUpdate();
 			con.commit();
 			con.close();
@@ -325,7 +327,18 @@ public class HomeImpl implements HomeDao {
 				sql = "select count(distinct(url_id)) as total from profile_email_data where user_id = ?";
 			}else if(action.equalsIgnoreCase("bingMapsData")) {
 				sql = "select count(distinct(url_id)) as total from bing_maps_data where user_id = ?";
+			}else if(action.equalsIgnoreCase("bingMapsDetail")) {
+				sql = "select count(distinct(url_id)) as total from bing_maps_detail where user_id = ?";
+			}else if(action.equalsIgnoreCase("googlePlaceData")) {
+				sql = "select count(distinct(url_id)) as total from google_place where user_id = ?";
+			}else if(action.equalsIgnoreCase("spokeoData")) {
+				sql = "select count(distinct(url_id)) as total from spokeo_data where user_id = ?";
+			}else if(action.equalsIgnoreCase("Smartystreet")) {
+				sql = "select count(distinct(url_id)) as total from smartystreet_data where user_id = ?";
+			}else if(action.equalsIgnoreCase("govShopData")) {
+				sql = "select count(distinct(url_id)) as total from govshop_data where user_id = ?";
 			}
+			
 			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setInt(1, userId);
@@ -476,6 +489,16 @@ public class HomeImpl implements HomeDao {
 				sql = "update master_profile_email_data set status = ? where master_profile_email_data_id = ?";
 			}else if(action.equalsIgnoreCase("bingMapsData")){
 				sql = "update master_bing_maps_url set status = ? where master_bing_maps_url_id = ?";
+			}else if(action.equalsIgnoreCase("bingMapsDetail")){
+				sql = "update master_bing_maps_detail_url set status = ? where master_bing_maps_detail_url_id = ?";
+			}else if(action.equalsIgnoreCase("googlePlaceData")){
+				sql = "update master_google_place_url set status = ? where master_google_place_url_id = ?";
+			}else if(action.equalsIgnoreCase("spokeoData")){
+				sql = "update master_spokeo_url set status = ? where master_spokeo_id = ?";
+			}else if(action.equalsIgnoreCase("smartyStreetData")){
+				sql = "update master_smartystreet_url set status = ? where master_smartystreet_url_id = ?";
+			}else if(action.equalsIgnoreCase("govShopData")){
+				sql = "update master_govshop_url set status = ? where master_govshop_url_id = ?";
 			}
 			
 			
@@ -610,8 +633,6 @@ public class HomeImpl implements HomeDao {
 			con.close();
 		}catch (Exception e) {
 			// TODO: handle exception
-			System.out.println("Error ::::");
-			
 			e.printStackTrace();
 		}
 		return userIds;
@@ -632,9 +653,6 @@ public class HomeImpl implements HomeDao {
 			}else if(action.equalsIgnoreCase("company_log")) {
 				sql = "update  user set company_link = ? where user_id = ?";
 			}
-			
-			 
-			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setString(1, total);
 			ps.setLong(2, userId);
@@ -722,8 +740,32 @@ public class HomeImpl implements HomeDao {
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1, userId);
 				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignBingMapsDetail")){
+				sql = "UPDATE master_bing_maps_detail_url SET user_id=? WHERE master_bing_maps_detail_url_id IN (SELECT master_bing_maps_detail_url_id FROM (SELECT master_bing_maps_detail_url_id FROM master_bing_maps_detail_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignGooglePlaceData")){
+				sql = "UPDATE master_google_place_url SET user_id=? WHERE master_google_place_url_id IN (SELECT master_google_place_url_id FROM (SELECT master_google_place_url_id FROM master_google_place_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignSpokeoData")){
+				sql = "UPDATE master_spokeo_url SET user_id=? WHERE master_spokeo_id IN (SELECT master_spokeo_id FROM (SELECT master_spokeo_id FROM master_spokeo_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignSmartyStreetData")){
+				sql = "UPDATE master_smartystreet_url SET user_id=? WHERE master_smartystreet_url_id IN (SELECT master_smartystreet_url_id FROM (SELECT master_smartystreet_url_id FROM master_smartystreet_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignGovShopData")){
+				sql = "UPDATE master_govshop_url SET user_id=? WHERE master_govshop_url_id IN (SELECT master_govshop_url_id FROM (SELECT master_govshop_url_id FROM master_govshop_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
 			}
-			
 			
 			queryStatus = ps.executeUpdate();
 			
@@ -746,7 +788,7 @@ public class HomeImpl implements HomeDao {
 			try (Connection con = (Connection) dataSource.getConnection()){
 				
 				String sql = "insert into company_detail(company_name,company_location,employee_count,company_url,company_headquater,year_founded,company_size,"
-						+ "company_speciality,company_confirmed_location,affiliate_company,showcase_page,url,url_id,user_id,ipaddress,li_co_id,company_type,company_stock_name,company_industry,phone_number,employees_link) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+						+ "company_speciality,company_confirmed_location,affiliate_company,showcase_page,url,url_id,user_id,ipaddress,li_co_id,company_type,company_stock_name,company_industry,phone_number,employees_link,remarks) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 				PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, companyDetails.getCompany_name());
 				ps.setString(2, companyDetails.getCompany_location());
@@ -769,6 +811,8 @@ public class HomeImpl implements HomeDao {
 				ps.setString(19, companyDetails.getCompany_industry());
 				ps.setString(20, companyDetails.getPhone_number());
 				ps.setString(21, companyDetails.getEmployees_link());
+				ps.setString(22, companyDetails.getRemarks());
+				
 				status = ps.executeUpdate();
 				con.commit();		
 				 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
@@ -898,6 +942,9 @@ public class HomeImpl implements HomeDao {
 				scrap.setUrl(rs.getString("url"));
 				scrap.setUrl_id(rs.getInt("url_id")); 
 				scrap.setCreated_date(rs.getString("created_date"));
+				scrap.setRemarks(rs.getString("remarks"));
+				scrap.setPast_org(rs.getString("past_org"));
+				scrap.setPast_position(rs.getString("past_position"));
 				scraps.add(scrap);
 			}
 			con.close();
@@ -1021,6 +1068,7 @@ public class HomeImpl implements HomeDao {
 				contacts.setUrl(rs.getString("url"));
 				contacts.setCreatedDate(rs.getString("created_date"));
 				contacts.setUrl_id(rs.getString("url_id"));
+				contacts.setUser_id(rs.getString("user_id"));
 				liContacts.add(contacts);
 			}
 			con.close();
@@ -1029,7 +1077,29 @@ public class HomeImpl implements HomeDao {
 			// TODO: handle exception
 		}
 		return liContacts;
-	}	
+	}
+
+	@Override
+	public int fileUploadDataBase(String url,String tableName) {
+		int status = 0;
+		try {
+			Connection con = (Connection) dataSource.getConnection();
+			//String sql = "LOAD DATA LOCAL INFILE '"+ filePath +"' INTO table "+ tableName +" FIELDS TERMINATED BY ','";
+			String sql = "insert into "+tableName+"(url) values(?)";
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setString(1, url);
+			/*ps.setString(2, tableName);*/
+			status = ps.executeUpdate();
+			con.close();	
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		System.out.println("Status :::"+status);
+		 return status;	
+		
+	}
+
 
 
 	

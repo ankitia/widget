@@ -13,8 +13,6 @@ public interface ListBuildingDao {
 	
 	List<ListBuildingView> getListBuildingData(int userId,String action); 
 	
-	List<ListBuilding> exportListBuilding(String startDate,String endDate);
-	
 	int getCurrentDateCount(int userId);
 	
 	public int insertListBuild(ListBuilding listBuilding);
@@ -23,8 +21,5 @@ public interface ListBuildingDao {
 	
 	public int getTotalListBuildCount(int userId);
 
-	List<MasterListBuildingURL> exportMasterListBuilding();
-	
-	
 }
 

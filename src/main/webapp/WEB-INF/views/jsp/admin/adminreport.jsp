@@ -78,10 +78,23 @@ function checkReportList(checkList){
 	     			<option value="masterListBuild">Master List Building</option>
 	     			<option value="listBuilding">List Building</option>
 	     			<option value="masterGoogleData">Master Google Data</option>
+	     			<option value="googlePlace">Google Place</option>
 	     			<option value="masterGoogleMaps">Master Google Maps</option>
+	     			<option value="mapsData">Maps Data</option>
 	     			<option value="masterYelpData">Master Yelp Data</option>
+	     			<option value="yelpData">Yelp Data</option>
 	     			<option value="masterFullDetails">Master Full Details</option>
 	     			<option value="fullDetails">Full Details</option>
+	     			<option value="masterProfileEmail">Master Profile Email</option>
+	     			<option value="profileEmailData">Profile Email Data</option>
+	     			<option value="masterSpokeo">Master Spokeo</option>
+	     			<option value="spokeoData">Spokeo Data</option>
+	     			<option value="masterSmartystreet">Master Smartystreet</option>
+	     			<option value="smartystreetData">Smartystreet Data</option>
+	     			<option value="masterBing">Master Bing</option>
+	     			<option value="bingData">Bing Data</option>
+	     			<option value="masterZillow">Master Zillow</option>
+	     			<option value="masterBingMapsDetails">Master BingMaps</option>
 	     		</select> 
 	     		<input type = "text" id = "startDate"  placeholder = "Start Date">
 	     		<input type = "text" id = "endDate" placeholder = "End Date"> 

@@ -42,8 +42,9 @@
          	<c:forEach items="${urlList }" var="urlList" varStatus="index">         
 	         	<tr>
 	         		<td>${index.count } </td> 
-	         		<td>
-	         			<a href="${urlList.url }?id=${urlList.userId}&urlId=${urlList.companyUrlId}"  onclick="setStatus('Done',${urlList.companyUrlId})" target="_blank"> Link ${urlList.companyUrlId }</a> 
+	         		<td> 
+	         			<%-- <a href="${urlList.url }?id=${urlList.userId}&urlId=${urlList.companyUrlId}"  onclick="setStatus('Done',${urlList.companyUrlId})" target="_blank"> Link ${urlList.companyUrlId }</a> --%>
+	         			<a style="cursor: pointer;" target="${urlList.url }?id=${urlList.userId}&urlId=${urlList.companyUrlId}" onclick="setStatus('Done','${urlList.companyUrlId}','${urlList.url }?id=${urlList.userId}&urlId=${urlList.companyUrlId}')"> Link ${urlList.companyUrlId }</a> 
 	         		</td>
 	         	</tr>	
 	         </c:forEach> 
@@ -64,6 +65,10 @@
      
     <script src="<c:url value="resources/js/bootstrap-dropdown.js"></c:url>"></script>
     
-
+<script type="text/javascript">
+function setStatus(status,urlId,url_string){
+	window.open("#", url_string, "");
+}
+</script>
   </body>
 </html>

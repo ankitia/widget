@@ -143,31 +143,6 @@ public class PropertyImpl implements PropertyDao {
 		return properties;
 	}
 
-	@Override
-	public List<MasterGoogleURL> exportMasterGoogleUrlList() {
-		// TODO Auto-generated method stub
-		
-		List<MasterGoogleURL> data = new ArrayList<>();
-		try(Connection con = (Connection) dataSource.getConnection();) {
-			ResultSet rs = null;
-			PreparedStatement ps = null;
-			String sql = "select * from master_google_url";
-			ps = (PreparedStatement) con.prepareStatement(sql);
-			rs = ps.executeQuery();
-			while (rs.next()) {
-				MasterGoogleURL masterURL = new MasterGoogleURL();
-				masterURL.setUrlId(Long.parseLong(rs.getString("master_google_url_id")));
-				masterURL.setUrl((rs.getString("url")));
-				masterURL.setUserId(rs.getString("user_id").trim()!=""?Integer.parseInt(rs.getString("user_id")): 0);
-				masterURL.setStatus(rs.getString("status"));
-				data.add(masterURL);
-			}
-			con.close();			
-		}catch (Exception e) {
-			e.printStackTrace();
-			// TODO: handle exception
-		}
-		return data;
-	}
+
 
 }

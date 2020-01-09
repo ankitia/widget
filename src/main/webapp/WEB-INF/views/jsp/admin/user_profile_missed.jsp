@@ -1,5 +1,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -42,7 +43,16 @@
              <c:forEach items="${urlList }" var="urlList" varStatus="index">         
 	         	<tr>
 	         		<td>${index.count } </td> 
-	         		<td><a href="${urlList.url }?id=${urlList.userId}&urlId=${urlList.masterUrlId}"  onclick="setStatus('Done',${urlList.masterUrlId})" target="_blank"> Link ${urlList.masterUrlId }</a> </td>	         		
+	         		<td>
+	         			<c:choose>
+	         				<c:when test="${fn:contains(urlList.url, '?')}">
+	         						<a href="${urlList.url }&id=${urlList.userId}&urlId=${urlList.masterUrlId}"  onclick="setStatus('Done',${urlList.masterUrlId})" target="_blank">  Link ${urlList.masterUrlId }</a>
+	         				</c:when> 
+	         				<c:otherwise>
+	         						<a href="${urlList.url }?id=${urlList.userId}&urlId=${urlList.masterUrlId}"  onclick="setStatus('Done',${urlList.masterUrlId})" target="_blank">  Link ${urlList.masterUrlId }</a>
+	         				</c:otherwise>
+	         			</c:choose>
+	         		<%-- <a href="${urlList.url }?id=${urlList.userId}&urlId=${urlList.masterUrlId}"  onclick="setStatus('Done',${urlList.masterUrlId})" target="_blank"> Link ${urlList.masterUrlId }</a> </td> --%>	         		
 	         	</tr>	
 	         </c:forEach>
          </table>

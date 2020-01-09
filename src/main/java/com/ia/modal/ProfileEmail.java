@@ -17,6 +17,36 @@ public class ProfileEmail {
 	private String url_id;
 	private String user_id;
 	private String ipaddress;
+	private String url;
+	private String message;
+	private String full_designation;
+	private String created_date;
+	
+	
+	public String getCreated_date() {
+		return created_date;
+	}
+	public void setCreated_date(String created_date) {
+		this.created_date = created_date;
+	}
+	public String getFull_designation() {
+		return full_designation;
+	}
+	public void setFull_designation(String full_designation) {
+		this.full_designation = full_designation;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
 	public int getProfileId() {
 		return profileId;
 	}

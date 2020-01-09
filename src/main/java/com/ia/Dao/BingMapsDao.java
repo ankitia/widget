@@ -16,6 +16,7 @@ public interface BingMapsDao {
 	
 	List<BingMapsData> getBingMapsData(int userId);
 	
+	
 	 
 }
 

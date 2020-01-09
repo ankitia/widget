@@ -148,7 +148,7 @@ public class CompanyImpl implements CompanyDao {
 				details.setPhone_number(rs.getString("phone_number"));
 				details.setCompany_li_id(rs.getString("li_co_id"));
 				details.setCreated_date(rs.getString("created_date"));
-				
+				details.setEmployees_link(rs.getString("employees_link"));
 				companyDetails.add(details);
 			}
 		}catch (Exception e) {

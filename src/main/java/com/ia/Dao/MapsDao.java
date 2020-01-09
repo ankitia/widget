@@ -21,6 +21,6 @@ public interface MapsDao {
 	
 	List<MapsData> getMapsData(int userId);
 		
-	List<MasterMapsURL> exportMapsDataUrlList(); 
+	 
 }
 

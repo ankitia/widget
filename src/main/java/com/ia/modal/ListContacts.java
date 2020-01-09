@@ -26,9 +26,16 @@ public class ListContacts {
 	private String url_id;
 	private String ipaddress;
 	private String createdDate;
+	private String remarks;
 	
 	
 	
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
 	public String getCreatedDate() {
 		return createdDate;
 	}

@@ -1,5 +1,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -70,12 +71,19 @@ function setStatus(status,urlId){
          	<tr>
          		<th width="3%">#</th>
          		<th width="57%">Url</th>         		
-         	</tr>   
+         	</tr>    
              <c:forEach items="${urlList }" var="urlList" varStatus="index">         
 	         	<tr>
 	         		<td>${index.count } </td> 
 	         		<td>
-	         			<a href="${urlList.url }&id=${urlList.userId}&urlId=${urlList.urlId}"  onclick="setStatus('Done',${urlList.urlId})" target="_blank"> Link ${urlList.urlId }</a> 
+		         		<c:choose>
+		         			<c:when test="${fn:contains(urlList.url, '?')}">
+		         				<a href="${urlList.url }&id=${urlList.userId}&urlId=${urlList.urlId}"  onclick="setStatus('Done',${urlList.urlId})" target="_blank"> Link ${urlList.urlId }</a>	
+		         			</c:when> 
+		         			<c:otherwise>
+		         				<a href="${urlList.url }?id=${urlList.userId}&urlId=${urlList.urlId}"  onclick="setStatus('Done',${urlList.urlId})" target="_blank"> Link ${urlList.urlId }</a>
+		         			</c:otherwise>
+	         		  	</c:choose>
 	         		</td>
 	         	</tr>	
 	         </c:forEach>  

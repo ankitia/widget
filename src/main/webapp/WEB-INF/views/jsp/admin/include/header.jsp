@@ -28,20 +28,34 @@
                 	</c:when>
                 	<c:otherwise> 
                 		<li><a href="<%=request.getContextPath() %>/dashboard">Dashboard</a></li>
-                		<li><a href="<%=request.getContextPath() %>/masterGoogleURL">Google</a></li>
-                		<li><a href="<%=request.getContextPath() %>/masterBingURL">Bing</a></li>
-                		<li><a href="<%=request.getContextPath() %>/masterZillowURL">Zillow</a></li>
-                		<li><a href="<%=request.getContextPath() %>/masterYelpURL">Yelp</a></li>
-                		<li><a href="<%=request.getContextPath() %>/masterMapsURL">Maps</a></li>
                 		<li><a href="<%=request.getContextPath() %>/masterProfileEmailURL">Profile Email</a></li>
-                		<li><a href="<%=request.getContextPath() %>/masterBingMaps">Bing Maps</a></li>
-                	</c:otherwise>  
+					      <li class="dropdown">
+					        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Scripts
+					        <span class="caret"></span></a>
+					        <ul class="dropdown-menu">
+					          	<li><a href="<%=request.getContextPath() %>/masterGoogleURL">Google</a></li>
+		                		<li><a href="<%=request.getContextPath() %>/masterBingURL">Bing</a></li>
+		                		<li><a href="<%=request.getContextPath() %>/masterZillowURL">Zillow</a></li>
+		                		<li><a href="<%=request.getContextPath() %>/masterBingMaps">Bing Maps</a></li>
+		                		<li><a href="<%=request.getContextPath() %>/masterYelpURL">Yelp</a></li>
+		                		<li><a href="<%=request.getContextPath() %>/masterMapsURL">Maps</a></li>
+		                		<li><a href="<%=request.getContextPath() %>/masterBingMapsDetail">Bing Maps Detail</a></li>
+		                		<li><a href="<%=request.getContextPath() %>/masterGooglePlace">Google Place</a></li>
+		                		<li><a href="<%=request.getContextPath() %>/masterSpokeoURL">Spokeo</a></li>
+		                		<li><a href="<%=request.getContextPath() %>/masterSmartystreetDataURL">Smartystreet</a></li>
+		                		<li><a href="<%=request.getContextPath() %>/masterGovShopURL">GovShop</a></li>
+					        </ul> 
+					      </li>
+                		
+                		
+                	</c:otherwise>    
                 </c:choose>
                                   
                 <c:if test="${userRole == 1}">
                 	<li><a href="<%=request.getContextPath() %>/userAssigned">Assigned</a></li>
                 	<li><a href="<%=request.getContextPath() %>/report">Report</a></li>
                 	<li><a href="<%=request.getContextPath() %>/reset">ReActive</a></li>
+                	<li><a href="<%=request.getContextPath() %>/adminupload">Upload</a></li>
                 </c:if>
                 
                 

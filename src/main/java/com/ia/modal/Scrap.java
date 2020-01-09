@@ -13,9 +13,30 @@ public class Scrap {
 	private String contact_url;
 	private long url_id;
 	private String created_date;
-	
+	private String past_org;
+	private String past_position;
+	private String remarks;
 	
 	 
+	
+	public String getPast_org() {
+		return past_org;
+	}
+	public void setPast_org(String past_org) {
+		this.past_org = past_org;
+	}
+	public String getPast_position() {
+		return past_position;
+	}
+	public void setPast_position(String past_position) {
+		this.past_position = past_position;
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
 	public String getCreated_date() {
 		return created_date;
 	}

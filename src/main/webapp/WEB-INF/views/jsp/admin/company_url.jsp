@@ -56,12 +56,12 @@
          	</tr>   
              <c:forEach items="${urlList }" var="urlList" varStatus="index">         
 	         	<tr>
-	         		<td>${index.count } </td> 
-	         		<td>
-	         			<a href="${urlList.url }?id=${urlList.userId}&urlId=${urlList.companyUrlId}"  onclick="setStatus('Done',${urlList.companyUrlId})" target="_blank"> Link ${urlList.companyUrlId }</a> 
-	         		</td>
+	         		<td>${index.count } </td>  
+	         		<td>   
+	         			<a style="cursor: pointer;" target="${urlList.url }?id=${urlList.userId}&urlId=${urlList.companyUrlId}" onclick="setStatus('Done','${urlList.companyUrlId}','${urlList.url }?id=${urlList.userId}&urlId=${urlList.companyUrlId}')"> Link ${urlList.companyUrlId }</a> 
+	         		</td>  
 	         	</tr>	
-	         </c:forEach>  
+	         </c:forEach>   
          </table>
       </div>
       <div id="push"></div>

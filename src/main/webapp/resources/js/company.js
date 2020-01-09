@@ -1,5 +1,7 @@
-function setStatus(status,urlId){	
-	$.ajax({
+//function setStatus(status,urlId,url,userId){
+function setStatus(status,urlId,url_string){
+	window.open("#", url_string, "");
+	$.ajax({   
 		type : "POST",
 		url : "updateUrlStatus",
 		data :{
@@ -8,7 +10,7 @@ function setStatus(status,urlId){
 			action : "companyData"
 		},
 		success : function(data){
-			
+			 		 
 		},
 		error : function(e){
 			consloe.log("Error ::: "+e);

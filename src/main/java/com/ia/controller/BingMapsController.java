@@ -3,6 +3,8 @@ package com.ia.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,9 +36,6 @@ public class BingMapsController {
 		model.addAttribute("userVerificationActive",bingMapsDao.getBingMapsUrlList(userId,"active").size());
 		model.addAttribute("userVerificationApproved",homeDao.getTotalCount(userId,"bingMapsData"));
 		model.addAttribute("userVerificationAll",bingMapsDao.getBingMapsUrlList(userId,"all").size());
-		
-		
-		
 		model.addAttribute("getTotalActiveLink",bingMapsDao.getBingMapsUrlList(0, "active").size());
 		
 		return "admin/bing_maps_url";
@@ -47,8 +46,6 @@ public class BingMapsController {
 	public String bingMapsVerificationLog(HttpServletRequest requestm,Model model,HttpSession session)
 	{
 		int userId = Integer.parseInt(session.getAttribute("userId")+"");
-		
-		
 		model.addAttribute("total",homeDao.getTotalCount(userId,"bingData"));		
 		model.addAttribute("getScrap", bingMapsDao.getBingMapsData(userId));		
 		
@@ -72,15 +69,44 @@ public class BingMapsController {
 		 if(bingData.getUser_id()==null || bingData.getUser_id().equalsIgnoreCase("0") || bingData.getUser_id().equalsIgnoreCase("")) {
 	        	bingData.setUser_id("1");
 	        }
-			 System.out.println(bingData.getUrl_id()+"--"+request.getAttribute("url_id"));
+			 
 	        String urlId = bingData.getUrl_id()+"";
 	        if(urlId.equalsIgnoreCase("null") || urlId==null ) {
 	        	bingData.setUrl_id("0");
 	        }
 	        bingData.setIpaddress(request.getRemoteAddr());
 	        
-	        bingMapsDao.insertBingMapsData(bingData);
+	        try {
+	        	   JSONArray jsonArr = new JSONArray(bingData.getData());
+			       for (int i = 0; i < jsonArr.length(); i++) {			            
+			    	   	JSONObject jsonObj = jsonArr.getJSONObject(i);
+			    	   	
+			    	    if(!jsonObj.isNull("query"))
+			    	    	bingData.setQuery(jsonObj.get("query")+"");
+			    	    if(!jsonObj.isNull("entry_point"))
+			    	    	bingData.setEntry_point(jsonObj.get("entry_point")+"");
+			    	    if(!jsonObj.isNull("title"))
+			    	    	bingData.setTitle(jsonObj.get("title")+"");
+			    	    if(!jsonObj.isNull("entity_id"))
+			    	    	bingData.setEntity_id(jsonObj.get("entity_id")+"");
+			    	    if(!jsonObj.isNull("filter_url_param"))
+			    	    	bingData.setFilter_url_param(jsonObj.get("filter_url_param")+"");
+			    	    if(!jsonObj.isNull("category"))
+			    	    	bingData.setCategory(jsonObj.get("category")+"");
+			    	    
+			    	    
+			    	    bingMapsDao.insertBingMapsData(bingData);
+			       }
+			       
+			       if(jsonArr.length()==0) {
+			    	   bingMapsDao.insertBingMapsData(bingData);
+			       }
+	        }catch (Exception e) {
+				e.printStackTrace();
+			}
+	        
 	        return "";
 	}
 
 }
+

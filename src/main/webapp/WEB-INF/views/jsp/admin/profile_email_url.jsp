@@ -75,8 +75,9 @@ function setStatus(status,urlId){
 	         	<tr>
 	         		<td>${index.count } </td> 
 	         		<td>
-	         			<a href="${urlList.url }&id=${urlList.userId}&urlId=${urlList.urlId}"  onclick="setStatus('Done',${urlList.urlId})" target="_blank"> Link ${urlList.urlId }</a> 
-	         		</td>
+	         			<%-- <a href="${urlList.url }&id=${urlList.userId}&urlId=${urlList.urlId}"  onclick="setStatus('Done',${urlList.urlId})" target="_blank"> Link ${urlList.urlId }</a> --%> 
+	         			<a href="${urlList.url }"  onclick="setStatus('Done',${urlList.urlId})" target="_blank"> Link ${urlList.urlId }</a>
+	         		</td> 
 	         	</tr>	
 	         </c:forEach>  
          </table>

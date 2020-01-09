@@ -20,6 +20,16 @@ public class YelpData {
 	private String url_id;
 	private String user_id;
 	private String ipaddress;
+	private String created_date;
+	
+	
+	
+	public String getCreated_date() {
+		return created_date;
+	}
+	public void setCreated_date(String created_date) {
+		this.created_date = created_date;
+	}
 	public int getYelpId() {
 		return yelpId;
 	}

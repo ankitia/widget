@@ -210,65 +210,9 @@ public class ListBuildingImpl implements ListBuildingDao {
 		return 0;
 	}
 
-	@Override
-	public List<ListBuilding> exportListBuilding(String startDate, String endDate) {
-		List<ListBuilding> listBuildings = new ArrayList<>();
-		try (Connection con = (Connection) dataSource.getConnection()){
-			String sql = "select * from list_building_details where DATE_FORMAT(created_date,'%m/%d/%Y') BETWEEN ? AND ?";
-			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
-			ps.setString(1,startDate);
-			ps.setString(2,endDate);
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				ListBuilding details = new ListBuilding();
-				details.setName(rs.getString("name"));
-				details.setNew_link(rs.getString("new_link"));
-				details.setCompany_link(rs.getString("company_link"));
-				details.setCompany_name(rs.getString("company_name"));;
-				details.setCompany_tenure(rs.getString("company_tenure"));
-				details.setContact_location(rs.getString("contact_location"));
-				details.setContact_designation(rs.getString("contact_designation"));
-				details.setUser_id(rs.getString("user_id"));
-				details.setUrl_id(rs.getString("url_id"));
-				details.setTotal_result_no(rs.getString("total_result_no"));
-				details.setTotal_changed_job_no(rs.getString("total_changed_job_no"));
-				details.setUrl(rs.getString("url"));;
-				details.setListId(rs.getInt("url_id"));
-				details.setCreated_date(rs.getString("created_date"));
-				listBuildings.add(details);
-			}
-			con.close();
-		}catch (Exception e) {
-			e.printStackTrace();
-			// TODO: handle exception
-		}
-		return listBuildings;
-	}
+	
 
-	@Override
-	public List<MasterListBuildingURL> exportMasterListBuilding() {
-		List<MasterListBuildingURL> data = new ArrayList<>();
-		try(Connection con = (Connection) dataSource.getConnection();) {
-			ResultSet rs = null;
-			PreparedStatement ps = null;
-			String sql = "select * from master_list_building_url";
-			ps = (PreparedStatement) con.prepareStatement(sql);
-			rs = ps.executeQuery();
-			while (rs.next()) {
-				MasterListBuildingURL masterListBuildingURL = new MasterListBuildingURL();
-				masterListBuildingURL.setListBuildUrlId(Long.parseLong(rs.getString("master_list_url_id")));
-				masterListBuildingURL.setUrl((rs.getString("url")));
-				masterListBuildingURL.setStatus(rs.getString("status"));
-				masterListBuildingURL.setUserId(rs.getString("user_id").trim()!=""?Integer.parseInt(rs.getString("user_id")): 0);
-				data.add(masterListBuildingURL);
-			}
-			con.close();			
-		}catch (Exception e) {
-			e.printStackTrace();
-			// TODO: handle exception
-		}
-		return data;
-	}
+	
 
 
 }

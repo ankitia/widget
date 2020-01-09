@@ -68,7 +68,7 @@ public class ZillowController {
 	@RequestMapping(value="downloadZillowFile", method=RequestMethod.GET)
 	public String downloadZillowFile(ZillowData zillowData,HttpServletRequest request) {
 
-		for (int j = 95017; j < 113216; j++) {
+		for (int j = 713216; j < 813216; j++) {
 			
 			List<ZillowData> zillowDatas = zillowDao.getZillowData(j,"all");
 			for (int i = 0; i < zillowDatas.size(); i++) {

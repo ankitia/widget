@@ -26,8 +26,15 @@ public class CompanyDetails
 	private String phone_number;
 	private String created_date;
 	private String employees_link;
+	private String remarks;
 	
-		
+	
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
 	public String getCreated_date() {
 		return created_date;
 	}

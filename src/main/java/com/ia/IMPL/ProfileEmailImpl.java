@@ -31,7 +31,7 @@ public class ProfileEmailImpl implements ProfileEmailDao {
 		// TODO Auto-generated method stub
 		int status = 0; 
 		try (Connection con = (Connection) dataSource.getConnection()){
-			String sql = "insert into profile_email_data(name,designation,company_name,company_url,location_name,links,root_url,url_id,user_id,ipaddress) value(?,?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into profile_email_data(name,designation,company_name,company_url,location_name,links,root_url,url_id,user_id,ipaddress,url,message,full_designation) value(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, profileEmail.getName());
 			ps.setString(2, profileEmail.getDesignation());
@@ -43,6 +43,9 @@ public class ProfileEmailImpl implements ProfileEmailDao {
 			ps.setString(8, profileEmail.getUrl_id());
 			ps.setString(9, profileEmail.getUser_id());
 			ps.setString(10, profileEmail.getIpaddress());
+			ps.setString(11, profileEmail.getUrl());
+			ps.setString(12, profileEmail.getMessage());
+			ps.setString(13, profileEmail.getFull_designation());
 			status = ps.executeUpdate();
 			con.commit();		
 			 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
@@ -139,19 +142,21 @@ public class ProfileEmailImpl implements ProfileEmailDao {
 		return profileEmails;
 	}
 
+	
+
 	@Override
-	public List<MasterProfileEmailURL> exportMasterProfileEmailUrlList() {
+	public MasterProfileEmailURL getMasterURLDetail(String url) {
 		// TODO Auto-generated method stub
 		List<MasterProfileEmailURL> data = new ArrayList<>();
 		try(Connection con = (Connection) dataSource.getConnection();) {
 			ResultSet rs = null;
 			PreparedStatement ps = null;
-			String sql = "select * from master_yelp_url";
+			String sql = "select * from master_profile_email_data where url='"+url+"' order by  master_profile_email_data_id desc limit 0,1";
 			ps = (PreparedStatement) con.prepareStatement(sql);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				MasterProfileEmailURL masterURL = new MasterProfileEmailURL();
-				masterURL.setUrlId(Long.parseLong(rs.getString("profile_email_data_id")));
+				masterURL.setUrlId(Long.parseLong(rs.getString("master_profile_email_data_id")));
 				masterURL.setUrl((rs.getString("url")));
 				masterURL.setUserId(rs.getString("user_id").trim()!=""?Integer.parseInt(rs.getString("user_id")): 0);
 				masterURL.setStatus(rs.getString("status"));
@@ -162,8 +167,15 @@ public class ProfileEmailImpl implements ProfileEmailDao {
 			e.printStackTrace();
 			// TODO: handle exception
 		}
-		return data;
+		
+		if(data.size() >0 )		
+			return data.get(0);
+		else 
+			return null;
+			
 	}
+
+	
 
 	 
 
