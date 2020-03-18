@@ -65,7 +65,7 @@ public class BingController {
 		int userId = Integer.parseInt(session.getAttribute("userId")+"");
 		model.addAttribute("urlList",bingDao.getBingUrlList(userId,"missed"));	
 		System.out.println("This is bingVerificationMissed  "+userId);
-		return "admin/google_verification_missed";
+		return "admin/bing_verification_missed";
 	}
 	
 	@CrossOrigin

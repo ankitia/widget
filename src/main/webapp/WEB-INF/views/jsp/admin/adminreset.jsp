@@ -47,6 +47,23 @@
 	   }
    }
    
+   function resetAllLinks(){
+	  $.ajax({
+		  type : "POST", 
+		  url : "resetAllLinks",
+		  data : {
+			  tableName :$("#reportAllList").val(),
+		  },
+		  success :function(data){
+			  alert("Reactive links successfully");
+			  $("#reportAllList").val("");   
+		  },error : function(e){
+			  console.log("Error ::"+e); 
+		  }
+	   }); 
+	   
+   }
+   
    </script>    	
 
   </head>
@@ -80,6 +97,28 @@
 	     		<button class="btn btn-primary" style="margin: -10px 0px 0px 10px;"  onclick="resetLinks()">Reset</button>
 	     	</div>
 	     	</div>
+	     	
+	     	
+	     	<br />  
+	     	<div class="row row_set">
+  			<h3>Reset</h3>
+	     	<div class="col-sm-4"> 
+	     		<select name="reportAllList" id="reportAllList" >
+	     			<option value="">Select Option</option>
+	     			<option value="master_url">Master User Verification</option>
+	     			<option value="master_company_url">Master Company</option> 
+	     			<option value="master_url_profile">Master Full Details</option>
+	     			<option value="master_list_building_url">Master List Build</option>
+	     			  
+	     			<!--<option value="scrap">User Verification</option>
+	     				<option value="companyDetails">Company Details</option> -->
+	     			<!-- <option value="listBuilding">List Building</option> -->
+	     		</select>
+	     	 
+	     		<button class="btn btn-primary" style="margin: -10px 0px 0px 10px;"  onclick="resetAllLinks()">Reset</button>
+	     	</div>
+	     	</div>
+	     	
 		 </div> 
  </div>
       <div id="push"></div>

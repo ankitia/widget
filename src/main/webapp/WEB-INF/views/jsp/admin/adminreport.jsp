@@ -70,23 +70,26 @@ function checkReportList(checkList){
 	     	<div class="col-sm-3"> 
 	     		<select name="reportList" id="reportList" onchange="checkReportList(this)">
 	     			<option value="">Select Option</option>
-	     			<option value="masterScrap">Master User Verification</option>
-	     			<option value="scrap">User Verification</option>
-	     			<option value="masterCompany">Master Company</option>
-	     			<option value="companyDetails">Company Details</option>
-	     			<option value="companyLocations">Company Locations</option>
-	     			<option value="masterListBuild">Master List Building</option>
-	     			<option value="listBuilding">List Building</option>
+	     			
+	     			<c:if test="${userId == 1}">
+		     			<option value="masterScrap">Master User Verification</option>
+		     			<option value="scrap">User Verification</option>
+		     			<option value="masterCompany">Master Company</option>
+		     			<option value="companyDetails">Company Details</option>
+		     			<option value="companyLocations">Company Locations</option>
+		     			<option value="masterListBuild">Master List Building</option>
+		     			<option value="listBuilding">List Building</option>
+		     			<option value="masterFullDetails">Master Full Details</option>
+		     			<option value="fullDetails">Full Details</option>
+		     			<option value="masterProfileEmail">Master Profile Email</option>
+		     			<option value="profileEmailData">Profile Email Data</option>
+		     		</c:if>
 	     			<option value="masterGoogleData">Master Google Data</option>
 	     			<option value="googlePlace">Google Place</option>
 	     			<option value="masterGoogleMaps">Master Google Maps</option>
 	     			<option value="mapsData">Maps Data</option>
 	     			<option value="masterYelpData">Master Yelp Data</option>
 	     			<option value="yelpData">Yelp Data</option>
-	     			<option value="masterFullDetails">Master Full Details</option>
-	     			<option value="fullDetails">Full Details</option>
-	     			<option value="masterProfileEmail">Master Profile Email</option>
-	     			<option value="profileEmailData">Profile Email Data</option>
 	     			<option value="masterSpokeo">Master Spokeo</option>
 	     			<option value="spokeoData">Spokeo Data</option>
 	     			<option value="masterSmartystreet">Master Smartystreet</option>
@@ -95,6 +98,14 @@ function checkReportList(checkList){
 	     			<option value="bingData">Bing Data</option>
 	     			<option value="masterZillow">Master Zillow</option>
 	     			<option value="masterBingMapsDetails">Master BingMaps</option>
+	     			<option value="masterGovShop">Master GovShop</option>
+	     			<option value="govShop">GovShop Data</option>
+	     			<option value="masterGoogle">Master Google</option>
+	     			<option value="googleData">Google Data</option>
+	     			<option value="masterZoom">Master Zoom Info</option>
+	     			<option value="zoomInfoData">Zoom Info Data</option>
+	     			<option value="masterManta">Master Manta</option>
+	     			<option value="mantaData">Manta Data</option>
 	     		</select> 
 	     		<input type = "text" id = "startDate"  placeholder = "Start Date">
 	     		<input type = "text" id = "endDate" placeholder = "End Date"> 

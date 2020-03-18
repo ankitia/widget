@@ -25,8 +25,24 @@ public class GovShopData
  	private String url;
  	private String user_id;
  	private String ipaddress;
-
- 	public int getGovId() {
+ 	private String created_date;
+ 	private String website;
+ 	
+ 	
+ 	
+ 	public String getWebsite() {
+		return website;
+	}
+	public void setWebsite(String website) {
+		this.website = website;
+	}
+	public String getCreated_date() {
+		return created_date;
+	}
+	public void setCreated_date(String created_date) {
+		this.created_date = created_date;
+	}
+	public int getGovId() {
 		return govId;
 	}
 	public void setGovId(int govId) {

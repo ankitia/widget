@@ -337,7 +337,16 @@ public class HomeImpl implements HomeDao {
 				sql = "select count(distinct(url_id)) as total from smartystreet_data where user_id = ?";
 			}else if(action.equalsIgnoreCase("govShopData")) {
 				sql = "select count(distinct(url_id)) as total from govshop_data where user_id = ?";
+			}else if(action.equalsIgnoreCase("zoomData")) {
+				sql = "select count(distinct(url_id)) as total from zoom_info_data where user_id = ?";
+			}else if(action.equalsIgnoreCase("googleZoomData")) {
+				sql = "select count(distinct(url_id)) as total from google_zoominfo_data where user_id = ?";
+			}else if(action.equalsIgnoreCase("mantaData")) {
+				sql = "select count(distinct(url_id)) as total from manta_data where user_id = ?";
+			}else if(action.equalsIgnoreCase("zumperData")) {
+				sql = "select count(distinct(url_id)) as total from zumper_data where user_id = ?";
 			}
+			
 			
 			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
@@ -387,12 +396,25 @@ public class HomeImpl implements HomeDao {
 	}
 
 	@Override
-	public List<UserDetail> getUserDetails() {
+	public List<UserDetail> getUserDetails(String action) {
 		// TODO Auto-generated method stub
 		List<UserDetail> users = new ArrayList<>();
 		try {
 			Connection con = (Connection) dataSource.getConnection();
 			String sql = "select u.fname,u.lname,u.useremail,u.mobile_number,u.password,count(s.user_id) as total from scrap s,user u where u.user_id=s.user_id  group by  s.user_id";
+			
+			if(action.equalsIgnoreCase("userVerification")) {
+				sql = "select u.fname,u.lname,u.useremail,u.mobile_number,u.password,count(s.user_id) as total,(select count(master_url_id) from master_url pe where status='Active' and s.user_id = pe.user_id) as pending  from scrap s,user u where u.user_id=s.user_id  group by  s.user_id";
+			}else if(action.equalsIgnoreCase("companyDetails")) {
+				sql = "select u.fname,u.lname,u.useremail,u.mobile_number,u.password,count(s.user_id) as total,(select count(company_url_id) from master_company_url pe where status='Active' and s.user_id = pe.user_id) as pending  from company_detail s,user u where u.user_id=s.user_id  group by  s.user_id";
+			}else if(action.equalsIgnoreCase("fullDetails")) {
+				sql = "select u.fname,u.lname,u.useremail,u.mobile_number,u.password,count(s.user_id) as total,(select count(master_url_id) from master_url_profile pe where status='Active' and s.user_id = pe.user_id) as pending  from list_contacts s,user u where u.user_id=s.user_id  group by  s.user_id";
+			}else if(action.equalsIgnoreCase("profileEmail")) {
+				sql = "select u.fname,u.lname,u.useremail,u.mobile_number,u.password,count(s.user_id) as total,(select count(master_profile_email_data_id) from master_profile_email_data pe where status='Active' and s.user_id = pe.user_id) as pending from profile_email_data s,user u where u.user_id=s.user_id  group by  s.user_id";
+			}
+			
+			System.out.println("sql-->"+sql);
+			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -403,6 +425,7 @@ public class HomeImpl implements HomeDao {
 				user.setPassword(rs.getString("password"));
 				user.setMobileNumber(rs.getString("mobile_number"));
 				user.setTotal(rs.getString("total"));
+				user.setPending(rs.getString("pending")); 
 				users.add(user);
 			} 
 			con.close();
@@ -499,10 +522,15 @@ public class HomeImpl implements HomeDao {
 				sql = "update master_smartystreet_url set status = ? where master_smartystreet_url_id = ?";
 			}else if(action.equalsIgnoreCase("govShopData")){
 				sql = "update master_govshop_url set status = ? where master_govshop_url_id = ?";
+			}else if(action.equalsIgnoreCase("googleZoomData")){
+				sql = "update master_google_zoominfo_url set status = ? where master_google_zoominfo_url_id = ?";
+			}else if(action.equalsIgnoreCase("zoomData")){
+				sql = "update master_zoominfo_url set status = ? where master_zoominfo_url_id = ?";
+			}else if(action.equalsIgnoreCase("mantaData")){
+				sql = "update master_manta_url set status = ? where master_manta_url_id = ?";
+			}else if(action.equalsIgnoreCase("zumperData")){
+				sql = "update master_zumper_url set status = ? where master_zumper_url_id = ?";
 			}
-			
-			
-			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setString(1, status);
 			ps.setLong(2, urlId);
@@ -765,7 +793,29 @@ public class HomeImpl implements HomeDao {
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1, userId);
 				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignGoogleZoomData")){
+				sql = "UPDATE master_google_zoominfo_url SET user_id=? WHERE master_google_zoominfo_url_id IN (SELECT master_google_zoominfo_url_id FROM (SELECT master_google_zoominfo_url_id FROM master_google_zoominfo_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignZoomData")){
+				sql = "UPDATE master_zoominfo_url SET user_id=? WHERE master_zoominfo_url_id IN (SELECT master_zoominfo_url_id FROM (SELECT master_zoominfo_url_id FROM master_zoominfo_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignMantaData")){
+				sql = "UPDATE master_manta_url SET user_id=? WHERE master_manta_url_id IN (SELECT master_manta_url_id FROM (SELECT master_manta_url_id FROM master_manta_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignZumperData")){
+				sql = "UPDATE master_zumper_url SET user_id=? WHERE master_zumper_url_id IN (SELECT master_zumper_url_id FROM (SELECT master_zumper_url_id FROM master_zumper_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
 			}
+			
+			
 			
 			queryStatus = ps.executeUpdate();
 			
@@ -1098,6 +1148,25 @@ public class HomeImpl implements HomeDao {
 		System.out.println("Status :::"+status);
 		 return status;	
 		
+	}
+
+	@Override
+	public boolean reActiveAllMasterURL(String tableName) {
+		int queryStatus = 0;
+		try(Connection con = (Connection) dataSource.getConnection()) {
+			String sql = "update  "+ tableName +" set user_id=0 where status='Active'";
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+			queryStatus = ps.executeUpdate();
+			con.commit();
+			con.close();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		if(queryStatus > 0)
+			return true;
+		else		
+			return false;
 	}
 
 

@@ -156,12 +156,13 @@ public class CompanyController {
 		if(missedLink > 2) {
 		}*/
 		if(action.equalsIgnoreCase("scrap")) {
-			return homeDao.setPendingLink("assignScrap", userId, 50)+"";
+			return homeDao.setPendingLink("assignScrap", userId, 49)+"";
 		}else if(action.equalsIgnoreCase("companyData")) {
 			/*if(companyDao.getCurrentDateCount(userId) > 4000){
 				return "Your daily 4000 limit exceeded (Per day limit 4000)";
 			}else*/	
 			if(companyDao.getCompanyUrlList(userId, "active").size()<50) {
+				System.out.println("Company data call" + companyDao.getCompanyUrlList(userId, "active").size());
 				return homeDao.setPendingLink("assignCompany", userId, 50)+"";
 			}
 					
@@ -195,8 +196,15 @@ public class CompanyController {
 			return homeDao.setPendingLink("assignSmartyStreetData", userId, 10)+"";
 		}else if(action.equalsIgnoreCase("assignGovShopData")) { 
 			return homeDao.setPendingLink("assignGovShopData", userId, 10)+"";
+		}else if(action.equalsIgnoreCase("assignGoogleZoomData")) { 
+			return homeDao.setPendingLink("assignGoogleZoomData", userId, 10)+"";
+		}else if(action.equalsIgnoreCase("assignZoomData")) { 
+			return homeDao.setPendingLink("assignZoomData", userId, 10)+"";
+		}else if(action.equalsIgnoreCase("assignMantaData")) { 
+			return homeDao.setPendingLink("assignMantaData", userId, 10)+"";
+		}else if(action.equalsIgnoreCase("assignZumperData")) { 
+			return homeDao.setPendingLink("assignZumperData", userId, 10)+"";
 		}
-		
 		
 		
 		return "";

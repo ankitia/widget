@@ -4,6 +4,7 @@
 <html lang="en">
   <head> 
     <link rel="stylesheet" href="<c:url value="resources/css/bootstrap-responsive.css"></c:url>">
+     <%-- <link rel="stylesheet" href="<c:url value="resources/css/bootstrap.css"></c:url>">    --%>
   </head>
 
   <body>
@@ -27,8 +28,8 @@
                 		<li><a href="<%=request.getContextPath() %>/admindashboard">Dashboard</a></li>
                 	</c:when>
                 	<c:otherwise> 
-                		<li><a href="<%=request.getContextPath() %>/dashboard">Dashboard</a></li>
-                		<li><a href="<%=request.getContextPath() %>/masterProfileEmailURL">Profile Email</a></li>
+                		<li><a href="<%=request.getContextPath() %>/dashboard">Dashboard</a></li> 
+                		<%-- <li><a href="<%=request.getContextPath() %>/masterProfileEmailURL">Profile Email</a></li> --%>
 					      <li class="dropdown">
 					        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Scripts
 					        <span class="caret"></span></a>
@@ -44,7 +45,11 @@
 		                		<li><a href="<%=request.getContextPath() %>/masterSpokeoURL">Spokeo</a></li>
 		                		<li><a href="<%=request.getContextPath() %>/masterSmartystreetDataURL">Smartystreet</a></li>
 		                		<li><a href="<%=request.getContextPath() %>/masterGovShopURL">GovShop</a></li>
-					        </ul> 
+		                		<li><a href="<%=request.getContextPath() %>/masterGoogleZoom">Google Zoom</a></li>
+		                		<li><a href="<%=request.getContextPath() %>/masterZoomInfoURL">Zoom Info</a></li>
+		                		<li><a href="<%=request.getContextPath() %>/masterMantaURL">Manta Data</a></li>
+		                		<li><a href="<%=request.getContextPath() %>/masterZumperURL">Zumper Data</a></li>
+					        </ul>  
 					      </li>
                 		
                 		
@@ -52,10 +57,16 @@
                 </c:choose>
                                   
                 <c:if test="${userRole == 1}">
-                	<li><a href="<%=request.getContextPath() %>/userAssigned">Assigned</a></li>
-                	<li><a href="<%=request.getContextPath() %>/report">Report</a></li>
-                	<li><a href="<%=request.getContextPath() %>/reset">ReActive</a></li>
-                	<li><a href="<%=request.getContextPath() %>/adminupload">Upload</a></li>
+                	<c:if test="${userId == 1}">
+	                	<li><a href="<%=request.getContextPath() %>/uuserAssigned">Assigned</a></li>
+	                	<li><a href="<%=request.getContextPath() %>/reset">ReActive</a></li>
+	                	<li><a href="<%=request.getContextPath() %>/adminupload">Upload</a></li>
+	                	<li><a href="<%=request.getContextPath() %>/report">Report</a></li>
+	                </c:if>
+	                <c:if test="${userId != 1}">
+	                	<li><a href="<%=request.getContextPath() %>/adminupload">Upload</a></li>
+	                	<li><a href="<%=request.getContextPath() %>/report">Report</a></li>
+	                </c:if>
                 </c:if>
                 
                 
@@ -103,6 +114,7 @@
                 </li> -->
               </ul>   
               <ul class="nav navbar-nav navbar-right" style="float:right;">
+              	  <li><a><font color="red" size="4" style="float: right;"> Welcome, <%=session.getAttribute("userName") %> </font></a></li>
 			      <li><a href="<%=request.getContextPath() %>/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
 			    </ul> 
             </div><!--/.nav-collapse -->

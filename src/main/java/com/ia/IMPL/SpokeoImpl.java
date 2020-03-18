@@ -33,7 +33,7 @@ public class SpokeoImpl implements SpokeoDao {
 		
 		int status = 0; 
 		try (Connection con = (Connection) dataSource.getConnection()){
-			String sql = "insert into spokeo_data(address,details_lst,building_value,last_sold_price,last_sold_period,year_bulit,living_area,lot_size,bathrooms,building_type,country,units,home_value,bedrooms,home_type,heating,cooling,parking,stories,structure,fireplace,root_url,url_id,user_id,ipaddress) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into spokeo_data(address,details_lst,building_value,last_sold_price,last_sold_period,year_bulit,living_area,lot_size,bathrooms,building_type,country,units,home_value,bedrooms,home_type,heating,cooling,parking,stories,structure,fireplace,root_url,url_id,user_id,ipaddress,remarks) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, spokeoData.getAddress());
 			ps.setString(2, spokeoData.getDetails_lst());
@@ -60,7 +60,8 @@ public class SpokeoImpl implements SpokeoDao {
 			ps.setString(23, spokeoData.getUrl_id());
 			ps.setString(24, spokeoData.getUser_id());
 			ps.setString(25, spokeoData.getIpaddress());
-			
+			ps.setString(26, spokeoData.getRemarks());
+			 
 			
 			status = ps.executeUpdate();
 			con.commit();		

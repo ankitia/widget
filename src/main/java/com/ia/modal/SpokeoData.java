@@ -29,8 +29,15 @@ public class SpokeoData {
 	private String user_id;
 	private String ipaddress;
 	private String created_date;
+	private String remarks;
 	
 	
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
 	public String getCreated_date() {
 		return created_date;
 	}

@@ -5,7 +5,10 @@ import java.util.List;
 import com.ia.modal.BingMapsData;
 import com.ia.modal.BingPageUrlsData;
 import com.ia.modal.GooglePlace;
+import com.ia.modal.GoogleZoominfoData;
+import com.ia.modal.GovShopData;
 import com.ia.modal.ListBuilding;
+import com.ia.modal.MantaData;
 import com.ia.modal.MapsTileData;
 import com.ia.modal.MasterBingMapsURL;
 import com.ia.modal.MasterData;
@@ -20,6 +23,7 @@ import com.ia.modal.ProfileEmail;
 import com.ia.modal.SmartystreetData;
 import com.ia.modal.SpokeoData;
 import com.ia.modal.YelpData;
+import com.ia.modal.ZoomInfoData;
 
 public interface ExportDao {
 	
@@ -50,7 +54,7 @@ public interface ExportDao {
 	
 	//Google Maps
 	List<MasterMapsURL> exportMapsDataUrlList();
-	List<MapsTileData> exportMapsTileData();
+	List<MapsTileData> exportMapsTileData(String startDate, String endDate);
 	
 	//Yelp
 	List<MasterYelpURL> exportMasterYelpUrlList();
@@ -64,6 +68,17 @@ public interface ExportDao {
 	//Bing Data
 	List<BingPageUrlsData> exportBingData(String startDate,String endDate);
 	
+	//Govshop Data
+	List<GovShopData> exportGovShopData(String startDate,String endDate);
 	
+	//GoogleZoomInfo Data
+	List<GoogleZoominfoData> exportGoogleZoomInfoData(String startDate,String endDate);
+	
+	//ZoomInfo Data
+	List<ZoomInfoData> exportZoomInfoData(String startDate,String endDate);
+	
+	//Manta Data
+	List<MantaData> exportMantaData(String startDate,String endDate);
+		
 }
 

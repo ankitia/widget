@@ -35,28 +35,30 @@
   		<div class="row row_set">
   			<form action="uploadFile" method="post" enctype="multipart/form-data">
   			
-  			<h3>Report</h3>
+  			<h3>Upload</h3>
 	     	<div class="col-sm-3"> 
 	     		<select name="tableName" id="tableName" onchange="checkReportList(this)">
 	     			<option value="">Select Option</option>
-	     			<option value="master_company_url">Master Company</option>
-	     			<option value="master_profile_email_data">Master Profile Email</option>
+	     			<c:if test="${userId == 1}">
+		     			<option value="master_url">Master User Verification</option>
+		     			<option value="master_company_url">Master Company</option>
+		     			<option value="master_profile_email_data">Master Profile Email</option>
+		     			<option value="master_list_building_url">Master List Building</option>
+		     			<option value="master_url_profile">Master Full Details</option>
+	     			</c:if>
 	     			<option value="master_yelp_url">Master Yelp</option>
 	     			<option value="master_zillow_url">Master Zillow</option>
-	     			<option value="master_list_building_url">Master List Building</option>
-	     			<option value="master_url_profile">Master Full Details</option>
 	     			<option value="master_google_url">Master Google Data</option>
 	     			<option value="master_bing_url">Master Bing Data</option>
 	     			<option value="master_google_place_url">Master Google Place Data</option>
 	     			<option value="master_spokeo_url">Master Spokeo Data</option>
-	     			<option value="master_url">Master User Verification</option>
 	     			<option value="master_smartystreet_url">Master Smartystreet</option> 
 	     			<option value="master_govshop_url">Master GovShop</option> 
-	     			<!--   
-	     			
-	     			<option value="masterYelpData">Master Yelp Data</option>
-	     			<option value="masterFullDetails">Master Full Details</option>
-	     			<option value="fullDetails">Full Details</option> -->
+	     			<option value="master_google_zoominfo_url">Master Google Zoom</option>
+	     			<option value="master_zoominfo_url">Master Zoom Info</option>
+	     			<option value="master_manta_url">Master Manta Data</option>
+	     			<option value="master_maps_url">Master Maps(Google)</option>
+	     			<option value="master_zumper_url">Master Zumper</option>
 	     		</select> 
 	     		<input type = "file" id = "file" name="file" placeholder = "FileUpload" > 
 	     		
@@ -68,42 +70,7 @@
 		    </form> 
 		 </div> 
 		    
-     <%-- <div class="row">
-     	<div class="col-sm-3"></div>
-	    <div class="col-sm-6">
-	    	
-	    	<div class="text-right"><c:out value="${count }"></c:out></div>
-		    <table class="table table-striped" style="    font-size: 13px;">
-	         	<tr>
-	         		<td width="3%" >#</td>
-	         		<td width="17%">Name</td>
-	         		<td width="20%">User Name</td>
-	         		<td width="50%">Mobile number</td>
-	         		<td width="10%">Total</td>
-	         	</tr>     	 
-	         	<c:set var="count" value="0"></c:set>
-	             <c:forEach items="${userList }" var="userList" varStatus="index">         
-		         	<tr>
-		         		<td>${index.count } </td>
-		         		<td>${userList.fname } ${userList.lname } </td>
-		         		<td>${userList.userEmail }</td>
-		         		<td>${userList.mobileNumber }</td>
-		         		<td>
-		         			${userList.total }
-		         			<c:set var="count" value="${userList.total + count }"></c:set> 
-		         		
-		         		</td>
-		         	</tr>	
-		         </c:forEach>
-		         <tr>
-	         		<td colspan="4" >#</td>
-	         		<td width="10%"><strong><c:out value="${count }"></c:out></strong></td>
-	         	</tr>     	 
-		         
-		         	
-	         </table>
-	    </div>
-   	</div> --%> 
+      
  </div>
 
       <div id="push"></div>

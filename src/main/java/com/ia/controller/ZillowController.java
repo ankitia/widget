@@ -5,11 +5,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +23,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ia.Dao.HomeDao;
 import com.ia.Dao.ZillowDao;
+import com.ia.modal.CompanyLocation;
 import com.ia.modal.ZillowData;
+import com.ia.modal.ZillowFeatureData;
 
 @Controller
 public class ZillowController {
@@ -34,6 +39,7 @@ public class ZillowController {
 	@RequestMapping(value="masterZillowURL")
 	public String masterZillowURL(HttpServletRequest reques,Model model,HttpSession session)
 	{
+		session.setAttribute("userId",1);
 		int userId = Integer.parseInt(session.getAttribute("userId")+"");
 		model.addAttribute("urlList",zillowDao.getZillowUrlList(userId,"display"));
 		
@@ -49,18 +55,56 @@ public class ZillowController {
 	@RequestMapping(value="insertZillow", method=RequestMethod.POST)
  	@ResponseBody public String insertZillow(ZillowData zillowData,HttpServletRequest request) 
 	{
-		 if(zillowData.getUser_id()==null || zillowData.getUser_id().equalsIgnoreCase("0") || zillowData.getUser_id().equalsIgnoreCase("")) {
-	        	zillowData.setUser_id("1");
-	        }
-			 System.out.println(zillowData.getUrl_id()+"--"+request.getAttribute("url_id"));
-	        String urlId = zillowData.getUrl_id()+"";
-	        if(urlId.equalsIgnoreCase("null") || urlId==null ) {
-	        	zillowData.setUrl_id("0");
-	        }
 	        zillowData.setIpaddress(request.getRemoteAddr());
-	        zillowData.setUser_id("0");
-	        zillowData.setUrl_id("1");
-	        zillowDao.insertZillowData(zillowData);
+	        /*zillowData.setUser_id("0");
+	        zillowData.setUrl_id("1");*/
+	        int zillowId = zillowDao.insertZillowData(zillowData);
+	        
+	        try {
+	        	JSONArray jsonArr =  null;
+	        	 
+	        	
+	        	if(zillowData.getFeature_lst().length() > 0) {
+	        	   jsonArr = new JSONArray(zillowData.getFeature_lst());
+			       for (int i = 0; i < jsonArr.length(); i++) {			            
+			    	   	JSONObject jsonObj = jsonArr.getJSONObject(i);
+			    	   	Iterator keys =jsonObj.keys();
+			    	    while(keys.hasNext()) {
+			    	    	   // loop to get the dynamic key
+			    	    	   String currentDynamicKey = (String)keys.next();
+			    	    	   // get the value of the dynamic key
+			    	    	   JSONObject currentDynamicValue = jsonObj.getJSONObject(currentDynamicKey);
+			    	    	   /*System.out.println("Key ::"+currentDynamicKey+" --value-- "+currentDynamicValue);*/
+			    	    	   Iterator keys1 =currentDynamicValue.keys();
+			    	    	   while(keys1.hasNext()) {
+			    	    		   String currentDynamicKey1 = (String)keys1.next();
+			    	    		   /*JSONObject currentDynamicValue1 = currentDynamicValue.getJSONObject(currentDynamicKey1);*/
+			    	    		   /*System.out.println("key1--------->"+currentDynamicKey1+" ---value1 ---");
+			    	    		   System.out.println("key1--------->"+currentDynamicValue.get(currentDynamicKey1)+" ---value1 ---");*/
+			    	    		   
+			    	    		   ZillowFeatureData featureData = new ZillowFeatureData();
+			    	    		   featureData.setKey_1(currentDynamicKey);
+			    	    		   featureData.setKey_2(currentDynamicKey1);
+			    	    		   featureData.setKey_value(currentDynamicValue.get(currentDynamicKey1)+"");
+			    	    		   featureData.setZillow_id(zillowId+"");
+			    	    		   
+			    	    		   zillowDao.insertZillowFeatureData(featureData);
+			    	    	   }
+			    	    	   // do something here with the value...
+			    	    	 }
+			    	   	
+			        }
+	        	}
+	        } catch (Exception e) {
+					e.printStackTrace();
+				}
+	        
+	        
+	        
+	        
+	        
+	        
+	       
 	        
 	        return "";
 	}       
@@ -68,7 +112,7 @@ public class ZillowController {
 	@RequestMapping(value="downloadZillowFile", method=RequestMethod.GET)
 	public String downloadZillowFile(ZillowData zillowData,HttpServletRequest request) {
 
-		for (int j = 713216; j < 813216; j++) {
+		/*for (int j = 14394; j < 20000; j++) {
 			
 			List<ZillowData> zillowDatas = zillowDao.getZillowData(j,"all");
 			for (int i = 0; i < zillowDatas.size(); i++) {
@@ -82,11 +126,7 @@ public class ZillowController {
 		        }
 			}
 			
-		}
-		
-		
-		
-		 
+		}*/
 	    
 	System.out.println("Done");
 		

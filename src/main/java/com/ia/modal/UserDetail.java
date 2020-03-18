@@ -9,8 +9,15 @@ public class UserDetail {
 	private String password;
 	private String total;
 	private String mobileNumber;
-	
+	private String pending;
 	 
+	
+	public String getPending() {
+		return pending;
+	}
+	public void setPending(String pending) {
+		this.pending = pending;
+	}
 	public String getMobileNumber() {
 		return mobileNumber;
 	}

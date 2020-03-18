@@ -15,7 +15,9 @@ import org.springframework.stereotype.Component;
 import com.ia.Dao.ZillowDao;
 import com.ia.modal.MasterZillowURL;
 import com.ia.modal.ZillowData;
+import com.ia.modal.ZillowFeatureData;
 import com.mysql.jdbc.Statement;
+
 
   
 @Component("zillowDao")
@@ -31,51 +33,37 @@ public class ZillowImpl implements ZillowDao {
 		// TODO Auto-generated method stub
 		int status = 0; 
 		try (Connection con = (Connection) dataSource.getConnection()){
-			String sql = "insert into zillow_data(address_div,agent_listing,data_lst,fact_list,home_values,image0,image1,image2,image3,image4,monthly_cost,nearby_school,popup_div,premier_leader,rental_home_values,sub_section_container0,sub_section_container1,sub_section_container2,sub_section_container3,sub_section_container4,sub_section_container5,sub_section_container6,sub_section_container7,sub_section_container8,sub_section_container9,sub_section_container10,sub_section_container11,sub_section_container12,sub_section_container13,sub_section_container14,sub_section_container15,sub_section_container16,sub_section_container17,sub_section_container18,sub_section_container19,sub_section_container20,sub_section_container21,sub_section_container22,todo,url_id,user_id,url,ipaddress) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, zillowData.getAddress_div());
-			ps.setString(2, zillowData.getAgent_listing());
-			ps.setString(3, zillowData.getData_lst());
-			ps.setString(4, zillowData.getFact_list());
-			ps.setString(5, zillowData.getHome_values());
-			ps.setString(6, zillowData.getImage0());
-			ps.setString(7, zillowData.getImage1());
-			ps.setString(8, zillowData.getImage2());
-			ps.setString(9, zillowData.getImage3());
-			ps.setString(10, zillowData.getImage4());
-			ps.setString(11, zillowData.getMonthly_cost());
-			ps.setString(12, zillowData.getNearby_school());
-			ps.setString(13, zillowData.getPopup_div());
-			ps.setString(14, zillowData.getPremier_leader());
-			ps.setString(15, zillowData.getRental_home_values());
-			ps.setString(16, zillowData.getSub_section_container0());
-			ps.setString(17, zillowData.getSub_section_container1());
-			ps.setString(18, zillowData.getSub_section_container2());
-			ps.setString(19, zillowData.getSub_section_container3());
-			ps.setString(20, zillowData.getSub_section_container4());
-			ps.setString(21, zillowData.getSub_section_container5());
-			ps.setString(22, zillowData.getSub_section_container6());
-			ps.setString(23, zillowData.getSub_section_container7());
-			ps.setString(24, zillowData.getSub_section_container8());
-			ps.setString(25, zillowData.getSub_section_container9());
-			ps.setString(26, zillowData.getSub_section_container10());
-			ps.setString(27, zillowData.getSub_section_container11());
-			ps.setString(28, zillowData.getSub_section_container12());
-			ps.setString(29, zillowData.getSub_section_container13());
-			ps.setString(30, zillowData.getSub_section_container14());
-			ps.setString(31, zillowData.getSub_section_container15());
-			ps.setString(32, zillowData.getSub_section_container16());
-			ps.setString(33, zillowData.getSub_section_container17());
-			ps.setString(34, zillowData.getSub_section_container18());
-			ps.setString(35, zillowData.getSub_section_container19());
-			ps.setString(36, zillowData.getSub_section_container20());
-			ps.setString(37, zillowData.getSub_section_container21());
-			ps.setString(38, zillowData.getSub_section_container22());
-			ps.setString(39, zillowData.getTodo());
-			ps.setString(40, zillowData.getUrl_id());
-			ps.setString(41, zillowData.getUser_id());
-			ps.setString(42, zillowData.getUrl());
-			ps.setString(43, zillowData.getIpaddress());
+			String sql = "insert into zillow_data(ds_price,ds_bed_bath_living_area,ds_address,ds_status,ds_zestimate_value,ds_morgage,ds_overview_states,ds_overview_text,listing_agents,fact_lst,feature_lst,zestimate_value,estimated_sales_range,zestimate_history,zestimate_model_text,estimated_monthly_cost,monthly_cost_lst,rent_zestimate,nearby_school_lst,nearby_school_description,neighborhood_prediction_text,zestimate_median_score,neighborhood_travel_score,listing_provided_by,nearby_neighborhood_txt,url_id,user_id,url,ipaddress) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS );
+			ps.setString(1, zillowData.getDs_price());
+			ps.setString(2, zillowData.getDs_bed_bath_living_area());
+			ps.setString(3, zillowData.getDs_address());
+			ps.setString(4, zillowData.getDs_status());
+			ps.setString(5, zillowData.getDs_zestimate_value());
+			ps.setString(6, zillowData.getDs_morgage());
+			ps.setString(7, zillowData.getDs_overview_states());
+			ps.setString(8, zillowData.getDs_overview_text());
+			ps.setString(9, zillowData.getListing_agents());
+			ps.setString(10, zillowData.getFact_lst());
+			ps.setString(11, zillowData.getFeature_lst());
+			ps.setString(12, zillowData.getZestimate_value());
+			ps.setString(13, zillowData.getEstimated_sales_range());
+			ps.setString(14, zillowData.getZestimate_history());
+			ps.setString(15, zillowData.getZestimate_model_text());
+			ps.setString(16, zillowData.getEstimated_monthly_cost());
+			ps.setString(17, zillowData.getMonthly_cost_lst());
+			ps.setString(18, zillowData.getRent_zestimate());
+			ps.setString(19, zillowData.getNearby_school_lst());
+			ps.setString(20, zillowData.getNearby_school_description());
+			ps.setString(21, zillowData.getNeighborhood_prediction_text());
+			ps.setString(22, zillowData.getZestimate_median_score());
+			ps.setString(23, zillowData.getNeighborhood_travel_score());
+			ps.setString(24, zillowData.getListing_provided_by());
+			ps.setString(25, zillowData.getNearby_neighborhood_txt());
+			ps.setString(26, zillowData.getUrl_id());
+			ps.setString(27, zillowData.getUser_id());
+			ps.setString(28, zillowData.getUrl());
+			ps.setString(29, zillowData.getIpaddress());
 			
 			
 			status = ps.executeUpdate();
@@ -166,10 +154,9 @@ public class ZillowImpl implements ZillowDao {
 			while (rs.next()) {
 				ZillowData bingData = new ZillowData();
 				bingData.setZillowId(rs.getInt("zillow_id"));
-				bingData.setData_lst(rs.getString("data_lst"));;
+				bingData.setDs_address(rs.getString("ds_address"));;
 				//bingData.setSub_section_container0(rs.getString("sub_section_container0"));;
-				bingData.setSub_section_container0(""	);
-				bingData.setPopup_div(rs.getString("popup_div"));
+				bingData.setDs_morgage(rs.getString("ds_morgage"));
 				bingData.setUrl(rs.getString("url"));
 				bingData.setUrl_id(rs.getString("url_id"));
 				bingDatas.add(bingData);
@@ -181,6 +168,36 @@ public class ZillowImpl implements ZillowDao {
 			// TODO: handle exception
 		}
 		return bingDatas;
+	}
+
+	@Override
+	public int insertZillowFeatureData(ZillowFeatureData zillowData) {
+		int status = 0; 
+		try (Connection con = (Connection) dataSource.getConnection()){
+			String sql = "insert into zillow_feature_list(key_1,key_2,key_value,zillow_id) value(?,?,?,?)";
+			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS );
+			ps.setString(1, zillowData.getKey_1());
+			ps.setString(2, zillowData.getKey_2());
+			ps.setString(3, zillowData.getKey_value());
+			ps.setString(4, zillowData.getZillow_id());
+			status = ps.executeUpdate();
+			con.commit();		
+			 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+		            if (generatedKeys.next()) {
+		            	status = generatedKeys.getInt(1);
+		            } else {
+		                throw new SQLException("Creating user failed, no ID obtained.");
+		            }
+		        }catch (Exception e) {
+		        	e.printStackTrace();
+				}
+			 con.close();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		System.out.println("Status insertZillowData:::"+status);
+		return status;
 	}
 
 	 

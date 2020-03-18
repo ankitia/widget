@@ -12,6 +12,35 @@ public class MapsTileData {
 	private String location;
 	private String detail;
 	private String opening_time;
+	private String root_url;
+	private String user_id;
+	private String url_id;
+	private String created_date;
+	
+	public String getRoot_url() {
+		return root_url;
+	}
+	public void setRoot_url(String root_url) {
+		this.root_url = root_url;
+	}
+	public String getUser_id() {
+		return user_id;
+	}
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
+	}
+	public String getUrl_id() {
+		return url_id;
+	}
+	public void setUrl_id(String url_id) {
+		this.url_id = url_id;
+	}
+	public String getCreated_date() {
+		return created_date;
+	}
+	public void setCreated_date(String created_date) {
+		this.created_date = created_date;
+	}
 	public int getMapsId() {
 		return mapsId;
 	}

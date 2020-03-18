@@ -15,7 +15,10 @@ import com.ia.Dao.ExportDao;
 import com.ia.modal.BingMapsData;
 import com.ia.modal.BingPageUrlsData;
 import com.ia.modal.GooglePlace;
+import com.ia.modal.GoogleZoominfoData;
+import com.ia.modal.GovShopData;
 import com.ia.modal.ListBuilding;
+import com.ia.modal.MantaData;
 import com.ia.modal.MapsTileData;
 import com.ia.modal.MasterBingMapsURL;
 import com.ia.modal.MasterData;
@@ -30,6 +33,7 @@ import com.ia.modal.ProfileEmail;
 import com.ia.modal.SmartystreetData;
 import com.ia.modal.SpokeoData;
 import com.ia.modal.YelpData;
+import com.ia.modal.ZoomInfoData;
 
 @Component("exportDao")
 public class ExportImpl implements ExportDao {
@@ -552,6 +556,8 @@ public class ExportImpl implements ExportDao {
 				yelpData.setOwner(rs.getString("owner"));
 				yelpData.setRoot_url(rs.getString("root_url"));
 				yelpData.setUrl_id(rs.getString("url_id"));
+				yelpData.setBusiness_person_name(rs.getString("business_person_name"));
+				yelpData.setBusiness_person_designation(rs.getString("business_person_designation"));
 				bingDatas.add(yelpData);
 			}
 			con.close();
@@ -567,10 +573,10 @@ public class ExportImpl implements ExportDao {
 		List<BingPageUrlsData> bingDatas = new ArrayList<>();
 		try {
 			Connection con = (Connection) dataSource.getConnection();
-			String sql = "select * from bing_page_data";
+			String sql = "select bd.url_id,bd.created_date,bp.bing_data_id,bp.text_data,bp.link,bp.type,bp.location,bp.description,bp.phone_number,bp.address_location,bp.rating,bd.url_id,bd.created_date from bing_data bd,bing_page_data bp where bd.bing_data_id = bp.bing_data_id and DATE_FORMAT(bd.created_date,'%m/%d/%Y') BETWEEN ? AND ?";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
-			/*ps.setString(1,startDate);
-			ps.setString(2,endDate);*/
+			ps.setString(1,startDate);
+			ps.setString(2,endDate);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				BingPageUrlsData bingData = new BingPageUrlsData();
@@ -583,6 +589,8 @@ public class ExportImpl implements ExportDao {
 				bingData.setAddress_location(rs.getString("address_location"));
 				bingData.setRating(rs.getString("rating"));
 				bingData.setBingId(rs.getInt("bing_data_id"));
+				bingData.setUrl_id(rs.getString("url_id"));
+				bingData.setCreated_date(rs.getString("created_date"));
 				bingDatas.add(bingData);
 			}
 			con.close();
@@ -594,23 +602,263 @@ public class ExportImpl implements ExportDao {
 	}
 
 	@Override
-	public List<MapsTileData> exportMapsTileData() {
+	public List<MapsTileData> exportMapsTileData(String startDate, String endDate) {
 		List<MapsTileData> data = new ArrayList<>();
 		try(Connection con = (Connection) dataSource.getConnection();) {
 			ResultSet rs = null;
 			PreparedStatement ps = null;
-			String sql = "select * from maps_tile_data";
+			String sql = "select md.maps_data_id,m.url,md.url_id,md.user_id,md.created_date,name,rating,location,detail,opening_time from maps_data md,maps_tile_data mt,master_maps_url m  where md.maps_data_id =mt.maps_data_id and m.master_maps_url_id = md.url_id and DATE_FORMAT(md.created_date,'%m/%d/%Y') BETWEEN ? AND ?";
 			ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setString(1,startDate);
+			ps.setString(2,endDate);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				MapsTileData mapsTileData = new MapsTileData();
-				mapsTileData.setMapsId(Integer.parseInt(rs.getString("maps_tile_data_id")));
+				mapsTileData.setMapsId(Integer.parseInt(rs.getString("maps_data_id")));
 				mapsTileData.setName((rs.getString("name")));
 				mapsTileData.setRating(rs.getString("rating"));
 				mapsTileData.setLocation(rs.getString("location"));
 				mapsTileData.setDetail(rs.getString("detail"));
 				mapsTileData.setOpening_time(rs.getString("opening_time"));
+				mapsTileData.setRoot_url(rs.getString("url"));
+				mapsTileData.setUser_id(rs.getString("user_id"));
+				mapsTileData.setUrl_id(rs.getString("url_id"));
+				mapsTileData.setCreated_date(rs.getString("created_date"));
+				
 				data.add(mapsTileData);
+			}
+			con.close();			
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return data;
+	}
+
+	@Override
+	public List<GovShopData> exportGovShopData(String startDate, String endDate) {
+		List<GovShopData> data = new ArrayList<>();
+		try(Connection con = (Connection) dataSource.getConnection();) {
+			ResultSet rs = null;
+			PreparedStatement ps = null;
+			String sql = "select * from govshop_data";
+			ps = (PreparedStatement) con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				GovShopData mapsTileData = new GovShopData();
+				mapsTileData.setGovId(Integer.parseInt(rs.getString("govshop_data_id")));
+				mapsTileData.setTitle(rs.getString("title"));
+				mapsTileData.setAddress(rs.getString("address"));
+				mapsTileData.setTextual_overview(rs.getString("textual_overview"));
+				mapsTileData.setDuns(rs.getString("duns"));
+				mapsTileData.setCage_code(rs.getString("cage_code"));
+				mapsTileData.setType(rs.getString("type"));
+				mapsTileData.setEmployees(rs.getString("employees"));
+				mapsTileData.setSectors_served(rs.getString("sectors_served"));
+				mapsTileData.setCompany_security_level(rs.getString("company_security_level"));
+				mapsTileData.setCredit_card_usage(rs.getString("credit_card_usage"));
+				mapsTileData.setAnnual_revenue(rs.getString("annual_revenue"));
+				mapsTileData.setYear_founded(rs.getString("year_founded"));
+				mapsTileData.setCountry_of_origin(rs.getString("country_of_origin"));
+				mapsTileData.setPublic_sector_interest(rs.getString("public_sector_interest"));
+				mapsTileData.setSpec_title(rs.getString("spec_title"));
+				mapsTileData.setSpec_textual(rs.getString("spec_textual"));
+				mapsTileData.setRemarks(rs.getString("remarks"));
+				mapsTileData.setUrl(rs.getString("url"));
+				mapsTileData.setUrl_id(rs.getString("url_id"));
+				mapsTileData.setUser_id(rs.getString("user_id"));
+				mapsTileData.setCreated_date(rs.getString("created_date"));
+				mapsTileData.setWebsite(rs.getString("website"));
+				data.add(mapsTileData);
+			}
+			con.close();			
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return data;
+	}
+
+	@Override
+	public List<GoogleZoominfoData> exportGoogleZoomInfoData(String startDate, String endDate) {
+		List<GoogleZoominfoData> data = new ArrayList<>();
+		try(Connection con = (Connection) dataSource.getConnection();) {
+			ResultSet rs = null;
+			PreparedStatement ps = null;
+			String sql = "select * from google_zoominfo_data where DATE_FORMAT(created_date,'%m/%d/%Y') BETWEEN ? AND ?";
+			ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setString(1,startDate);
+			ps.setString(2,endDate);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				GoogleZoominfoData zoominfoData = new GoogleZoominfoData();
+				zoominfoData.setGoogleZoomId(Integer.parseInt(rs.getString("google_zoominfo_data_id")));
+				zoominfoData.setText(rs.getString("text"));
+				zoominfoData.setLinks(rs.getString("links"));
+				zoominfoData.setLink(rs.getString("link"));
+				zoominfoData.setExact_match(rs.getString("exact_match"));
+				zoominfoData.setChar_match_10(rs.getString("char_match_10"));
+				zoominfoData.setChar_match_15(rs.getString("char_match_15"));
+				zoominfoData.setChar_match_20(rs.getString("char_match_20"));
+				zoominfoData.setSearch_string(rs.getString("search_string"));
+				zoominfoData.setEndpoint_type(rs.getString("endpoint_type"));
+				zoominfoData.setUrl(rs.getString("url"));
+				zoominfoData.setIpaddress(rs.getString("ipaddress"));
+				zoominfoData.setUser_id(rs.getString("user_id"));
+				zoominfoData.setUrl_id(rs.getString("url_id"));
+				zoominfoData.setRemarks(rs.getString("remarks"));
+				zoominfoData.setIs_zoominfo_link(rs.getString("is_zoominfo_link"));
+				zoominfoData.setIs_zoominfo_company_link(rs.getString("is_zoominfo_company_link"));
+				zoominfoData.setBox_company_name(rs.getString("box_company_name"));
+				zoominfoData.setBox_website(rs.getString("box_website"));
+				zoominfoData.setBox_direction(rs.getString("box_direction"));
+				zoominfoData.setBox_rating(rs.getString("box_rating"));
+				zoominfoData.setBox_total_reviews(rs.getString("box_total_reviews"));
+				zoominfoData.setBox_type(rs.getString("box_type"));
+				zoominfoData.setBox_address(rs.getString("box_address"));
+				zoominfoData.setBox_hours(rs.getString("box_hours"));
+				zoominfoData.setBox_phone(rs.getString("box_phone"));
+				zoominfoData.setBox_stock_price(rs.getString("box_stock_price"));
+				zoominfoData.setBox_ceo(rs.getString("box_ceo"));
+				zoominfoData.setBox_founder(rs.getString("box_founder"));
+				zoominfoData.setBox_founded(rs.getString("box_founded"));
+				zoominfoData.setBox_headquarters(rs.getString("box_headquarters"));
+				zoominfoData.setBox_subsidiaries(rs.getString("box_subsidiaries"));
+				zoominfoData.setBox_revenue(rs.getString("box_revenue"));
+				zoominfoData.setBox_parent_organization(rs.getString("box_parent_organization"));
+				zoominfoData.setBox_description(rs.getString("box_description"));
+				zoominfoData.setBox_facebook_link(rs.getString("box_facebook_link"));
+				zoominfoData.setBox_twitter_link(rs.getString("box_twitter_link"));
+				zoominfoData.setBox_linkedin_link(rs.getString("box_linkedin_link"));
+				zoominfoData.setBox_instagram_link(rs.getString("box_instagram_link"));
+				zoominfoData.setBox_youtube_link(rs.getString("box_youtube_link"));
+				zoominfoData.setBox_pinterest(rs.getString("box_pinterest"));
+				zoominfoData.setIs_manta_company_link(rs.getString("is_manta_company_link"));
+				zoominfoData.setIs_manta_link(rs.getString("is_manta_link"));
+				data.add(zoominfoData);
+			}
+			con.close();			
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return data;
+	}
+
+	@Override
+	public List<ZoomInfoData> exportZoomInfoData(String startDate, String endDate) {
+		List<ZoomInfoData> data = new ArrayList<>();
+		try(Connection con = (Connection) dataSource.getConnection();) {
+			ResultSet rs = null;
+			PreparedStatement ps = null;
+			String sql = "select * from zoom_info_data where DATE_FORMAT(created_date,'%m/%d/%Y') BETWEEN ? AND ?";
+			ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setString(1,startDate);
+			ps.setString(2,endDate);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				ZoomInfoData zoominfoData = new ZoomInfoData();
+				zoominfoData.setZoomId(Integer.parseInt(rs.getString("zoom_info_data_id")));
+				zoominfoData.setCompany_name(rs.getString("company_name"));
+				zoominfoData.setHeadquarters_address(rs.getString("headquarters_address"));
+				zoominfoData.setPhone(rs.getString("phone"));
+				zoominfoData.setWebsite(rs.getString("website"));
+				zoominfoData.setDescription(rs.getString("description"));
+				zoominfoData.setSic_code(rs.getString("sic_code"));
+				zoominfoData.setEmployees(rs.getString("employees"));
+				zoominfoData.setRevenue(rs.getString("revenue"));
+				zoominfoData.setNaics_code(rs.getString("naics_code"));
+				zoominfoData.setIndustries(rs.getString("industries"));
+				zoominfoData.setFacebook_link(rs.getString("facebook_link"));
+				zoominfoData.setTwitter_link(rs.getString("twitter_link"));
+				zoominfoData.setLinkedin_link(rs.getString("linkedin_link"));
+				zoominfoData.setRemarks(rs.getString("remarks"));
+				zoominfoData.setUrl(rs.getString("url"));
+				zoominfoData.setIpaddress(rs.getString("ipaddress"));
+				zoominfoData.setUser_id(rs.getString("user_id"));
+				zoominfoData.setUrl_id(rs.getString("url_id"));
+				data.add(zoominfoData);
+			}
+			con.close();			
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return data;
+	}
+
+	@Override
+	public List<MantaData> exportMantaData(String startDate, String endDate) {
+		List<MantaData> data = new ArrayList<>();
+		try(Connection con = (Connection) dataSource.getConnection();) {
+			ResultSet rs = null;
+			PreparedStatement ps = null;
+			String sql = "select * from manta_data where DATE_FORMAT(created_date,'%m/%d/%Y') BETWEEN ? AND ?";
+			ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setString(1,startDate);
+			ps.setString(2,endDate);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				MantaData mantaData = new MantaData();
+				mantaData.setMantaId(Integer.parseInt(rs.getString("manta_data_id")));
+				mantaData.setHeader_title(rs.getString("header_title"));
+				mantaData.setHeader_address(rs.getString("header_address"));
+				mantaData.setTitle(rs.getString("title"));
+				mantaData.setAlt_title(rs.getString("alt_title"));
+				mantaData.setAbout_phone(rs.getString("about_phone"));
+				mantaData.setAbout_website(rs.getString("about_website"));
+				mantaData.setAbout_address(rs.getString("about_address"));
+				mantaData.setDescription(rs.getString("description"));
+				mantaData.setShort_description(rs.getString("short_description"));
+				mantaData.setLong_description(rs.getString("long_description"));
+				mantaData.setReviews(rs.getString("reviews"));
+				mantaData.setMain_phone(rs.getString("main_phone"));
+				mantaData.setWebsite(rs.getString("website"));
+				mantaData.setContact_name(rs.getString("contact_name"));
+				mantaData.setContact_email(rs.getString("contact_email"));
+				mantaData.setContact_job_title(rs.getString("contact_job_title"));
+				mantaData.setAddress(rs.getString("address"));
+				mantaData.setDirection_link(rs.getString("direction_link"));
+				mantaData.setLocation_type(rs.getString("location_type"));
+				mantaData.setYear_established(rs.getString("year_established"));
+				mantaData.setAnnual_revenue(rs.getString("annual_revenue"));
+				mantaData.setEmployees(rs.getString("employees"));
+				mantaData.setSic_code(rs.getString("sic_code"));
+				mantaData.setNaics_code(rs.getString("naics_code"));
+				mantaData.setBusiness_categories(rs.getString("business_categories"));
+				mantaData.setUrl(rs.getString("url"));
+				mantaData.setUrl_id(rs.getString("url_id"));
+				mantaData.setUser_id(rs.getString("user_id"));
+				mantaData.setRemarks(rs.getString("remarks"));
+				mantaData.setIpaddress(rs.getString("ipaddress"));
+				mantaData.setAbout_street_name(rs.getString("about_street_name"));
+				mantaData.setAbout_city(rs.getString("about_city"));
+				mantaData.setAbout_state(rs.getString("about_state"));
+				mantaData.setAbout_zipcode(rs.getString("about_zipcode"));
+				mantaData.setStreet_name(rs.getString("street_name"));
+				mantaData.setCity(rs.getString("city"));
+				mantaData.setState(rs.getString("state"));
+				mantaData.setZipcode(rs.getString("zipcode"));
+				
+				mantaData.setServices(rs.getString("services"));
+				mantaData.setFacebook_link(rs.getString("facebook_link"));
+				mantaData.setTwitter_link(rs.getString("twitter_link"));
+				mantaData.setContact_info_name(rs.getString("contact_info_name"));
+				mantaData.setContact_info_designation(rs.getString("contact_info_designation"));
+				mantaData.setContact_info_email(rs.getString("contact_info_email"));
+				mantaData.setContact_info_phone(rs.getString("contact_info_phone"));
+				mantaData.setContact_info_name1(rs.getString("contact_info_name1"));
+				mantaData.setContact_info_designation1(rs.getString("contact_info_designation1"));
+				mantaData.setContact_info_email1(rs.getString("contact_info_email1"));
+				mantaData.setContact_info_phone1(rs.getString("contact_info_phone1"));
+				mantaData.setContact_info_name2(rs.getString("contact_info_name2"));
+				mantaData.setContact_info_designation2(rs.getString("contact_info_designation2"));
+				mantaData.setContact_info_email2(rs.getString("contact_info_email2"));
+				mantaData.setContact_info_phone2(rs.getString("contact_info_phone2"));
+				mantaData.setPresident(rs.getString("president"));
+				mantaData.setContact(rs.getString("contact"));
+				
+				data.add(mantaData);
 			}
 			con.close();			
 		}catch (Exception e) {

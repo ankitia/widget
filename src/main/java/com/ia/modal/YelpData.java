@@ -21,9 +21,23 @@ public class YelpData {
 	private String user_id;
 	private String ipaddress;
 	private String created_date;
+	private String business_person_designation;
+	private String business_person_name;
 	
 	
 	
+	public String getBusiness_person_designation() {
+		return business_person_designation;
+	}
+	public void setBusiness_person_designation(String business_person_designation) {
+		this.business_person_designation = business_person_designation;
+	}
+	public String getBusiness_person_name() {
+		return business_person_name;
+	}
+	public void setBusiness_person_name(String business_person_name) {
+		this.business_person_name = business_person_name;
+	}
 	public String getCreated_date() {
 		return created_date;
 	}

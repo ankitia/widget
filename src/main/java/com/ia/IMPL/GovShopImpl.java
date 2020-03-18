@@ -32,7 +32,7 @@ public class GovShopImpl implements GovShopDao {
 		// TODO Auto-generated method stub
 		int status = 0; 
 		try (Connection con = (Connection) dataSource.getConnection()){
-			String sql = "insert into govshop_data(title,address,textual_overview,duns,cage_code,type,employees,sectors_served,company_security_level,credit_card_usage,annual_revenue,year_founded,country_of_origin,public_sector_interest,spec_title,spec_textual,url_id,contact_info_lst,remarks,url,user_id,ipaddress) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into govshop_data(title,address,textual_overview,duns,cage_code,type,employees,sectors_served,company_security_level,credit_card_usage,annual_revenue,year_founded,country_of_origin,public_sector_interest,spec_title,spec_textual,url_id,contact_info_lst,remarks,url,user_id,ipaddress,website) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, govShopData.getTitle());
 			ps.setString(2, govShopData.getAddress());
@@ -56,7 +56,7 @@ public class GovShopImpl implements GovShopDao {
 			ps.setString(20, govShopData.getUrl());
 			ps.setString(21, govShopData.getUser_id());
 			ps.setString(22, govShopData.getIpaddress());
-			
+			ps.setString(23, govShopData.getWebsite());
 			
 			status = ps.executeUpdate();
 			con.commit();		

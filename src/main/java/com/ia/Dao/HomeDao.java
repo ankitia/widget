@@ -28,7 +28,7 @@ public interface HomeDao {
 	List<User> getUserList();
 	
 	
-	List<UserDetail> getUserDetails();
+	List<UserDetail> getUserDetails(String action);
 	
 	boolean insertScrap(Scrap scrap);
 	
@@ -75,6 +75,8 @@ public interface HomeDao {
 	List<MasterURL> exportMasterURL();
 	
 	boolean reActiveMasterURL(String ids,String action);
+	
+	boolean reActiveAllMasterURL(String tableName);
  	
 	List<MasterURLProfile> exportMasterURLProfile();
 	

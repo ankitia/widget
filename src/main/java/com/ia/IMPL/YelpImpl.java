@@ -31,7 +31,7 @@ public class YelpImpl implements YelpDao {
 		// TODO Auto-generated method stub
 		int status = 0; 
 		try (Connection con = (Connection) dataSource.getConnection()){
-			String sql = "insert into yelp_data(title,review,star_rating,category,address,direction,phone,website,owner,root_url,url_id,user_id,ipaddress) value(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into yelp_data(title,review,star_rating,category,address,direction,phone,website,owner,root_url,url_id,user_id,ipaddress,business_person_name,business_person_designation) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, yelpData.getTitle());
 			ps.setString(2, yelpData.getReview());
@@ -46,6 +46,9 @@ public class YelpImpl implements YelpDao {
 			ps.setString(11, yelpData.getUrl_id());
 			ps.setString(12, yelpData.getUser_id());
 			ps.setString(13, yelpData.getIpaddress());
+			ps.setString(14, yelpData.getBusiness_person_name());
+			ps.setString(15, yelpData.getBusiness_person_designation());
+			
 			status = ps.executeUpdate();
 			con.commit();		
 			 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {

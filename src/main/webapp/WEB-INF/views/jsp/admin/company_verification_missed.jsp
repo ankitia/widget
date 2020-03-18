@@ -67,7 +67,7 @@
     
 <script type="text/javascript">
 function setStatus(status,urlId,url_string){
-	window.open("#", url_string, "");
+	window.open("www.google.com", url_string, "");
 }
 </script>
   </body>

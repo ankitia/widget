@@ -11,8 +11,22 @@ public class BingPageUrlsData
 	private String phone_number;
 	private String address_location;
 	private String rating;
-	
+	private String created_date;
+	private String url_id;
 	 
+	
+	public String getCreated_date() {
+		return created_date;
+	}
+	public void setCreated_date(String created_date) {
+		this.created_date = created_date;
+	}
+	public String getUrl_id() {
+		return url_id;
+	}
+	public void setUrl_id(String url_id) {
+		this.url_id = url_id;
+	}
 	public String getLocation() {
 		return location;
 	}

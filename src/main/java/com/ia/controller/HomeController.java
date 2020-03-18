@@ -39,8 +39,11 @@ import com.ia.modal.Category;
 import com.ia.modal.CompanyDetails;
 import com.ia.modal.CompanyLocation;
 import com.ia.modal.GooglePlace;
+import com.ia.modal.GoogleZoominfoData;
+import com.ia.modal.GovShopData;
 import com.ia.modal.ListBuilding;
 import com.ia.modal.ListContacts;
+import com.ia.modal.MantaData;
 import com.ia.modal.MapsTileData;
 import com.ia.modal.ProfileEmail;
 import com.ia.modal.Scrap;
@@ -48,6 +51,7 @@ import com.ia.modal.SmartystreetData;
 import com.ia.modal.SpokeoData;
 import com.ia.modal.User;
 import com.ia.modal.YelpData;
+import com.ia.modal.ZoomInfoData;
 import com.ia.util.CommonUtility;
 import com.ia.util.MailConfiguration;
 
@@ -301,10 +305,15 @@ public class HomeController {
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"smartyStreetData")+"";
 		}else if(action.equalsIgnoreCase("govShopData")){
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"govShopData")+"";
+		}else if(action.equalsIgnoreCase("googleZoomData")){
+			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"googleZoomData")+"";
+		}else if(action.equalsIgnoreCase("zoomData")){
+			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"zoomData")+"";
+		}else if(action.equalsIgnoreCase("mantaData")){
+			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"mantaData")+"";
+		}else if(action.equalsIgnoreCase("zumperData")){
+			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"zumperData")+"";
 		}
-		
-		
-		
 		return "false";
 	}
 	
@@ -370,8 +379,13 @@ public class HomeController {
 	@RequestMapping(value="admindashboard")
 	public String admindashboard(HttpServletRequest requestm,Model model)
 	{
-		model.addAttribute("userList", homeDao.getUserDetails());		
-		System.out.println("This is admin dashboard -- ");
+		model.addAttribute("userList", homeDao.getUserDetails("userVerification"));		
+		model.addAttribute("companyList", homeDao.getUserDetails("companyDetails"));		
+		model.addAttribute("fullDetailsList", homeDao.getUserDetails("fullDetails"));		
+		model.addAttribute("profileEmailList", homeDao.getUserDetails("profileEmail"));		
+		
+		System.out.println("This is call ");
+		
 		return "admin/admindashboard";
 	}
 	
@@ -467,6 +481,19 @@ public class HomeController {
 	
 	@RequestMapping(value="dashboard")
 	public String dashboard(HttpServletRequest requestm,Model model,HttpSession session)
+	{
+		if(session.getAttribute("userId")!=null) {
+			int userId = Integer.parseInt(session.getAttribute("userId")+"");
+			System.out.println("This is dashboard  s1 --"+userId);
+			return "admin/dashboard";	
+		}else {
+			return "redirect:login";	
+		}
+		
+	}
+	
+	@RequestMapping(value="dashboard1")
+	public String dashboard1(HttpServletRequest requestm,Model model,HttpSession session)
 	{
 		if(session.getAttribute("userId")!=null) {
 		
@@ -681,8 +708,6 @@ public class HomeController {
       			// TODO Auto-generated catch block
       			e.printStackTrace();
       		}
-    	   
-    	   
        }else if(action.equalsIgnoreCase("listBuilding")) {
     	   csvFileName = "List_Build_Data.csv";
       	   try {
@@ -804,11 +829,19 @@ public class HomeController {
 			CommonUtility.exportMasterData("master_list_building_url","master_list_url_id","Master List Build", response, exportDao);
        }else if(action.equalsIgnoreCase("masterBingMapsDetails")) {
 			CommonUtility.exportMasterData("master_bing_maps_detail_url","master_bing_maps_detail_url_id","Master Bing Maps", response, exportDao);
+       }else if(action.equalsIgnoreCase("masterGovShop")) {
+			CommonUtility.exportMasterData("master_govshop_url","master_govshop_url_id","Master Govshop", response, exportDao);
+       }else if(action.equalsIgnoreCase("masterManta")) {
+			CommonUtility.exportMasterData("master_manta_url","master_manta_url_id","Master Manta", response, exportDao);
+       }else if(action.equalsIgnoreCase("masterZoom")) {
+			CommonUtility.exportMasterData("master_zoominfo_url","master_zoominfo_url_id","Master Zoom", response, exportDao);
+       }else if(action.equalsIgnoreCase("masterGoogle")) {
+			CommonUtility.exportMasterData("master_google_zoominfo_url","master_google_zoominfo_url_id","Master Google", response, exportDao);
        }else if(action.equalsIgnoreCase("yelpData")) {
     	   csvFileName = "yelpData.csv";
       	   try {
      			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
-     			String[] header = { "yelpId","title","review","star_rating","category","address","direction","phone","website","owner","root_url","url_id","user_id","created_date"};
+     			String[] header = { "yelpId","title","review","star_rating","category","address","direction","phone","website","owner","root_url","url_id","user_id","created_date","business_person_name","business_person_designation"};
      	        csvWriter.writeHeader(header);
      	        List<YelpData> tempUrls = exportDao.exportYelpData(request.getParameter("exportStartDate"),request.getParameter("exportEndDate"));
      	        for (YelpData aBook : tempUrls) {
@@ -823,7 +856,7 @@ public class HomeController {
     	   csvFileName = "bingData.csv";
       	   try {
      			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
-     			String[] header = { "bingId","text","link","type","location","description","phone_number","address_location","rating"};
+     			String[] header = { "bingId","text","link","type","location","description","phone_number","address_location","rating","created_date","url_id"};
      	        csvWriter.writeHeader(header);
      	        List<BingPageUrlsData> tempUrls = exportDao.exportBingData(request.getParameter("exportStartDate"),request.getParameter("exportEndDate"));
      	        for (BingPageUrlsData aBook : tempUrls) {
@@ -853,9 +886,9 @@ public class HomeController {
     	   csvFileName = "mapsData.csv";
       	   try {
      			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
-     			String[] header = { "name","rating","location","detail","opening_time"};
+     			String[] header = { "root_url","name","rating","location","detail","opening_time","created_date"};
      	        csvWriter.writeHeader(header);
-     	        List<MapsTileData> tempUrls = exportDao.exportMapsTileData();
+     	        List<MapsTileData> tempUrls = exportDao.exportMapsTileData(request.getParameter("exportStartDate"),request.getParameter("exportEndDate"));
      	        for (MapsTileData aBook : tempUrls) {
      	            csvWriter.write(aBook, header);
      	        }
@@ -864,20 +897,71 @@ public class HomeController {
      			// TODO Auto-generated catch block
      			e.printStackTrace();
      		}
+       }else if(action.equalsIgnoreCase("govShop")) {
+    	   csvFileName = "govShop.csv";
+      	   try {
+     			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+     			String[] header = {"govId","title", "address","textual_overview","duns","cage_code","type","employees","sectors_served","company_security_level","credit_card_usage","annual_revenue","year_founded","country_of_origin","public_sector_interest","spec_title","spec_textual","contact_info_lst","remarks","url","url_id","user_id","created_date","website" };
+     	        csvWriter.writeHeader(header);
+     	        List<GovShopData> tempUrls = exportDao.exportGovShopData(request.getParameter("exportStartDate"),request.getParameter("exportEndDate"));
+     	        for (GovShopData aBook : tempUrls) {
+     	            csvWriter.write(aBook, header);
+     	        }
+     	     csvWriter.close();
+     		} catch (IOException e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}
+       }else if(action.equalsIgnoreCase("googleData")) {
+    	   csvFileName = "googleData.csv";
+      	   try {
+     			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+     			String[] header = {"text","links","link","exact_match","char_match_10","char_match_15","char_match_20","search_string","endpoint_type","url","ipaddress","user_id","url_id","remarks","is_zoominfo_link","is_zoominfo_company_link","box_company_name","box_website","box_direction","box_rating","box_total_reviews","box_type","box_address","box_hours","box_phone","box_stock_price","box_ceo","box_founder","box_founded","box_headquarters","box_subsidiaries","box_revenue","box_parent_organization","box_description","box_facebook_link","box_twitter_link","box_linkedin_link","box_instagram_link","box_youtube_link","box_pinterest","is_manta_company_link","is_manta_link" };
+     	        csvWriter.writeHeader(header);
+     	        List<GoogleZoominfoData> tempUrls = exportDao.exportGoogleZoomInfoData(request.getParameter("exportStartDate"),request.getParameter("exportEndDate"));
+     	        for (GoogleZoominfoData aBook : tempUrls) {
+     	            csvWriter.write(aBook, header);
+     	        }
+     	     csvWriter.close();
+     		} catch (IOException e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}
+       }else if(action.equalsIgnoreCase("zoomInfoData")) {
+    	   csvFileName = "zoomInfoData.csv";
+      	   try {
+     			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+     			String[] header = {"company_name","headquarters_address","phone","website","description","sic_code","employees","revenue","naics_code","industries","facebook_link","twitter_link","linkedin_link","remarks","url","ipaddress","user_id","url_id"};
+     	        csvWriter.writeHeader(header);
+     	        List<ZoomInfoData> tempUrls = exportDao.exportZoomInfoData(request.getParameter("exportStartDate"),request.getParameter("exportEndDate"));
+     	        for (ZoomInfoData aBook : tempUrls) {
+     	            csvWriter.write(aBook, header);
+     	        }
+     	     csvWriter.close();
+     		} catch (IOException e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}
+       }else if(action.equalsIgnoreCase("mantaData")) {
+    	   csvFileName = "mantaData.csv";
+      	   try {
+     			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+     			String[] header = {"header_title","header_address","title","alt_title","about_phone","about_website","about_address","description","short_description","long_description","reviews","main_phone","website","contact_name","contact_email","contact_job_title","address","direction_link","location_type","year_established","annual_revenue","employees","sic_code","naics_code","business_categories","url","url_id","user_id","remarks","ipaddress","about_street_name","about_city","about_state","about_zipcode","street_name","city","state","zipcode","president","contact","services","facebook_link","twitter_link","contact_info_name","contact_info_designation","contact_info_phone","contact_info_email","contact_info_name1","contact_info_designation1","contact_info_phone1","contact_info_email1","contact_info_name2","contact_info_designation2","contact_info_phone2","contact_info_email2"};
+     	        csvWriter.writeHeader(header);
+     	        List<MantaData> tempUrls = exportDao.exportMantaData(request.getParameter("exportStartDate"),request.getParameter("exportEndDate"));
+     	        for (MantaData aBook : tempUrls) {
+     	            csvWriter.write(aBook, header);
+     	        }
+     	     csvWriter.close();
+     		} catch (IOException e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}
        }
-       
-       
-       
-       
-       
- 
        }catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-       
-       
-       
 	}
 	
 	@RequestMapping(value="reset")
@@ -886,6 +970,11 @@ public class HomeController {
 		
 		
 		return "admin/adminreset";
+	}
+	
+	@RequestMapping(value="resetAllLinks")
+	@ResponseBody public String resetAllLinks(HttpServletRequest request,HttpServletResponse response) {
+		return homeDao.reActiveAllMasterURL(request.getParameter("tableName"))+"";
 	}
 	
 	@RequestMapping(value="resetLinks")

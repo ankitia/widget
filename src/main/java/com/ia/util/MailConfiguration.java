@@ -16,7 +16,7 @@ public class MailConfiguration {
 	
 	
 	static final String username = "developers@infoanalytica.com";
-	static final String passwd = "Deve123*+@"; 
+	static final String passwd = "Admin123*+@"; 
 	static Session session  = null;
 	 
  	public static Session mailConfiguration() {

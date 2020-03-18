@@ -1,7 +1,7 @@
 //function setStatus(status,urlId,url,userId){
 function setStatus(status,urlId,url_string){
-	window.open("#", url_string, "");
-	$.ajax({   
+	window.open("www.google.com", url_string, "");
+	$.ajax({    
 		type : "POST",
 		url : "updateUrlStatus",
 		data :{
