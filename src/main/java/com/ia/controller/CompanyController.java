@@ -204,7 +204,12 @@ public class CompanyController {
 			return homeDao.setPendingLink("assignMantaData", userId, 10)+"";
 		}else if(action.equalsIgnoreCase("assignZumperData")) { 
 			return homeDao.setPendingLink("assignZumperData", userId, 10)+"";
+		}else if(action.equalsIgnoreCase("assignRentData")) { 
+			return homeDao.setPendingLink("assignRentData", userId, 10)+"";
+		}else if(action.equalsIgnoreCase("assignTruliagData")) { 
+			return homeDao.setPendingLink("assignTruliagData", userId, 10)+"";
 		}
+		
 		
 		
 		return "";

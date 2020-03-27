@@ -2,6 +2,8 @@ package com.ia.Dao;
 
 import java.util.List;
 
+import com.ia.list.modal.RentDataList;
+import com.ia.list.modal.ZumperDataList;
 import com.ia.modal.BingMapsData;
 import com.ia.modal.BingPageUrlsData;
 import com.ia.modal.GooglePlace;
@@ -79,6 +81,13 @@ public interface ExportDao {
 	
 	//Manta Data
 	List<MantaData> exportMantaData(String startDate,String endDate);
+	
+	
+	//Rent Data
+	List<RentDataList> exportRentData(String startDate,String endDate);
+	
+	//Zumper Data
+	List<ZumperDataList> exportZumperData(String startDate,String endDate);
 		
 }
 

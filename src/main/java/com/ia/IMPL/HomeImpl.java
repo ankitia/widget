@@ -345,6 +345,10 @@ public class HomeImpl implements HomeDao {
 				sql = "select count(distinct(url_id)) as total from manta_data where user_id = ?";
 			}else if(action.equalsIgnoreCase("zumperData")) {
 				sql = "select count(distinct(url_id)) as total from zumper_data where user_id = ?";
+			}else if(action.equalsIgnoreCase("rentData")) {
+				sql = "select count(distinct(url_id)) as total from rent_data where user_id = ?";
+			}else if(action.equalsIgnoreCase("truliaData")) {
+				sql = "select count(distinct(url_id)) as total from trulia_data where user_id = ?";
 			}
 			
 			
@@ -530,7 +534,14 @@ public class HomeImpl implements HomeDao {
 				sql = "update master_manta_url set status = ? where master_manta_url_id = ?";
 			}else if(action.equalsIgnoreCase("zumperData")){
 				sql = "update master_zumper_url set status = ? where master_zumper_url_id = ?";
+			}else if(action.equalsIgnoreCase("rentData")){
+				sql = "update master_rent_url set status = ? where master_rent_url_id = ?";
+			}else if(action.equalsIgnoreCase("truliaData")){
+				sql = "update master_trulia_url set status = ? where master_trulia_url_id = ?";
 			}
+			
+			
+			
 			PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 			ps.setString(1, status);
 			ps.setLong(2, urlId);
@@ -813,10 +824,17 @@ public class HomeImpl implements HomeDao {
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1, userId);
 				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignRentData")){
+				sql = "UPDATE master_rent_url SET user_id=? WHERE master_rent_url_id IN (SELECT master_rent_url_id FROM (SELECT master_rent_url_id FROM master_rent_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
+			}else if(action.equalsIgnoreCase("assignTruliagData")){
+				sql = "UPDATE master_trulia_url SET user_id=? WHERE master_trulia_url_id IN (SELECT master_trulia_url_id FROM (SELECT master_trulia_url_id FROM master_trulia_url where user_id=0 and status = 'Active' LIMIT 0, ?  ) tmp )";
+				ps = (PreparedStatement) con.prepareStatement(sql);
+				ps.setInt(1, userId);
+				ps.setInt(2, limit);
 			}
-			
-			
-			
 			queryStatus = ps.executeUpdate();
 			
 		}catch (Exception e) {

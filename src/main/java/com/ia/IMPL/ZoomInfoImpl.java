@@ -91,7 +91,7 @@ public class ZoomInfoImpl implements ZoomInfoDao {
 				ps.setInt(1,userId);
 			}else if(action.equalsIgnoreCase("missed")) {
 				//sql = "select m.* from master_zoominfo_url m where  m.status='Done' and  m.user_id = ? and m.master_zoominfo_url_id not in (select group_concat(url_id) from scrap where user_id=?)  limit 0,20;";
-				sql = "select m.* from master_zoominfo_url m where  m.status='Done' and  m.user_id = ? and m.master_zoominfo_url_id not in (select url_id from zoom_info_data_id where user_id=?);";
+				sql = "select m.* from master_zoominfo_url m where  m.status='Done' and  m.user_id = ? and m.master_zoominfo_url_id not in (select url_id from zoom_info_data  where user_id=?);";
 				ps = (PreparedStatement) con.prepareStatement(sql);
 				ps.setInt(1,userId);
 				ps.setInt(2,userId);	

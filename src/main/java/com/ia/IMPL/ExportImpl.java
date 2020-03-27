@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ia.Dao.ExportDao;
+import com.ia.list.modal.RentDataList;
+import com.ia.list.modal.ZumperDataList;
 import com.ia.modal.BingMapsData;
 import com.ia.modal.BingPageUrlsData;
 import com.ia.modal.GooglePlace;
@@ -859,6 +861,98 @@ public class ExportImpl implements ExportDao {
 				mantaData.setContact(rs.getString("contact"));
 				
 				data.add(mantaData);
+			}
+			con.close();			
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return data;
+	}
+
+	@Override
+	public List<RentDataList> exportRentData(String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		List<RentDataList> data = new ArrayList<>();
+		try(Connection con = (Connection) dataSource.getConnection();) {
+			ResultSet rs = null;
+			PreparedStatement ps = null;
+			String sql = "select * from rent_data r,rent_amenities_data ra where r.rent_data_id = ra.rent_id and  DATE_FORMAT(r.created_date,'%m/%d/%Y') BETWEEN ? AND ?";
+			ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setString(1,startDate);
+			ps.setString(2,endDate);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				RentDataList rentDataList = new RentDataList();
+				rentDataList.setRentId(Integer.parseInt(rs.getString("rent_data_id")));
+				rentDataList.setAddress(rs.getString("address"));
+				rentDataList.setBath_text(rs.getString("bath_text"));
+				rentDataList.setTitle(rs.getString("title"));
+				rentDataList.setBed_text(rs.getString("bed_text"));
+				rentDataList.setBuilding_type(rs.getString("building_type"));
+				rentDataList.setDescription(rs.getString("description"));
+				rentDataList.setDescription_bottom_txt(rs.getString("description_bottom_txt"));
+				rentDataList.setHeighlights_lst(rs.getString("heighlights_lst"));
+				rentDataList.setNeighborhood_name(rs.getString("neighborhood_name"));
+				rentDataList.setPet_policy_lst(rs.getString("pet_policy_lst"));
+				rentDataList.setPhone_number(rs.getString("phone_number"));
+				rentDataList.setProperty_managed_by(rs.getString("property_managed_by"));
+				rentDataList.setSqft_text(rs.getString("sqft_text"));
+				rentDataList.setTotal_units(rs.getString("total_units"));
+				rentDataList.setUnits_available(rs.getString("units_available"));
+				rentDataList.setUrl(rs.getString("url"));
+				rentDataList.setHeader(rs.getString("header"));
+				rentDataList.setUrl_id(rs.getString("url_id"));
+				rentDataList.setUser_id(rs.getString("user_id"));
+				rentDataList.setCreated_date(rs.getString("created_date"));
+				
+				data.add(rentDataList);
+			}
+			con.close();			
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return data;
+	}
+
+	@Override
+	public List<ZumperDataList> exportZumperData(String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		List<ZumperDataList> data = new ArrayList<>();
+		try(Connection con = (Connection) dataSource.getConnection();) {
+			ResultSet rs = null;
+			PreparedStatement ps = null;
+			String sql = "select z.*,za.header,za.amenities,m.url from zumper_data z,zumper_amenities_list za,master_zumper_url m  where za.zumper_id = z.zumper_data_id and m.master_zumper_url_id = z.url_id and DATE_FORMAT(z.created_date,'%m/%d/%Y') BETWEEN ? AND ?";
+			ps = (PreparedStatement) con.prepareStatement(sql);
+			ps.setString(1,startDate);
+			ps.setString(2,endDate);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				ZumperDataList zumperData = new ZumperDataList();
+				zumperData.setAddress(rs.getString("address"));
+				zumperData.setAgent_company_name(rs.getString("agent_company_name"));
+				zumperData.setAgent_hours(rs.getString("agent_hours"));
+				zumperData.setTitle(rs.getString("title"));
+				zumperData.setAgent_lst(rs.getString("agent_lst"));
+				zumperData.setAgent_name(rs.getString("agent_name"));
+				zumperData.setAgent_phone(rs.getString("agent_phone"));
+				zumperData.setAmenities_lst(rs.getString("amenities_lst"));
+				zumperData.setBreadcumb_text(rs.getString("breadcumb_text"));
+				zumperData.setDescription(rs.getString("description"));
+				zumperData.setPhone_number(rs.getString("phone_number"));
+				zumperData.setPrice(rs.getString("price"));
+				zumperData.setSummary(rs.getString("summary"));
+				zumperData.setTodo(rs.getString("todo"));
+				zumperData.setUrl(rs.getString("url"));
+				zumperData.setUrl_id(rs.getString("url_id"));
+				zumperData.setWalkscore(rs.getString("walkscore"));
+				zumperData.setWalkscore_description(rs.getString("walkscore_description"));
+				zumperData.setHeader(rs.getString("header"));
+				zumperData.setCreated_date(rs.getString("created_date"));
+				zumperData.setAmenities(rs.getString("amenities"));
+				
+				data.add(zumperData);
 			}
 			con.close();			
 		}catch (Exception e) {

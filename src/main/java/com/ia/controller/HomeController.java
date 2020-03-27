@@ -34,6 +34,8 @@ import com.ia.Dao.ExportDao;
 import com.ia.Dao.HomeDao;
 import com.ia.Dao.ListBuildingDao;
 import com.ia.Dao.MapsDao;
+import com.ia.list.modal.RentDataList;
+import com.ia.list.modal.ZumperDataList;
 import com.ia.modal.BingPageUrlsData;
 import com.ia.modal.Category;
 import com.ia.modal.CompanyDetails;
@@ -313,7 +315,14 @@ public class HomeController {
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"mantaData")+"";
 		}else if(action.equalsIgnoreCase("zumperData")){
 			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"zumperData")+"";
+		}else if(action.equalsIgnoreCase("rentData")){
+			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"rentData")+"";
+		}else if(action.equalsIgnoreCase("truliaData")){
+			return  homeDao.updateUrlStatus(Long.parseLong(request.getParameter("urlId")), request.getParameter("status"),"truliaData")+"";
 		}
+		
+		
+		
 		return "false";
 	}
 	
@@ -837,6 +846,10 @@ public class HomeController {
 			CommonUtility.exportMasterData("master_zoominfo_url","master_zoominfo_url_id","Master Zoom", response, exportDao);
        }else if(action.equalsIgnoreCase("masterGoogle")) {
 			CommonUtility.exportMasterData("master_google_zoominfo_url","master_google_zoominfo_url_id","Master Google", response, exportDao);
+       }else if(action.equalsIgnoreCase("masterRent")) {
+			CommonUtility.exportMasterData("master_rent_url","master_rent_url_id","Master Rent", response, exportDao);
+       }else if(action.equalsIgnoreCase("masterZumber")) {
+			CommonUtility.exportMasterData("master_zumper_url","master_zumper_url_id","Master Zumper", response, exportDao);
        }else if(action.equalsIgnoreCase("yelpData")) {
     	   csvFileName = "yelpData.csv";
       	   try {
@@ -957,7 +970,42 @@ public class HomeController {
      			// TODO Auto-generated catch block
      			e.printStackTrace();
      		}
+       }else if(action.equalsIgnoreCase("rentData")) {
+    	   csvFileName = "rentData.csv";
+      	   try {
+     			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+     			String[] header = {"rentId","address","amenities_lst","bath_text","bed_text","building_type","description","description_bottom_txt","heighlights_lst","neighborhood_name","pet_policy_lst","phone_number","property_managed_by","sqft_text","title","todo","total_units","units_available","url","ipaddress","user_id","url_id","created_date","header"};
+     	        csvWriter.writeHeader(header);
+     	        List<RentDataList> tempUrls = exportDao.exportRentData(request.getParameter("exportStartDate"),request.getParameter("exportEndDate"));
+     	        for (RentDataList aBook : tempUrls) {
+     	            csvWriter.write(aBook, header);
+     	        }
+     	     csvWriter.close();
+     		} catch (IOException e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}
+       }else if(action.equalsIgnoreCase("zumberData")) {
+    	   csvFileName = "zumberData.csv";
+      	   try {
+     			csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
+     			String[] header = {"address","agent_company_name","agent_hours","agent_lst","agent_name","agent_phone","amenities_lst","breadcumb_text","description","phone_number","price","summary","title","todo","url","url_id","user_id","walkscore","walkscore_description","created_date","header","amenities"};
+     	        csvWriter.writeHeader(header);
+     	        List<ZumperDataList> tempUrls = exportDao.exportZumperData(request.getParameter("exportStartDate"),request.getParameter("exportEndDate"));
+     	        for (ZumperDataList aBook : tempUrls) {
+     	            csvWriter.write(aBook, header);
+     	        }
+     	     csvWriter.close();
+     		} catch (IOException e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}
        }
+       
+       
+       
+       
+       
        }catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

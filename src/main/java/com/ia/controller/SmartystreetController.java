@@ -75,7 +75,7 @@ public class SmartystreetController {
 	        }
 	        smartystreetData.setIpaddress(request.getRemoteAddr());
 	        
-	        int bingId = smartystreeDao.insertSmartystreetData(smartystreetData);
+	        smartystreeDao.insertSmartystreetData(smartystreetData);
 	        return "";
 	}
 

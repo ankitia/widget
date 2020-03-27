@@ -49,7 +49,9 @@
 		                		<li><a href="<%=request.getContextPath() %>/masterZoomInfoURL">Zoom Info</a></li>
 		                		<li><a href="<%=request.getContextPath() %>/masterMantaURL">Manta Data</a></li>
 		                		<li><a href="<%=request.getContextPath() %>/masterZumperURL">Zumper Data</a></li>
-					        </ul>  
+		                		<li><a href="<%=request.getContextPath() %>/masterRentURL">Rent Data</a></li>
+		                		<li><a href="<%=request.getContextPath() %>/masterTruliaURL">Trulia Data</a></li>
+					        </ul>    
 					      </li>
                 		
                 		

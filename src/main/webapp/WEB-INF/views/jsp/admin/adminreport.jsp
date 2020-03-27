@@ -106,6 +106,10 @@ function checkReportList(checkList){
 	     			<option value="zoomInfoData">Zoom Info Data</option>
 	     			<option value="masterManta">Master Manta</option>
 	     			<option value="mantaData">Manta Data</option>
+	     			<option value="masterRent">Master Rent</option>
+	     			<option value="rentData">Rent Data</option>
+	     			<option value="masterZumber">Master Zumber</option>
+	     			<option value="zumberData">Zumber Data</option>
 	     		</select> 
 	     		<input type = "text" id = "startDate"  placeholder = "Start Date">
 	     		<input type = "text" id = "endDate" placeholder = "End Date"> 

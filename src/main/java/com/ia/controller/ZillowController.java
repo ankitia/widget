@@ -1,12 +1,6 @@
 package com.ia.controller;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -23,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ia.Dao.HomeDao;
 import com.ia.Dao.ZillowDao;
-import com.ia.modal.CompanyLocation;
 import com.ia.modal.ZillowData;
 import com.ia.modal.ZillowFeatureData;
 

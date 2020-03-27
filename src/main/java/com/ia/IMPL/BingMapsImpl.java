@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import com.ia.Dao.BingMapsDao;
 import com.ia.modal.BingMapsData;
 import com.ia.modal.MasterBingMapsURL;
-import com.ia.modal.MasterCompanyURL;
 import com.mysql.jdbc.Statement;
 
 
